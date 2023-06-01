@@ -59,23 +59,32 @@ Project Structure
 
 ```console
 Copy code
-├── pages/
-│ ├── index.js # Home page
-│ ├── projects.js # Projects page
-│ ├── project/[slug].js # Project detail page
+├── app/
+│ ├── api/contact/route.js # Api contact form setup
+│ ├── favicon.ico
+│ ├── page.js # Home page
+│ ├── layout.js # Projects page
+│ ├── not-found.jsx # 404 page
 │ └── ...
 ├── components/
-│ ├── Navbar.js # Navigation component
-│ ├── ProjectCard.js # Project card component
+│ ├── About.jsx
+│ ├── ContactForm.jsx
+│ ├── FooterComponent.jsx
+│ ├── Hero.jsx
+│ ├── ModeToggle.jsx
+│ ├── Navigation.jsx
+│ ├── Project.jsx
+│ ├── Projects.jsx
+│ ├── ThemeProvider.js
 │ └── ...
 ├── styles/
 │ ├── globals.css # Global styles
 │ └── ...
 ├── public/
-│ ├── images/ # Project images
-│ └── ...
+│ ├── project-images/ # Project images
+│ └── resume/Yunior_Batista_Resume.pdf # resume file
 ├── ...
-├── README.md # Project documentation (you're here)
+├── README.md # Project documentation
 └── ...
 ```
 
