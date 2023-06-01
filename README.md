@@ -1,34 +1,86 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+#Portfolio Website
 
-## Getting Started
+Hi There 👋
+This is my portfolio website built with Next.js, showcasing a collection of my notable projects. The website provides a platform for me to display my creativity, skills, and expertise through various projects in different domains.
 
-First, run the development server:
+**Technologies Used**
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
+<ul>
+<li>Next.js</li>
+<li>React</li>
+<li>Tailwind CSS</li>
+<li>HTML</li>
+<li>CSS</li>
+<li>JavaScript</li>
+<li>Sendgrid API for Email</li>
+<li>Flowbite-React</li>
+<li>Next Themes</li>
+<li>Framer Motion</li>
+</ul>
+
+##Features
+**Project Showcase:** The website includes a dedicated section to showcase my projects. Each project is presented with a brief description, key features, technologies used, and a link to view more details.
+
+**Responsive Design:** The website is designed to be fully responsive, ensuring a seamless experience across different devices and screen sizes.
+
+**Navigation:** Easy navigation is provided through a well-structured and intuitive user interface, allowing visitors to explore the website and access project details effortlessly.
+Getting Started
+To run the website locally, follow these steps:
+
+Clone the repository:
+
+```console
+git clone [https://github.com/batistaDev1113/Portfolio.git]
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+</span>
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Navigate to the project directory:
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+```console
+cd portfolio-app
+```
 
-## Learn More
+Install the dependencies:
 
-To learn more about Next.js, take a look at the following resources:
+```console
+npm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Start the development server:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+```console
+npm run dev
+```
 
-## Deploy on Vercel
+Open your browser and visit http://localhost:3000 to view the website.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```console
+Copy code
+├── pages/
+│ ├── index.js # Home page
+│ ├── projects.js # Projects page
+│ ├── project/[slug].js # Project detail page
+│ └── ...
+├── components/
+│ ├── Navbar.js # Navigation component
+│ ├── ProjectCard.js # Project card component
+│ └── ...
+├── styles/
+│ ├── globals.css # Global styles
+│ └── ...
+├── public/
+│ ├── images/ # Project images
+│ └── ...
+├── ...
+├── README.md # Project documentation (you're here)
+└── ...
+```
+
+**Contributing**
+Contributions to improve the portfolio website are welcome. If you encounter any issues or have suggestions for enhancements, please feel free to open an issue or submit a pull request.
+
+License
+This project is licensed under the MIT License.

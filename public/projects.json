@@ -1,0 +1,40 @@
+{
+  "projects": [
+    {
+      "id": 1,
+      "name": "Movie Finder",
+      "imageUrl": "/projects-images/movies-tmdb-min.png",
+      "description": "The Movie Finder project is a web application that allows users to search for movies. The application was built using: ",
+      "technologies": ["React", "TMDB API", "Javascript", "Tailwind CSS"],
+      "githubLink": "https://github.com/batistaDev1113/movie-finder",
+      "liveDemoLink": "https://batistadev1113.github.io/movie-finder"
+    },
+    {
+      "id": 2,
+      "name": "Robofriends",
+      "imageUrl": "/projects-images/robofriends-min.png",
+      "description": "Robofriends was fun project where the user can search up for robots by name. The application was built using: ",
+      "technologies": ["React", "Robohash API", "Javascript", "CSS"],
+      "githubLink": "https://github.com/batistaDev1113/robofriends",
+      "liveDemoLink": "https://batistadev1113.github.io/robofriends"
+    },
+    {
+      "id": 3,
+      "name": "Neighborhood Map",
+      "imageUrl": "/projects-images/disney-maps-min.png",
+      "description": "In this project, the user can search for Disney hotel locations in the Orlando, FL area. The application was built using: ",
+      "technologies": ["React", "Google Maps API", "Javascript", "CSS"],
+      "githubLink": "https://github.com/batistaDev1113/neighborhood-map-react",
+      "liveDemoLink": "https://batistadev1113.github.io/neighborhood-map-react"
+    },
+    {
+      "id": 4,
+      "name": "Memory Game",
+      "imageUrl": "/projects-images/memory-game-min.png",
+      "description": "In the Neighborhood map project, the user can search for Disney hotel locations in the Orlando, FL area. The application was built using: ",
+      "technologies": ["React", "Google Maps API", "Javascript", "CSS"],
+      "githubLink": "https://github.com/batistaDev1113/neighborhood-map-react",
+      "liveDemoLink": "https://batistadev1113.github.io/neighborhood-map-react"
+    }
+  ]
+}
