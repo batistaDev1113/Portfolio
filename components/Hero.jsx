@@ -34,7 +34,7 @@ const Hero = () => {
               Resume
             </Link>
           </div>
-          <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.5, ease: 'easeInOut' }} className="flex justify-center lg:mt-0 lg:col-span-5 lg:flex bg-slate-900 dark:bg-transparent rounded-lg shadow-lg hover:scale-105 duration-300 skew-x-6 md:w-full w-5/6 mx-auto drop-shadow-xl shadow-red-600">
+          <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.5, ease: 'easeInOut' }} className="flex justify-center lg:mt-0 lg:col-span-5 lg:flex bg-slate-900 dark:bg-transparent rounded-lg shadow-lg hover:scale-105 duration-300 skew-x-6 md:w-full w-5/6 mx-auto drop-shadow-xl shadow-red-600">
             <Image src="/developer-illustration-removebg-preview.png" alt="mockup" layout="fill" className='image' loading='eager' placeholder='blur' blurDataURL='data:image/png' />
           </m.div>
         </m.div>

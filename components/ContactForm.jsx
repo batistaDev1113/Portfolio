@@ -34,7 +34,7 @@ const ContactForm = () => {
       <h1 className="text-4xl uppercase text-gray-500 text-center my-20 tracking-widest">Contact Me</h1>
       <Card>
         <LazyMotion features={domAnimation}>
-          <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ duration: 1, delay: 0.5, ease: 'easeInOut' }} className="lg:grid lg:grid-cols-12 dark:bg-gray-800 place-items-center bg-white">
+          <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5, ease: 'easeInOut' }} className="lg:grid lg:grid-cols-12 dark:bg-gray-800 place-items-center bg-white">
             <section
               className="relative flex h-32 items-end bg-transparent lg:col-span-5 lg:h-full xl:col-span-6"
             >
