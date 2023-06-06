@@ -22,7 +22,7 @@ const Hero = () => {
   )
 
   return (
-    <section className="bg-white dark:bg-gray-900 relative w-full md:w-5/6 lg:w-4/5 lg:h-screen h-screen sm:mt-20 lg:mt-5 lg:my-none">
+    <section className="z-50 bg-white dark:bg-gray-900 relative w-full md:w-5/6 lg:w-4/5 lg:h-screen h-screen sm:mt-20 lg:mt-5 lg:my-none">
       <LazyMotion features={domAnimation}>
         <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} transition={{ delay: 0.5, ease: 'easeInOut' }} viewport={{ once: true }} className="grid px-4 mx-auto lg:gap-8 xl:gap-0 lg:grid-cols-12 place-items-center align-baseline sm:align-middle h-4/5">
           <div className="mr-auto place-self-center lg:col-span-7 mb-10">
