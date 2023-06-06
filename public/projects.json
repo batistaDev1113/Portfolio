@@ -2,6 +2,22 @@
   "projects": [
     {
       "id": 1,
+      "name": "Portfolio",
+      "imageUrl": "/projects-images/portfolio-min.png",
+      "description": "This is my portfolio site to showcase some of the projects I have worked on my free time. The application was built using: ",
+      "technologies": [
+        "Next.js/React",
+        "Javascript",
+        "Tailwind CSS",
+        "Flowbite-react",
+        "Framer Motion",
+        "Sendgrid API for email"
+      ],
+      "githubLink": "https://github.com/batistaDev1113/movie-finder",
+      "liveDemoLink": "https://yuniorbatista.com"
+    },
+    {
+      "id": 2,
       "name": "Movie Finder",
       "imageUrl": "/projects-images/movies-tmdb-min.png",
       "description": "The Movie Finder project is a web application that allows users to search for movies. The application was built using: ",
@@ -10,7 +26,7 @@
       "liveDemoLink": "https://batistadev1113.github.io/movie-finder"
     },
     {
-      "id": 2,
+      "id": 3,
       "name": "Robofriends",
       "imageUrl": "/projects-images/robofriends-min.png",
       "description": "Robofriends was fun project where the user can search up for robots by name. The application was built using: ",
@@ -19,7 +35,7 @@
       "liveDemoLink": "https://batistadev1113.github.io/robofriends"
     },
     {
-      "id": 3,
+      "id": 4,
       "name": "Neighborhood Map",
       "imageUrl": "/projects-images/disney-maps-min.png",
       "description": "In this project, the user can search for Disney hotel locations in the Orlando, FL area. The application was built using: ",
@@ -28,7 +44,7 @@
       "liveDemoLink": "https://batistadev1113.github.io/neighborhood-map-react"
     },
     {
-      "id": 4,
+      "id": 5,
       "name": "Memory Game",
       "imageUrl": "/projects-images/memory-game-min.png",
       "description": "In the Neighborhood map project, the user can search for Disney hotel locations in the Orlando, FL area. The application was built using: ",

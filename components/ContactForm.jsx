@@ -30,15 +30,15 @@ const ContactForm = () => {
     setSending(false)
   }
   return (
-    <section className="bg-white dark:bg-transparent w-4/5 my-10" id="contact">
+    <section className="z-50 bg-white dark:bg-gray-900 w-4/5 my-10" id="contact">
       <h1 className="text-4xl uppercase text-gray-500 text-center my-20 tracking-widest">Contact Me</h1>
       <Card>
         <LazyMotion features={domAnimation}>
-          <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5, ease: 'easeInOut' }} className="lg:grid lg:grid-cols-12 dark:bg-gray-800 place-items-center bg-white">
+          <m.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1, delay: 0.5, ease: 'easeInOut' }} className="lg:grid lg:grid-cols-12 dark:bg-gray-800 place-items-center">
             <section
-              className="relative flex h-32 items-end bg-transparent lg:col-span-5 lg:h-full xl:col-span-6"
+              className="relative flex h-32 items-center bg-transparent lg:col-span-5 lg:h-auto xl:col-span-6"
             >
-              <Image src="/contact-us.png" width={1000} height={1200} alt="Night" className="inset-0 h-full w-full object-cover xl:object-contain opacity-60 backdrop-blur-md hover:invert duration-500 ease-in-out rounded-md" loading='lazy' placeholder='blur' blurDataURL='data:image/png' />
+              <Image src="/contact-us.png" width={1000} height={1200} alt="Night" className="inset-0 h-full w-full object-cover xl:object-contain opacity-60 backdrop-blur-md hover:opacity-90 duration-500 ease-in-out rounded-md" loading='lazy' placeholder='blur' blurDataURL='data:image/png' />
             </section>
 
             <main
