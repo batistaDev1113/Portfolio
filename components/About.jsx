@@ -25,7 +25,7 @@ const About = () => {
                 <h5 className="text-2xl font-semibold text-gray-500 text-center lg:text-left mt-7 mb-5">
                   A little bit about me
                 </h5>
-                <m.div initial={{ x: 250, opacity: 0 }} whileInView={{ x: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1, ease: 'easeInOut', delay: 0.5 }}>
+                <m.div initial={{ y: 150, opacity: 0 }} whileInView={{ y: 0, opacity: 1 }} viewport={{ once: true }} transition={{ duration: 1, ease: 'easeInOut', delay: 0.5 }}>
                   <p className="font-normal text-gray-700 dark:text-gray-400 leading-loose">
                     Welcome to my web portfolio! I&apos;m Yunior Batista, a passionate and experienced developer dedicated to creating stunning and functional websites & web apps. With a deep understanding of front-end, I strive to craft seamless online experiences that leave a lasting impact.
 
