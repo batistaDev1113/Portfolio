@@ -26,7 +26,7 @@ const Hero = () => {
           className="grid px-4 mx-auto lg:gap-8 xl:gap-0 lg:grid-cols-12 place-items-center align-baseline sm:align-middle h-4/5"
         >
           <div className="mr-auto place-self-center lg:col-span-7 mb-10">
-            <h1 className="mt-0 text-4xl md:text-5xl md:font-semibold tracking-wide leading-none xl:text-6xl text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text font-kaushan">
+            <h1 className="mt-0 mb-5 text-4xl md:text-5xl md:font-semibold tracking-wide leading-none xl:text-6xl text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text font-kaushan">
               Frontend Developer
             </h1>
             <p className="max-w-2xl mb-6 text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400">
@@ -59,6 +59,7 @@ const Hero = () => {
               placeholder="blur"
               blurDataURL="data:image/png"
               quality={100}
+              priority={true}
             />
           </m.div>
         </m.div>

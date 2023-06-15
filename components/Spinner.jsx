@@ -12,6 +12,7 @@ const Spinner = () => {
         width="300"
         height="300"
         quality={95}
+        priority={true}
       />
     </div>
   );
