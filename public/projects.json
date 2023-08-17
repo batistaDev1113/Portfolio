@@ -47,10 +47,10 @@
       "id": 5,
       "name": "Memory Game",
       "imageUrl": "/projects-images/memory-game-min.png",
-      "description": "In the Neighborhood map project, the user can search for Disney hotel locations in the Orlando, FL area. The application was built using: ",
-      "technologies": ["React", "Google Maps API", "Javascript", "CSS"],
-      "githubLink": "https://github.com/batistaDev1113/neighborhood-map-react",
-      "liveDemoLink": "https://batistadev1113.github.io/neighborhood-map-react"
+      "description": "The memory game is a fun and interactive game where the user clicks on the cards and needs to remember their position to match the pair and get the points. The application was built using: ",
+      "technologies": ["Javascript", "CSS"],
+      "githubLink": "https://github.com/batistaDev1113/memory-game",
+      "liveDemoLink": "https://batistadev1113.github.io/memory-game"
     }
   ]
 }
