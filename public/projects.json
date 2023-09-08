@@ -18,6 +18,30 @@
     },
     {
       "id": 2,
+      "name": "Kanban Board",
+      "imageUrl": "/projects-images/kanbanboardclone-min.png",
+      "description": "A web app similar to a kanban board where users can add, drag and drop and eliminate tasks as they get them completed.  This app was built using: ",
+      "technologies": [
+        "React",
+        "Tailwind CSS",
+        "Javascript",
+        "React DND",
+        "Typescript"
+      ],
+      "githubLink": "https://github.com/batistaDev1113/kanban-board",
+      "liveDemoLink": "https://kanbanboardclone.vercel.app/"
+    },
+    {
+      "id": 3,
+      "name": "AI Summarizer",
+      "imageUrl": "/projects-images/ai-summarizer-min.png",
+      "description": "An AI summarizer app where users can enter a link with an article and a summary of it will be displayed to the screen.  This project was built using: ",
+      "technologies": ["React", "Rapid API", "Javascript", "Tailwind CSS"],
+      "githubLink": "https://github.com/batistaDev1113/ai-summarizer",
+      "liveDemoLink": "https://ai-summarizer-umber.vercel.app/"
+    },
+    {
+      "id": 4,
       "name": "Movie Finder",
       "imageUrl": "/projects-images/movies-tmdb-min.png",
       "description": "The Movie Finder project is a web application that allows users to search for movies. The application was built using: ",
@@ -25,24 +49,7 @@
       "githubLink": "https://github.com/batistaDev1113/movie-finder",
       "liveDemoLink": "https://batistadev1113.github.io/movie-finder"
     },
-    {
-      "id": 3,
-      "name": "Robofriends",
-      "imageUrl": "/projects-images/robofriends-min.png",
-      "description": "Robofriends was fun project where the user can search up for robots by name. The application was built using: ",
-      "technologies": ["React", "Robohash API", "Javascript", "CSS"],
-      "githubLink": "https://github.com/batistaDev1113/robofriends",
-      "liveDemoLink": "https://batistadev1113.github.io/robofriends"
-    },
-    {
-      "id": 4,
-      "name": "Neighborhood Map",
-      "imageUrl": "/projects-images/disney-maps-min.png",
-      "description": "In this project, the user can search for Disney hotel locations in the Orlando, FL area. The application was built using: ",
-      "technologies": ["React", "Google Maps API", "Javascript", "CSS"],
-      "githubLink": "https://github.com/batistaDev1113/neighborhood-map-react",
-      "liveDemoLink": "https://batistadev1113.github.io/neighborhood-map-react"
-    },
+
     {
       "id": 5,
       "name": "Memory Game",
