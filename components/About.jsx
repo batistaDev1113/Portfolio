@@ -71,7 +71,7 @@ const About = () => {
                 <Link
                   href="/resume/Yunior_Batista_Resume.pdf"
                   locale={false}
-                  download="/public/resume/Yunior_Batista_Resume.pdf"
+                  download="/resume/Yunior_Batista_Resume.pdf"
                   className=" w-full md:w-1/2 my-10 inline-flex items-center justify-center px-8 py-3 text-base text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-200 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-800 dark:hover:border-indigo-500 dark:focus:ring-gray-800 hover:scale-110 duration-500 ease-in-out"
                   target="_blank"
                 >
