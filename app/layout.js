@@ -1,4 +1,5 @@
 import "./styles/globals.css";
+import { Analytics } from "@vercel/analytics/react";
 import { Montserrat } from "next/font/google";
 import MyThemeProvider from "@/components/ThemeProvider";
 
@@ -15,6 +16,7 @@ export default function RootLayout({ children }) {
       <body suppressHydrationWarning={true} className={montserrat.className}>
         <MyThemeProvider attribute="class">{children}</MyThemeProvider>
       </body>
+      <Analytics />
     </html>
   );
 }
