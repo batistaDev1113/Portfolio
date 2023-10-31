@@ -3,7 +3,7 @@
 module.exports = {
   darkMode: "class",
   mode: "jit",
-  purge: [
+  content: [
     "./node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
     "./node_modules/flowbite/**/*.{js,jsx,ts,tsx}",
     "./public/**/*.html",
