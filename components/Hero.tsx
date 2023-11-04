@@ -7,7 +7,7 @@ import { LazyMotion, domAnimation, m } from "framer-motion";
 import Spinner from "./Spinner";
 
 const Hero = () => {
-  const [mounted, setMounted] = useState(false);
+  const [mounted, setMounted] = useState<Boolean>(false);
 
   useEffect(() => {
     setMounted(true);
