@@ -1,22 +1,25 @@
-import mail from "@sendgrid/mail";
+const mail = require("@sendgrid/mail");
 
-mail.setApiKey(process.env.SENDGRID_API_KEY as string);
+mail.setApiKey(process.env.SENDGRID_API_KEY);
 
-interface Body {
+type BodyProps = {
+  json(): BodyProps | PromiseLike<BodyProps>;
   full_name: string;
   email: string;
   textarea: string;
-}
+};
 
-export const POST = async (req: { json: () => Promise<Body> }) => {
-  const body = await req.json();
+export const POST = async (req: BodyProps) => {
+  const body: BodyProps = await req.json();
 
   console.log(body.full_name);
 
-  const message = `
-    FullName: ${body.full_name}\r\n
-    Email: ${body.email}\r\n
-    Message: ${body.textarea}\r\n
+  const message = `<div style="font-size: 16px;">
+  <h1 style="text-align: center;">New Message from Contact Form</h1>
+    <span><strong>FullName:</strong> ${body.full_name}\r\n</span>
+    <span><strong>Email:</strong> ${body.email}\r\n</span>
+    <p><strong>Message:</strong> ${body.textarea}\r\n</p>
+  </div>
   `;
 
   const data = {
