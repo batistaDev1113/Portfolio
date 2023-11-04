@@ -2,15 +2,17 @@ const mail = require("@sendgrid/mail");
 
 mail.setApiKey(process.env.SENDGRID_API_KEY);
 
-export const POST = async (req) => {
+export const POST = async (req: Request) => {
   const body = await req.json();
 
   console.log(body.full_name);
 
-  const message = `
-    FullName: ${body.full_name}\r\n
-    Email: ${body.email}\r\n
-    Message: ${body.textarea}\r\n
+  const message = `<div style="font-size: 16px;">
+  <h1 style="text-align: center;">New Message from Contact Form</h1>
+    <span><strong>FullName:</strong> ${body.full_name}\r\n</span>
+    <span><strong>Email:</strong> ${body.email}\r\n</span>
+    <p><strong>Message:</strong> ${body.textarea}\r\n</p>
+  </div>
   `;
 
   const data = {

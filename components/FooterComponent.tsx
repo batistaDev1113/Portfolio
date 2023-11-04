@@ -1,7 +1,7 @@
 "use client";
 
 import { Footer } from "flowbite-react";
-import { BsGithub, BsCodeS, BsLinkedin } from "react-icons/bs";
+import { BsGithub, BsLinkedin } from "react-icons/bs";
 import { RxCodesandboxLogo } from "react-icons/rx";
 
 const FooterComponent = () => {

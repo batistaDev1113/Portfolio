@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Navigation from "../components/Navigation";
 import Hero from "../components/Hero";
 import ContactForm from "../components/ContactForm";

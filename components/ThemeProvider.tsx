@@ -1,9 +1,15 @@
-"use client";
-
 import "../app/styles/globals.css";
 import { ThemeProvider } from "next-themes";
 
-const MyThemeProvider = ({ children, ...props }) => {
+interface MyThemeProviderProps {
+  children: React.ReactNode;
+  [key: string]: any;
+}
+
+const MyThemeProvider: React.FC<MyThemeProviderProps> = ({
+  children,
+  ...props
+}) => {
   return (
     <ThemeProvider
       {...props}

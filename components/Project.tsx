@@ -1,7 +1,16 @@
-import { lazy } from "react";
 import Image from "next/image";
 
-const Project = ({ project }) => {
+export type ProjectProps = {
+  project: {
+    name: string;
+    description: string;
+    imageUrl: string;
+    technologies: string[];
+    githubLink: string;
+    liveDemoLink: string;
+  };
+};
+const Project = ({ project }: ProjectProps) => {
   const {
     name,
     description,

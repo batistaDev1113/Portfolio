@@ -62,19 +62,19 @@ Copy code
 ├── app/
 │ ├── api/contact/route.js # Api contact form setup
 │ ├── favicon.ico
-│ ├── page.js # Home page
-│ ├── layout.js # Projects page
-│ ├── not-found.jsx # 404 page
+│ ├── page.tsx # Home page
+│ ├── layout.tsx # Projects page
+│ ├── not-found.tsx # 404 page
 │ └── ...
 ├── components/
-│ ├── About.jsx
-│ ├── ContactForm.jsx
-│ ├── FooterComponent.jsx
-│ ├── Hero.jsx
-│ ├── ModeToggle.jsx
-│ ├── Navigation.jsx
-│ ├── Project.jsx
-│ ├── Projects.jsx
+│ ├── About.tsx
+│ ├── ContactForm.tsx
+│ ├── FooterComponent.tsx
+│ ├── Hero.tsx
+│ ├── ModeToggle.tsx
+│ ├── Navigation.tsx
+│ ├── Project.tsx
+│ ├── Projects.tsx
 │ ├── ThemeProvider.js
 │ └── ...
 ├── styles/
