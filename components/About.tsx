@@ -1,11 +1,11 @@
 "use client";
 
-import { Card, Avatar } from "flowbite-react";
+import { Card } from "flowbite-react";
 import { FaFileDownload } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 import profileImage from "../public/profile.png";
-import { m, LazyMotion, domAnimation, animate } from "framer-motion";
+import { m, LazyMotion, domAnimation } from "framer-motion";
 
 const About = () => {
   return (
@@ -23,7 +23,6 @@ const About = () => {
         <div className="w-full">
           <Card
             horizontal={true}
-            shadow="true"
             className="flex w-full flex-col md:min-w-full lg:h-2/5 my-auto justify-center items-center"
           >
             <m.div

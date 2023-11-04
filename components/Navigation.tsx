@@ -1,9 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { BsSunFill, BsMoonFill } from "react-icons/bs";
-import { Navbar, Button, Tooltip } from "flowbite-react";
-import { useTheme } from "next-themes";
+import { Navbar } from "flowbite-react";
 import { ModeToggle } from "./ModeToggle";
 
 const Navigation = () => {

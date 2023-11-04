@@ -1,19 +1,19 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import Image from "next/image";
 import { FaRegPaperPlane } from "react-icons/fa";
 import { m, domAnimation, LazyMotion } from "framer-motion";
 import { Card } from "flowbite-react";
+import { FormEvent } from "react";
 
 const ContactForm = () => {
-  const [sending, setSending] = useState(false);
+  const [sending, setSending] = useState<boolean>(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
-    const form = e.target;
+    const form = e.currentTarget;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
@@ -119,7 +119,6 @@ const ContactForm = () => {
                       </label>
 
                       <textarea
-                        type="text"
                         id="Message"
                         name="textarea"
                         rows="4"

@@ -1,4 +1,3 @@
-import { lazy } from "react";
 import Image from "next/image";
 
 const Project = ({ project }) => {
