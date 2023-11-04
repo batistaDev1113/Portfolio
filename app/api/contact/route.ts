@@ -2,15 +2,8 @@ const mail = require("@sendgrid/mail");
 
 mail.setApiKey(process.env.SENDGRID_API_KEY);
 
-type BodyProps = {
-  json(): BodyProps | PromiseLike<BodyProps>;
-  full_name: string;
-  email: string;
-  textarea: string;
-};
-
-export const POST = async (req: BodyProps) => {
-  const body: BodyProps = await req.json();
+export const POST = async (req: Request) => {
+  const body = await req.json();
 
   console.log(body.full_name);
 
