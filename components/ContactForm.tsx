@@ -121,7 +121,7 @@ const ContactForm = () => {
                       <textarea
                         id="Message"
                         name="textarea"
-                        rows="4"
+                        rows={4}
                         placeholder="Type your message here..."
                         className="mt-1 w-full rounded-md border border-gray-200 bg-white text-sm text-gray-700 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200 dark:focus:border-green-300 outline-0 focus:ring-0 focus:border-green-300"
                         required
