@@ -36,6 +36,7 @@ const Hero = () => {
             </p>
             <Link
               href="/Yunior_Batista_Resume.pdf"
+              aria-label="Resume"
               locale={false}
               className="inline-flex items-center justify-center px-8 py-3 text-base text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-200 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-800 dark:hover:border-indigo-500 dark:focus:ring-gray-800 hover:scale-110 duration-500 ease-in-out"
               target="_blank"
@@ -54,8 +55,8 @@ const Hero = () => {
             <Image
               src="/hero-developer.png"
               alt="mockup"
-              width="1500"
-              height="300"
+              width="500"
+              height="100"
               className="image"
               loading="eager"
               placeholder="blur"
