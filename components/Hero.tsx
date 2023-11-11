@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { LazyMotion, domAnimation, m } from "framer-motion";
-import Spinner from "./Spinner";
+import Skeleton from "../components/Skeleton";
 
 const Hero = () => {
   const [mounted, setMounted] = useState<Boolean>(false);
@@ -13,7 +13,7 @@ const Hero = () => {
     setMounted(true);
   }, []);
 
-  if (!mounted) return <Spinner />;
+  if (!mounted) return <Skeleton />;
 
   return (
     <section className="z-50 bg-white dark:bg-gray-900 relative w-full md:w-5/6 lg:w-4/5 lg:h-screen h-screen sm:mt-20 lg:mt-5 lg:my-none">
