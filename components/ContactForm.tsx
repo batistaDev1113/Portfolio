@@ -48,8 +48,8 @@ const ContactForm = () => {
             <section className="relative flex h-32 items-center bg-transparent lg:col-span-5 lg:h-auto xl:col-span-6">
               <Image
                 src="/contact-us.png"
-                width={1000}
-                height={1200}
+                width={600}
+                height={100}
                 alt="Night"
                 className="inset-0 h-full w-full object-cover xl:object-contain opacity-60 backdrop-blur-md hover:opacity-90 duration-500 ease-in-out rounded-md"
                 loading="lazy"
