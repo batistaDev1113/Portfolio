@@ -8,7 +8,7 @@ const Skeleton = () => {
         className="grid w-full md:px-12 mx-auto md:w-3/4 lg:gap-8 xl:gap-0 lg:grid-cols-12 place-items-center justify-center align-baseline sm:align-middle h-screen animate-pulse"
       >
         <div className="mr-auto place-self-center lg:col-span-7 mb-10 w-full">
-          <h1 className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-56 mt-0 mb-5"></h1>
+          <p className="h-4 bg-gray-200 rounded-full dark:bg-gray-700 w-56 mt-0 mb-5"></p>
           <p className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 max-w-2xl mb-6"></p>
           <button className="bg-gray-200 rounded-md dark:bg-gray-700 w-32 h-10"></button>
         </div>

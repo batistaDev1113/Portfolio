@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint --fix"
   },
   "dependencies": {
     "@sendgrid/mail": "^7.7.0",
@@ -14,6 +14,7 @@
     "autoprefixer": "10.4.14",
     "eslint": "8.40.0",
     "eslint-config-next": "13.4.2",
+    "eslint-plugin-prettier": "^5.0.1",
     "flowbite": "^1.6.5",
     "flowbite-react": "^0.4.4",
     "framer-motion": "^10.12.14",
@@ -31,6 +32,8 @@
     "@tailwindcss/forms": "^0.5.3",
     "@types/node": "20.8.10",
     "@types/react": "^18.2.33",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
     "typescript": "^5.2.2"
   }
 }
