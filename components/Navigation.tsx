@@ -28,7 +28,7 @@ const Navigation = () => {
         </Navbar.Link>
         <Navbar.Link href="#projects" role="navigation">
           <span className="pb-1 hover:text-teal-600 dark:hover:text-teal-300 hover:border-b-2  hover:border-indigo-500 hover:border-spacing-4">
-            Some Projects I've Built
+            Some Projects I&apos;ve Built
           </span>
         </Navbar.Link>
         <Navbar.Link href="#contact" role="navigation">

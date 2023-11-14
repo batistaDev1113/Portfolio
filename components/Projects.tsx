@@ -21,7 +21,7 @@ const Projects = () => {
       id="projects"
     >
       <h3 className=" w-full text-4xl uppercase text-gray-500 text-center my-20 tracking-widest">
-        Some Projects I've Built
+        Some Projects I&apos;ve Built
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full gap-6">
         {projects.map((project) => (
