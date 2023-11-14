@@ -15,8 +15,11 @@ export function ModeToggle() {
   if (!mounted) return null;
 
   return (
-    <button
+    <div
+      role="button"
+      tabIndex={0}
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+      onKeyDown={() => setTheme(theme === "light" ? "dark" : "light")}
       className="w-6 h-6 flex items-center justify-center cursor-pointer transition:ease-in-out hover:scale-110 duration-200"
     >
       {theme === "dark" ? (
@@ -24,6 +27,6 @@ export function ModeToggle() {
       ) : (
         <BsMoonFill className="text-black" size={15} />
       )}
-    </button>
+    </div>
   );
 }

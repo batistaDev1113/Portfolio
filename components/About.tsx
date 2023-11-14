@@ -17,9 +17,9 @@ const About = () => {
         className="z-50 w-4/5 mx-auto dark:bg-gray-900 bg-white"
         id="about"
       >
-        <h1 className="text-4xl uppercase text-gray-500 text-center tracking-widest my-20">
-          About
-        </h1>
+        <h2 className="text-4xl uppercase text-gray-500 text-center tracking-widest my-20">
+          About Me
+        </h2>
         <div className="w-full">
           <Card
             horizontal={true}
