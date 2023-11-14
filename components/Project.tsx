@@ -29,8 +29,8 @@ const Project = ({ project }: ProjectProps) => {
               className="w-full rounded-xl shadow-xl shadow-black/40"
               src={imageUrl}
               alt={name}
-              width={3000}
-              height={2500}
+              width={500}
+              height={300}
               loading="lazy"
               placeholder="blur"
               blurDataURL="data:image/png"
