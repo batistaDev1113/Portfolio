@@ -7,11 +7,11 @@ const AboutDynamic = dynamic(() => import("../components/About"), {});
 const ProjectsDynamic = dynamic(() => import("../components/Projects"), {});
 const ContactFormDynamic = dynamic(
   () => import("../components/ContactForm"),
-  {}
+  {},
 );
 const FooterDynamic = dynamic(
   () => import("../components/FooterComponent"),
-  {}
+  {},
 );
 
 export default function Home() {
