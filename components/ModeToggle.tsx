@@ -16,16 +16,16 @@ export function ModeToggle() {
 
   return (
     <div
-      role="button"
+      role='button'
       tabIndex={0}
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       onKeyDown={() => setTheme(theme === "light" ? "dark" : "light")}
-      className="w-6 h-6 flex items-center justify-center cursor-pointer transition:ease-in-out hover:scale-110 duration-200"
+      className='w-6 h-6 flex items-center justify-center cursor-pointer transition:ease-in-out hover:scale-110 duration-200'
     >
       {theme === "dark" ? (
-        <BsSunFill size={15} className="text-white" />
+        <BsSunFill size={15} className='text-white' />
       ) : (
-        <BsMoonFill className="text-black" size={15} />
+        <BsMoonFill className='text-black' size={15} />
       )}
     </div>
   );

@@ -13,7 +13,7 @@ const MyThemeProvider: React.FC<MyThemeProviderProps> = ({
   return (
     <ThemeProvider
       {...props}
-      defaultTheme="dark"
+      defaultTheme='dark'
       enableSystem={true}
       enableColorScheme={true}
     >

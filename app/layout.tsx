@@ -23,7 +23,7 @@ export interface RootLayoutProps {
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang='en' suppressHydrationWarning>
       <body suppressHydrationWarning={true} className={montserrat.className}>
         <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
         <VercelAnalytics />

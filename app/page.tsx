@@ -16,7 +16,7 @@ const FooterDynamic = dynamic(
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center w-full snap-y snap-mandatory scroll-smooth overflow-hidden">
+    <main className='flex min-h-screen flex-col items-center w-full snap-y snap-mandatory scroll-smooth overflow-hidden'>
       <Navigation />
       <Hero />
       <AboutDynamic />
