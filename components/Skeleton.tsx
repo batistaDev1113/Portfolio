@@ -2,7 +2,10 @@ import React from "react";
 
 const Skeleton = () => {
   return (
-    <section className='flex min-h-screen flex-col items-center w-full'>
+    <section
+      className='flex min-h-screen flex-col items-center w-full'
+      data-testid='skeleton'
+    >
       <div
         role='status'
         className='grid w-full md:px-12 mx-auto md:w-3/4 lg:gap-8 xl:gap-0 lg:grid-cols-12 place-items-center justify-center align-baseline sm:align-middle h-screen animate-pulse'

@@ -16,7 +16,10 @@ const Hero = () => {
   if (!mounted) return <Skeleton />;
 
   return (
-    <section className='z-50 bg-white dark:bg-gray-900 relative w-full md:w-5/6 lg:w-4/5 lg:h-screen h-screen sm:mt-20 lg:mt-5 lg:my-none'>
+    <section
+      className='z-50 bg-white dark:bg-gray-900 relative w-full md:w-5/6 lg:w-4/5 lg:h-screen h-screen sm:mt-20 lg:mt-5 lg:my-none'
+      data-testid='hero-section'
+    >
       <LazyMotion features={domAnimation}>
         <m.div
           initial={{ opacity: 0 }}
