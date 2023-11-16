@@ -32,7 +32,7 @@ const About = () => {
               className='flex flex-col xl:flex-row align-middle justify-center gap-2   place-items-center xl:place-items-start '
             >
               <Image
-                src='/yunior-batista.jpg'
+                src='/profile.png'
                 alt='Yunior Batista'
                 width={300}
                 height={300}
