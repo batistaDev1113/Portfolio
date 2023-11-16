@@ -4,7 +4,6 @@ import { Card } from "flowbite-react";
 import { FaFileDownload } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import profileImage from "../public/profile.png";
 import { m, LazyMotion, domAnimation } from "framer-motion";
 
 const About = () => {
@@ -33,7 +32,7 @@ const About = () => {
               className='flex flex-col xl:flex-row align-middle justify-center gap-2   place-items-center xl:place-items-start '
             >
               <Image
-                src={profileImage}
+                src='/yunior-batista.jpg'
                 alt='Yunior Batista'
                 width={300}
                 height={300}
