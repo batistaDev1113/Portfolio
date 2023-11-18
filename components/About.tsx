@@ -16,7 +16,7 @@ const About = () => {
         className='z-50 w-4/5 mx-auto dark:bg-gray-900 bg-white'
         id='about'
       >
-        <h2 className='text-4xl uppercase text-gray-500 text-center tracking-widest my-20'>
+        <h2 className='md:text-4xl font-semibold md:font-normal text-lg uppercase text-gray-500 text-center tracking-widest my-20'>
           About Me
         </h2>
         <div className='w-full'>
@@ -42,7 +42,7 @@ const About = () => {
                 blurDataURL='data:image/png'
               />
               <div className='flex flex-col sm:px-10'>
-                <h5 className='text-2xl font-semibold text-gray-500 text-center lg:text-left mt-7 mb-5'>
+                <h5 className='md:text-2xl text-gray-500 text-center lg:text-left mt-7 mb-5'>
                   A little bit about me
                 </h5>
                 <m.div
