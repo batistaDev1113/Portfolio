@@ -1,4 +1,9 @@
+"use client";
+import { useState } from "react";
 import Image from "next/image";
+import { Card, Button } from "flowbite-react";
+import ProjectModal from "./ProjectModal";
+import { LazyMotion, domAnimation, m } from "framer-motion";
 
 export type ProjectProps = {
   project: {
@@ -11,6 +16,7 @@ export type ProjectProps = {
   };
 };
 const Project = ({ project }: ProjectProps) => {
+  const [openModal, setOpenModal] = useState(false);
   const {
     name,
     description,
@@ -21,53 +27,51 @@ const Project = ({ project }: ProjectProps) => {
   } = project;
 
   return (
-    <div className='dark:bg-transparent w-full'>
-      <div className='group h-auto w-70'>
-        <div className='grid grid-cols-3 relative h-full w-full rounded-xl shadow-xl transition-all duration-500 [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]'>
-          <div className='relative col-span-6 m-5'>
+    <LazyMotion features={domAnimation}>
+      <m.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ delay: 1, ease: "easeInOut", duration: 2 }}
+        viewport={{ once: true }}
+      >
+        <div className='dark:bg-transparent w-full hover:cursor-pointer flex justify-center'>
+          <Card
+            className='w-full flowbite-card hover:shadow-xl hover:shadow-slate-300 transition duration-500 ease-in-out'
+            horizontal
+          >
             <Image
-              className='w-full rounded-xl shadow-xl shadow-black/40'
               src={imageUrl}
-              alt={name}
               width={500}
-              height={300}
-              loading='lazy'
-              placeholder='blur'
-              blurDataURL='data:image/png'
-              quality={100}
+              height={500}
+              alt='Project image'
+              className='image max-h-200 rounded-t-md'
             />
-          </div>
-
-          <div className='absolute inset-0 h-auto w-full rounded-xl bg-gray-800 px-6 xl:px-12 text-center text-slate-200 [transform:rotateY(180deg)] [backface-visibility:hidden]'>
-            <div className='flex h-full flex-col text-left justify-center w-full'>
-              <h1 className='text-md md:text-2xl font-bold'>{name}</h1>
-              <p className='text-sm md:text-md'>{description}</p>
-              <ul className='list-disc'>
-                {technologies.map((technology) => (
-                  <li key={technology} className='text-base'>
-                    {technology}
-                  </li>
-                ))}
-              </ul>
-              <a
-                href={githubLink}
-                target='_blank'
-                className='mt-2 text-gray-800 rounded-md bg-green-300 py-1 px-2 text-sm hover:bg-green-500'
+            <div className='p-6 h-60'>
+              <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>
+                {name}
+              </h5>
+              <p className='font-normal text-gray-700 dark:text-gray-400 mt-5 mb-5'>
+                {description}
+              </p>
+              <Button
+                gradientDuoTone='purpleToBlue'
+                onClick={() => setOpenModal(!openModal)}
               >
-                Github Repo
-              </a>
-              <a
-                href={liveDemoLink}
-                target='_blank'
-                className='mt-2 text-gray-800 rounded-md bg-green-300 py-1 px-2 text-sm hover:bg-green-500'
-              >
-                Live Demo
-              </a>
+                More Details
+              </Button>
             </div>
-          </div>
+          </Card>
+
+          <ProjectModal
+            openModal={openModal}
+            setOpenModal={setOpenModal}
+            technologies={technologies}
+            githubLink={githubLink}
+            liveDemoLink={liveDemoLink}
+          />
         </div>
-      </div>
-    </div>
+      </m.div>
+    </LazyMotion>
   );
 };
 

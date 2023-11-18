@@ -26,31 +26,36 @@
   body {
     @apply dark:bg-gray-900 bg-white;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* scrollbar styles */
+
+  ::-webkit-scrollbar {
+    width: auto;
+  }
+
+  ::-webkit-scrollbar-track {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(to bottom, #86efac, #3b82f6, #9333ea);
+    border-radius: 20px;
+    width: 10px;
+  }
+
+  .image {
+    object-fit: fill;
+    width: 100% !important;
+    position: relative !important;
+    height: unset !important;
+  }
+
+  .flowbite-card div:first-child{
+    padding: 0 !important;
+  }
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
-/* scrollbar styles */
-
-::-webkit-scrollbar {
-  width: auto;
-}
-
-::-webkit-scrollbar-track {
-  width: 10px;
-}
-
-::-webkit-scrollbar-thumb {
-  background-image: linear-gradient(to bottom, #86efac, #3b82f6, #9333ea);
-  border-radius: 20px;
-  width: 10px;
-}
-
-.image {
-  object-fit: fill;
-  width: 100% !important;
-  position: relative !important;
-  height: unset !important;
-}
