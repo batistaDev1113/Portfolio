@@ -36,7 +36,7 @@ const Project = ({ project }: ProjectProps) => {
       >
         <div className='dark:bg-transparent w-full hover:cursor-pointer flex justify-center'>
           <Card
-            className='w-full flowbite-card hover:shadow-xl hover:shadow-slate-300 transition duration-500 ease-in-out'
+            className='w-full flowbite-card hover:shadow-xl hover:shadow-slate-600 transition duration-500 ease-in-out'
             horizontal
           >
             <Image
@@ -46,7 +46,7 @@ const Project = ({ project }: ProjectProps) => {
               alt='Project image'
               className='image max-h-200 rounded-t-md'
             />
-            <div className='p-6 h-60'>
+            <div className='p-6 md:h-60 h-70 flex flex-col justify-around'>
               <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>
                 {name}
               </h5>

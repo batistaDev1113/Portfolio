@@ -33,7 +33,7 @@ const ContactForm = () => {
       className='z-50 bg-white dark:bg-gray-900 w-4/5 my-10'
       id='contact'
     >
-      <h1 className='text-4xl uppercase text-gray-500 text-center my-20 tracking-widest'>
+      <h1 className='text-lg md:text-4xl uppercase text-gray-500 text-center my-20 tracking-widest font-semibold md:font-normal'>
         Contact Me
       </h1>
       <Card>
