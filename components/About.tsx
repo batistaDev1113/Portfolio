@@ -29,20 +29,20 @@ const About = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.5, ease: "easeInOut" }}
-              className='flex flex-col xl:flex-row align-middle justify-center gap-2   place-items-center xl:place-items-start '
+              className='flex flex-col lg:flex-row align-middle justify-center gap-2 place-items-center'
             >
               <Image
-                src='/profile.png'
+                src='/picofme.png'
                 alt='Yunior Batista'
                 width={300}
                 height={300}
-                className='sm:px-10 lg:scale-140 scale-100'
+                className='sm:px-10'
                 loading='lazy'
                 placeholder='blur'
                 blurDataURL='data:image/png'
               />
               <div className='flex flex-col sm:px-10'>
-                <h5 className='md:text-2xl text-gray-500 text-center lg:text-left mt-7 mb-5'>
+                <h5 className='text-center md:text-2xl text-gray-500 lg:text-left mt-7 mb-5'>
                   A little bit about me
                 </h5>
                 <m.div
