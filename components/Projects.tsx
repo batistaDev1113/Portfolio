@@ -1,20 +1,19 @@
-import data from "../public/projects.json";
 import Project from "./Project";
+import { fetchData } from "../db/fetchData";
 
-type ProjectPropsArray = {
-  projects: {
-    id: number;
-    name: string;
-    description: string;
-    imageUrl: string;
-    technologies: string[];
-    githubLink: string;
-    liveDemoLink: string;
-  }[];
+type ProjectProps = {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+  technologies: string[];
+  githubLink: string;
+  liveDemoLink: string;
 };
 
-const Projects = () => {
-  const { projects }: ProjectPropsArray = data;
+const Projects = async () => {
+  const projects: ProjectProps[] = (await fetchData()) || [];
+
   return (
     <div
       className='bg-white w-4/5 mx-auto my-20 dark:bg-gray-900 z-50'
