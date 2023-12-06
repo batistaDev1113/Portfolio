@@ -15,6 +15,7 @@ const nextConfig = {
   },
   images: {
     domains: ["flowbite.com"],
+    formats: ["image/webp"],
   },
   reactStrictMode: true,
   swcMinify: true,

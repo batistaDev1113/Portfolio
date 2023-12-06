@@ -6,6 +6,7 @@ import { FaRegPaperPlane } from "react-icons/fa";
 import { m, domAnimation, LazyMotion } from "framer-motion";
 import { Card } from "flowbite-react";
 import { FormEvent } from "react";
+import contactusImage from "/public/contact-us.webp";
 
 const ContactForm = () => {
   const [sending, setSending] = useState<boolean>(false);
@@ -47,7 +48,7 @@ const ContactForm = () => {
           >
             <section className='relative flex h-32 items-center bg-transparent lg:col-span-5 lg:h-auto xl:col-span-6'>
               <Image
-                src='/contact-us.png'
+                src={contactusImage}
                 width={600}
                 height={100}
                 alt='Night'
