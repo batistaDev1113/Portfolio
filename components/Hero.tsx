@@ -24,12 +24,8 @@ const Hero = () => {
       <section
         style={{
           backgroundImage: `url(${heroImage.src})`,
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "cover",
-          backgroundPosition: "bottom center",
-          backgroundAttachment: "fixed",
         }}
-        className='z-50 relative w-full h-screen mt-5 items-center justify-center flex'
+        className='z-50 relative w-full h-screen mt-5 items-center justify-center flex bg-auto bg-no-repeat bg-center md:bg-cover bg-fixed'
         data-testid='hero-section'
       >
         <m.div
