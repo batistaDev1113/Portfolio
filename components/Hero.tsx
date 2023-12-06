@@ -3,8 +3,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import heroImage from "/public/heroBackground.jpg";
+import { FaFileDownload } from "react-icons/fa";
 import { LazyMotion, domAnimation, m } from "framer-motion";
 import Skeleton from "../components/Skeleton";
+import { Card } from "flowbite-react";
+import profile from "/public/picofme.png";
 
 const Hero = () => {
   const [mounted, setMounted] = useState<Boolean>(false);
@@ -16,61 +20,100 @@ const Hero = () => {
   if (!mounted) return <Skeleton />;
 
   return (
-    <section
-      className='z-50 bg-white dark:bg-gray-900 relative w-full md:w-5/6 lg:w-4/5 lg:h-screen h-screen sm:mt-20 lg:mt-5 lg:my-none'
-      data-testid='hero-section'
-    >
-      <LazyMotion features={domAnimation}>
+    <LazyMotion features={domAnimation}>
+      <section
+        style={{
+          backgroundImage: `url(${heroImage.src})`,
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "cover",
+          backgroundPosition: "bottom center",
+          backgroundAttachment: "fixed",
+        }}
+        className='z-50 relative w-full h-screen mt-5 items-center justify-center flex'
+        data-testid='hero-section'
+      >
         <m.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.5, ease: "easeInOut" }}
           viewport={{ once: true }}
-          className='grid px-4 mx-auto lg:gap-8 xl:gap-0 lg:grid-cols-12 place-items-center align-baseline sm:align-middle h-4/5'
+          className='w-full flex justify-center items-center'
         >
-          <div className='mr-auto place-self-center lg:col-span-7 mb-10'>
-            <h1 className='mt-0 mb-5 text-4xl md:text-5xl md:font-semibold tracking-wide leading-none xl:text-6xl text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text font-kaushan'>
-              Frontend Developer
-            </h1>
-            <p className='max-w-2xl mb-6 text-gray-500 lg:mb-8 md:text-lg lg:text-xl dark:text-gray-400'>
-              {" "}
-              Building beautiful, user-friendly experiences with cutting-edge
-              technology.{" "}
-            </p>
-            <Link
-              href='/Yunior_Batista_Resume.pdf'
-              aria-label='Resume'
-              locale={false}
-              className='inline-flex items-center justify-center px-8 py-3 text-base text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-200 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-800 dark:hover:border-indigo-500 dark:focus:ring-gray-800 hover:scale-110 duration-500 ease-in-out'
-              target='_blank'
-              rel='noopener noreferrer'
-            >
-              Resume
-            </Link>
-          </div>
-          <m.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.5, ease: "easeInOut" }}
-            className='flex justify-center lg:mt-0 lg:col-span-5 lg:flex bg-slate-900 bg-transparent rounded-lg shadow-lg hover:scale-105 duration-300 skew-x-6 md:w-full w-5/6 mx-auto'
-          >
-            <Image
-              src='/hero-developer.png'
-              alt='mockup'
-              width='500'
-              height='100'
-              className='image'
-              loading='eager'
-              placeholder='blur'
-              blurDataURL='data:image/png'
-              quality={100}
-              priority={true}
-            />
-          </m.div>
+          <Card className='w-11/12 lg:w-10/12 xl:w-1/2 items-center'>
+            <div className='flex flex-col items-center'>
+              <m.div
+                initial={{ translateX: 120, opacity: 0 }}
+                animate={{ x: -120 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 1, ease: "easeInOut" }}
+              >
+                <Image
+                  alt=' Yunior Batista'
+                  height='96'
+                  src={profile}
+                  width='96'
+                  sizes='(max-width: 600px) 100vw, (max-width: 1400px) 50vw, 1000px'
+                  className='mb-3 rounded-full shadow-lg'
+                />
+              </m.div>
+              <h5 className='mb-1 text-2xl font-medium text-gray-900 dark:text-white'>
+                Yunior Batista
+              </h5>
+              <m.div
+                initial={{ translateX: 120, opacity: 0 }}
+                animate={{ x: -120 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 1.5, ease: "easeInOut" }}
+                className='my-5'
+              >
+                <span className='text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text font-kaushan text-4xl font-semibold'>
+                  Frontend Developer
+                </span>
+              </m.div>
+              <m.div
+                initial={{ translateX: 120, opacity: 0 }}
+                animate={{ x: -120 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 2, ease: "easeInOut" }}
+              >
+                <p className='text-sm text-gray-500 dark:text-gray-400 max-w-md text-center leading-6'>
+                  I&apos;m a Frontend Developer with 5+ years of experience,
+                  creating beautiful user experiences using technologies such as
+                  React, Nextjs, TypeScript and JavaScript.
+                </p>
+              </m.div>
+              <section className='grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-3 grid-flow-col'>
+                <Link
+                  href='/Yunior_Batista_Resume.pdf'
+                  aria-label='Resume'
+                  locale={false}
+                  className='button-about'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  View Resume
+                </Link>
+                <Link
+                  href='/Yunior_Batista_Resume.pdf'
+                  aria-label='Download my CV'
+                  locale={false}
+                  download='/Yunior_Batista_Resume.pdf'
+                  className='button-about'
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  Download Resume
+                  <FaFileDownload className='ml-2' />
+                </Link>
+              </section>
+            </div>
+          </Card>
         </m.div>
-      </LazyMotion>
-    </section>
+      </section>
+    </LazyMotion>
   );
 };
 
