@@ -14,7 +14,7 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["flowbite.com"],
+    domains: ["flowbite.com", "pidpxaphvdylvpcpsgcs.supabase.co"],
     formats: ["image/webp"],
   },
   reactStrictMode: true,
