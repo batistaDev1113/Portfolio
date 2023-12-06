@@ -3,12 +3,12 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import heroImage from "/public/heroBackground.jpg";
+import heroImage from "/public/heroBackground.webp";
 import { FaFileDownload } from "react-icons/fa";
 import { LazyMotion, domAnimation, m } from "framer-motion";
 import Skeleton from "../components/Skeleton";
 import { Card } from "flowbite-react";
-import profile from "/public/picofme.png";
+import profile from "/public/picofme.webp";
 
 const Hero = () => {
   const [mounted, setMounted] = useState<Boolean>(false);
