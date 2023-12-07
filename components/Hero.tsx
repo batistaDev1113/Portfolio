@@ -25,7 +25,7 @@ const Hero = () => {
         style={{
           backgroundImage: `url(${heroImage.src})`,
         }}
-        className='z-50 relative w-full h-screen mt-5 items-center justify-center flex bg-auto bg-no-repeat bg-center md:bg-cover bg-fixed'
+        className='z-50 relative w-full h-screen items-center justify-center flex bg-no-repeat bg-center bg-auto md:bg-fixed'
         data-testid='hero-section'
       >
         <m.div
@@ -64,7 +64,7 @@ const Hero = () => {
                 transition={{ delay: 1.5, ease: "easeInOut" }}
                 className='my-5'
               >
-                <span className='text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text font-kaushan text-4xl font-semibold'>
+                <span className='text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text font-kaushan text-2xl md:text-4xl font-semibold'>
                   Frontend Developer
                 </span>
               </m.div>
