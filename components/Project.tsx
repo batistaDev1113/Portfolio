@@ -46,6 +46,9 @@ const Project = ({ project }: ProjectProps) => {
               alt='Project image'
               className='image max-h-200 rounded-t-md'
               loading='lazy'
+              placeholder='blur'
+              blurDataURL='data:image/png'
+              fetchPriority='low'
             />
             <div className='p-6 md:h-60 h-70 flex flex-col justify-around'>
               <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>

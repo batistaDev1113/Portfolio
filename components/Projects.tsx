@@ -19,7 +19,7 @@ const Projects = async () => {
       className='bg-white w-4/5 mx-auto my-20 dark:bg-gray-900 z-50'
       id='projects'
     >
-      <h3 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-500 text-center my-20 tracking-widest'>
+      <h3 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center my-20 tracking-widest'>
         Some Projects I&apos;ve Built
       </h3>
       <div className='grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 w-full gap-6'>
