@@ -84,7 +84,7 @@ const Hero = () => {
               <section className='grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-3 grid-flow-col'>
                 <Link
                   href='/Yunior_Batista_Resume.pdf'
-                  aria-label='Resume'
+                  aria-label='View Resume'
                   locale={false}
                   className='button-about'
                   target='_blank'
@@ -94,7 +94,7 @@ const Hero = () => {
                 </Link>
                 <Link
                   href='/Yunior_Batista_Resume.pdf'
-                  aria-label='Download my CV'
+                  aria-label='Download Resume'
                   locale={false}
                   download='/Yunior_Batista_Resume.pdf'
                   className='button-about'

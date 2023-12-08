@@ -21,12 +21,20 @@ const Navigation = () => {
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse className='uppercase'>
-        <Navbar.Link href='#projects' role='navigation'>
+        <Navbar.Link
+          href='#projects'
+          role='link'
+          aria-label='Link to projects section'
+        >
           <span className='pb-1 hover:text-teal-600 dark:hover:text-teal-300 hover:border-b-2  hover:border-indigo-500 hover:border-spacing-4'>
             Some Projects I&apos;ve Built
           </span>
         </Navbar.Link>
-        <Navbar.Link href='#contact' role='navigation'>
+        <Navbar.Link
+          href='#contact'
+          role='link'
+          aria-label='Link to contact me form'
+        >
           <span className='pb-1 hover:text-teal-600 dark:hover:text-teal-300 hover:border-b-2  hover:border-indigo-500 hover:border-spacing-4'>
             Contact Me
           </span>
