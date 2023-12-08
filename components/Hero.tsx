@@ -53,7 +53,7 @@ const Hero = () => {
                   className='mb-3 rounded-full shadow-lg'
                 />
               </m.div>
-              <h5 className='mb-1 text-2xl font-medium text-gray-900 dark:text-white'>
+              <h5 className='mb-1 text-2xl opacity-70 font-semibold text-gray-900 dark:text-white'>
                 Yunior Batista
               </h5>
               <m.div
@@ -64,7 +64,7 @@ const Hero = () => {
                 transition={{ delay: 1.5, ease: "easeInOut" }}
                 className='my-5'
               >
-                <span className='text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text font-kaushan text-2xl md:text-4xl font-semibold'>
+                <span className='text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-2xl md:text-4xl font-semibold'>
                   Frontend Developer
                 </span>
               </m.div>

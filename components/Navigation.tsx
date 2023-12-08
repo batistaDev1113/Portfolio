@@ -12,7 +12,7 @@ const Navigation = () => {
     >
       <Navbar.Brand
         href='/'
-        className='header-text self-center text-2xl font-semibold font-kaushan text-teal-600 dark:text-teal-300 lg:text-3xl hover:text-teal-600'
+        className='self-center text-2xl font-semibold text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text md:text-4xl lg:text-3xl hover:text-teal-600'
       >
         Yunior B.
       </Navbar.Brand>
@@ -21,11 +21,6 @@ const Navigation = () => {
         <Navbar.Toggle />
       </div>
       <Navbar.Collapse className='uppercase'>
-        {/* <Navbar.Link href='#about' role='navigation'>
-          <span className='pb-1 hover:text-teal-600 dark:hover:text-teal-300 hover:border-b-2  hover:border-indigo-500 hover:border-spacing-8'>
-            About Me
-          </span>
-        </Navbar.Link> */}
         <Navbar.Link href='#projects' role='navigation'>
           <span className='pb-1 hover:text-teal-600 dark:hover:text-teal-300 hover:border-b-2  hover:border-indigo-500 hover:border-spacing-4'>
             Some Projects I&apos;ve Built
