@@ -4,6 +4,9 @@ import { Footer } from "flowbite-react";
 import { BsGithub, BsLinkedin } from "react-icons/bs";
 import { RxCodesandboxLogo } from "react-icons/rx";
 
+const LINKEDIN_URL = "https://www.linkedin.com/in/yunior-profile/";
+const GITHUB_URL = "https://github.com/batistaDev1113";
+
 const FooterComponent = () => {
   return (
     <Footer
@@ -16,13 +19,13 @@ const FooterComponent = () => {
           <Footer.Copyright href='#' by='Yunior Batista' year={2023} />
           <div className='flex space-x-4 ml-8'>
             <Footer.Icon
-              href='https://www.linkedin.com/in/yunior-batista-profile/'
+              href={LINKEDIN_URL}
               target='_blank'
               icon={BsLinkedin}
               aria-label="Link to Yunior's LinkedIn profile"
             />
             <Footer.Icon
-              href='https://github.com/batistaDev1113'
+              href={GITHUB_URL}
               target='_blank'
               icon={BsGithub}
               aria-label="Link to Yunior's GitHub profile"
