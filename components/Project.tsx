@@ -51,9 +51,9 @@ const Project = ({ project }: ProjectProps) => {
               fetchPriority='low'
             />
             <div className='p-6 md:h-60 h-70 flex flex-col justify-around'>
-              <h5 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>
+              <h4 className='text-2xl font-bold tracking-tight text-gray-900 dark:text-white'>
                 {name}
-              </h5>
+              </h4>
               <p className='font-normal text-gray-700 dark:text-gray-400 mt-5 mb-5'>
                 {description}
               </p>

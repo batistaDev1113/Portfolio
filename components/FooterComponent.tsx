@@ -19,13 +19,20 @@ const FooterComponent = () => {
               href='https://www.linkedin.com/in/yunior-batista-profile/'
               target='_blank'
               icon={BsLinkedin}
+              aria-label="Link to Yunior's LinkedIn profile"
             />
             <Footer.Icon
               href='https://github.com/batistaDev1113'
               target='_blank'
               icon={BsGithub}
+              aria-label="Link to Yunior's GitHub profile"
             />
-            <Footer.Icon href='#' target='_blank' icon={RxCodesandboxLogo} />
+            <Footer.Icon
+              href='#'
+              target='_blank'
+              icon={RxCodesandboxLogo}
+              aria-label="Link to Yunior's codesandbox profile"
+            />
           </div>
         </div>
       </div>
