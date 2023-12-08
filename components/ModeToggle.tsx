@@ -2,21 +2,13 @@
 
 import { useTheme } from "next-themes";
 import { BsSunFill, BsMoonFill } from "react-icons/bs";
-import { useEffect, useState } from "react";
-
 export function ModeToggle() {
-  const { setTheme, theme } = useTheme();
-  const [mounted, setMounted] = useState<Boolean>(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
+  const { theme, setTheme } = useTheme();
 
   return (
     <div
       role='button'
+      aria-label='Toggle theme mode'
       tabIndex={0}
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
       onKeyDown={() => setTheme(theme === "light" ? "dark" : "light")}
@@ -30,3 +22,5 @@ export function ModeToggle() {
     </div>
   );
 }
+
+export default ModeToggle;
