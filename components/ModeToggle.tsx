@@ -1,9 +1,17 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 import { BsSunFill, BsMoonFill } from "react-icons/bs";
 export function ModeToggle() {
+  const [mounted, setMounted] = useState<Boolean>(false);
   const { theme, setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
 
   return (
     <div
