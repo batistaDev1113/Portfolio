@@ -10,9 +10,14 @@ const supabaseUrl: string = process.env.SUPABASE_URL;
 const supabaseKey: string = process.env.SUPABASE_KEY;
 export const supabase = createClient(supabaseUrl, supabaseKey);
 
+export const revalidate = 1;
+
 export async function fetchData() {
   try {
-    const { data, error } = await supabase.from("projects").select("*");
+    const { data, error } = await supabase
+      .from("projects")
+      .select("*")
+      .order("id", { ascending: true });
     if (error) throw error;
     return data;
   } catch (error) {
