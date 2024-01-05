@@ -16,7 +16,7 @@ const FooterComponent = () => {
       <div className='w-full'>
         <Footer.Divider />
         <div className='w-full flex justify-between lg:justify-evenly md:text-center'>
-          <Footer.Copyright href='#' by='Yunior Batista' year={2023} />
+          <Footer.Copyright href='#' by='Yunior Batista' year={2024} />
           <div className='flex space-x-4 ml-8'>
             <Footer.Icon
               href={LINKEDIN_URL}
