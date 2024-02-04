@@ -55,39 +55,6 @@ npm run dev
 
 Open your browser and visit http://localhost:3000 to view the website.
 
-Project Structure
-
-```console
-Copy code
-├── app/
-│ ├── api/contact/route.js # Api contact form setup
-│ ├── favicon.ico
-│ ├── page.tsx # Home page
-│ ├── layout.tsx # Projects page
-│ ├── not-found.tsx # 404 page
-│ └── ...
-├── components/
-│ ├── About.tsx
-│ ├── ContactForm.tsx
-│ ├── FooterComponent.tsx
-│ ├── Hero.tsx
-│ ├── ModeToggle.tsx
-│ ├── Navigation.tsx
-│ ├── Project.tsx
-│ ├── Projects.tsx
-│ ├── ThemeProvider.js
-│ └── ...
-├── styles/
-│ ├── globals.css # Global styles
-│ └── ...
-├── public/
-│ ├── project-images/ # Project images
-│ └── resume/Yunior_Batista_Resume.pdf # resume file
-├── ...
-├── README.md # Project documentation
-└── ...
-```
-
 **Contributing**
 Contributions to improve the portfolio website are welcome. If you encounter any issues or have suggestions for enhancements, please feel free to open an issue or submit a pull request.
 
