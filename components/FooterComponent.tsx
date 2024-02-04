@@ -7,6 +7,8 @@ import { RxCodesandboxLogo } from "react-icons/rx";
 const LINKEDIN_URL = "https://www.linkedin.com/in/yunior-profile/";
 const GITHUB_URL = "https://github.com/batistaDev1113";
 
+const YEAR = new Date().getFullYear();
+
 const FooterComponent = () => {
   return (
     <Footer
@@ -16,7 +18,7 @@ const FooterComponent = () => {
       <div className='w-full'>
         <Footer.Divider />
         <div className='w-full flex justify-between lg:justify-evenly md:text-center'>
-          <Footer.Copyright href='#' by='Yunior Batista' year={2024} />
+          <Footer.Copyright href='#' by='Yunior Batista' year={YEAR} />
           <div className='flex space-x-4 ml-8'>
             <Footer.Icon
               href={LINKEDIN_URL}
