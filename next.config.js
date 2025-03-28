@@ -4,12 +4,7 @@ const nextConfig = {
   webpack: (config) => {
     config.module.rules.push({
       test: /\.pdf$/,
-      use: {
-        loader: "file-loader",
-        options: {
-          name: "[name].[ext]",
-        },
-      },
+      use: { loader: "file-loader", options: { name: "[name].[ext]" } },
     });
     return config;
   },
@@ -18,7 +13,6 @@ const nextConfig = {
     formats: ["image/webp"],
   },
   reactStrictMode: true,
-  swcMinify: true,
 };
 
 // const nextConfig = {}

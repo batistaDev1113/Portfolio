@@ -1,6 +1,19 @@
 import Project from "./Project";
 import { fetchData } from "../db/fetchData";
 
+export async function getStaticProps() {
+  const data = (await fetchData()) || [];
+  return {
+    props: {
+      data,
+    },
+    // Next.js will attempt to re-generate the page:
+    // - When a request comes in
+    // - At most once every 10 seconds
+    revalidate: 10, // In seconds
+  };
+}
+
 type ProjectProps = {
   id: number;
   name: string;
