@@ -11,23 +11,28 @@ import contactusImage from "/public/contact-us.webp";
 const ContactForm = () => {
   const [sending, setSending] = useState<boolean>(false);
 
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setSending(true);
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const data = Object.fromEntries(formData);
 
-    await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const formElement = event.currentTarget;
+    const formData = new FormData(formElement);
+    const formEntries = Object.fromEntries(formData);
 
-    form.reset();
-    setSending(false);
+    try {
+      await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formEntries),
+      });
+      formElement.reset();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    } finally {
+      setSending(false);
+    }
   };
   return (
     <section
