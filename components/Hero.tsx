@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Card } from "flowbite-react";
+import { LazyMotion, domAnimation, m } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import heroImage from "/public/heroBackground.webp";
+import { useEffect, useState } from "react";
 import { FaFileDownload } from "react-icons/fa";
-import { LazyMotion, domAnimation, m } from "framer-motion";
 import Skeleton from "../components/Skeleton";
-import { Card } from "flowbite-react";
+import heroImage from "/public/heroBackground.webp";
 import profile from "/public/picofme.webp";
 
 const Hero = () => {
@@ -85,7 +85,6 @@ const Hero = () => {
                 <Link
                   href='/Yunior-Batista-Resume.pdf'
                   aria-label='View Resume'
-                  locale={false}
                   className='button-about'
                   target='_blank'
                   rel='noopener noreferrer'
@@ -95,7 +94,6 @@ const Hero = () => {
                 <Link
                   href='/Yunior-Batista-Resume.pdf'
                   aria-label='Download Resume'
-                  locale={false}
                   download='/Yunior-Batista-Resume.pdf'
                   className='button-about'
                   target='_blank'

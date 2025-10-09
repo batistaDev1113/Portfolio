@@ -14,11 +14,16 @@ const nextConfig = {
     return config;
   },
   images: {
-    domains: ["flowbite.com", "pidpxaphvdylvpcpsgcs.supabase.co"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "flowbite.com",
+      },
+    ],
     formats: ["image/webp"],
   },
   reactStrictMode: true,
-  swcMinify: true,
+  outputFileTracingRoot: __dirname,
 };
 
 // const nextConfig = {}

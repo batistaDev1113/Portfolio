@@ -1,32 +1,47 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
-import { FaRegPaperPlane } from "react-icons/fa";
-import { m, domAnimation, LazyMotion } from "framer-motion";
 import { Card } from "flowbite-react";
-import { FormEvent } from "react";
+import { domAnimation, LazyMotion, m } from "framer-motion";
+import Image from "next/image";
+import { FormEvent, useState } from "react";
+import { FaRegPaperPlane } from "react-icons/fa";
 import contactusImage from "/public/contact-us.webp";
 
 const ContactForm = () => {
   const [sending, setSending] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSending(true);
+    setMessage("");
+    
     const form = e.currentTarget;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
 
-    await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    form.reset();
+      const result = await response.json();
+
+      if (response.ok) {
+        setMessage("Message sent successfully! Thank you for contacting me.");
+        form.reset();
+      } else {
+        setMessage(`Error: ${result.error || "Failed to send message"}`);
+      }
+    } catch (error) {
+      console.error("Contact form error:", error);
+      setMessage("Error: Failed to send message. Please try again.");
+    }
+
     setSending(false);
   };
   return (
@@ -44,15 +59,15 @@ const ContactForm = () => {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 1, delay: 0.5, ease: "easeInOut" }}
-            className='lg:grid lg:grid-cols-12 dark:bg-gray-800 place-items-center'
+            className='lg:grid lg:grid-cols-12 lg:min-h-[500px] dark:bg-gray-800 place-items-stretch'
           >
-            <section className='relative flex h-32 items-center bg-transparent lg:col-span-5 lg:h-auto xl:col-span-6'>
+            <section className='relative h-32 lg:h-full bg-transparent lg:col-span-5 xl:col-span-6 overflow-hidden'>
               <Image
                 src={contactusImage}
                 width={600}
-                height={100}
+                height={600}
                 alt='Night'
-                className='inset-0 h-full w-full object-cover xl:object-contain opacity-60 backdrop-blur-md hover:opacity-90 duration-500 ease-in-out rounded-md'
+                className='absolute inset-0 h-full w-full object-cover opacity-60 backdrop-blur-md hover:opacity-90 duration-500 ease-in-out lg:rounded'
                 loading='lazy'
                 placeholder='blur'
                 blurDataURL='data:image/png'
@@ -129,11 +144,24 @@ const ContactForm = () => {
                       />
                     </div>
                     <div className='col-span-6 sm:flex sm:items-center sm:gap-4'>
-                      <button className='inline-flex gap-3 shrink-0 rounded-md border border-green-300 hover:bg-gray-900 px-6 xl:px-12 py-3 text-sm font-medium dark:text-white transition hover:text-white focus:outline-none focus:ring active:text-blue-500 text-gray-500'>
-                        Send Away
-                        <FaRegPaperPlane className='self-center' />
+                      <button 
+                        type='submit'
+                        disabled={sending}
+                        className='inline-flex gap-3 shrink-0 rounded-md border border-green-300 hover:bg-gray-900 px-6 xl:px-12 py-3 text-sm font-medium dark:text-white transition hover:text-white focus:outline-none focus:ring active:text-blue-500 text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed'
+                      >
+                        {sending ? "Sending..." : "Send Away"}
+                        <FaRegPaperPlane className={`self-center ${sending ? 'animate-pulse' : ''}`} />
                       </button>
                     </div>
+                    {message && (
+                      <div className={`col-span-6 p-3 rounded-md text-sm ${
+                        message.includes('Error') 
+                          ? 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400' 
+                          : 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
+                      }`}>
+                        {message}
+                      </div>
+                    )}
                   </form>
                 </div>
               )}
