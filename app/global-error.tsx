@@ -15,7 +15,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="en">
+    <html lang='en'>
       <body>
         <Error statusCode={undefined as any} />
       </body>
