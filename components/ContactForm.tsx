@@ -15,7 +15,7 @@ const ContactForm = () => {
     e.preventDefault();
     setSending(true);
     setMessage("");
-    
+
     const form = e.currentTarget;
     const formData = new FormData(form);
     const data = Object.fromEntries(formData);
@@ -144,21 +144,25 @@ const ContactForm = () => {
                       />
                     </div>
                     <div className='col-span-6 sm:flex sm:items-center sm:gap-4'>
-                      <button 
+                      <button
                         type='submit'
                         disabled={sending}
                         className='inline-flex gap-3 shrink-0 rounded-md border border-green-300 hover:bg-gray-900 px-6 xl:px-12 py-3 text-sm font-medium dark:text-white transition hover:text-white focus:outline-none focus:ring active:text-blue-500 text-gray-500 disabled:opacity-50 disabled:cursor-not-allowed'
                       >
                         {sending ? "Sending..." : "Send Away"}
-                        <FaRegPaperPlane className={`self-center ${sending ? 'animate-pulse' : ''}`} />
+                        <FaRegPaperPlane
+                          className={`self-center ${sending ? "animate-pulse" : ""}`}
+                        />
                       </button>
                     </div>
                     {message && (
-                      <div className={`col-span-6 p-3 rounded-md text-sm ${
-                        message.includes('Error') 
-                          ? 'bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400' 
-                          : 'bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400'
-                      }`}>
+                      <div
+                        className={`col-span-6 p-3 rounded-md text-sm ${
+                          message.includes("Error")
+                            ? "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400"
+                            : "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400"
+                        }`}
+                      >
                         {message}
                       </div>
                     )}
