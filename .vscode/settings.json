@@ -1,7 +1,7 @@
 {
-  // MonoLisa Font Configuration
-  "editor.fontFamily": "'MonoLisa Variable', 'MonoLisa', 'CaskaydiaCove Nerd Font', 'Fira Code', Menlo, Monaco, 'Courier New', monospace",
-  "editor.fontSize": 13,
+  // Operator Mono & MonoLisa Font Configuration
+  "editor.fontFamily": "'Operator Mono', 'MonoLisa Variable', 'MonoLisa', 'CaskaydiaCove Nerd Font', 'Fira Code', Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 14,
   "editor.fontWeight": "400",
   "editor.lineHeight": 1.6,
   "editor.letterSpacing": 0.5,
@@ -10,13 +10,13 @@
   "editor.fontLigatures": true,
   
   // Terminal font configuration
-  "terminal.integrated.fontFamily": "'MonoLisa Variable', 'MonoLisa', 'CaskaydiaCove Nerd Font', 'Fira Code', Menlo, Monaco, monospace",
-  "terminal.integrated.fontSize": 12,
+  "terminal.integrated.fontFamily": "'Operator Mono', 'MonoLisa Variable', 'MonoLisa', 'CaskaydiaCove Nerd Font', 'Fira Code', Menlo, Monaco, monospace",
+  "terminal.integrated.fontSize": 13,
   "terminal.integrated.fontWeight": "400",
   "terminal.integrated.lineHeight": 1.4,
   
   // Debug console font
-  "debug.console.fontFamily": "'MonoLisa Variable', 'MonoLisa', 'CaskaydiaCove Nerd Font'",
+  "debug.console.fontFamily": "'Operator Mono', 'MonoLisa Variable', 'MonoLisa', 'CaskaydiaCove Nerd Font'",
   "debug.console.fontSize": 14,
   
   // Editor appearance optimizations for MonoLisa
@@ -125,5 +125,23 @@
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.wordWrap": "on"
+  },
+
+  // Operator Mono italic styling for enhanced readability
+  "editor.tokenColorCustomizations": {
+    "textMateRules": [
+      {
+        "scope": "comment, keyword, storage.type, storage.modifier, keyword.control, keyword.operator, keyword.other",
+        "settings": {
+          "fontStyle": "italic"
+        }
+      },
+      {
+        "scope": "entity.other.attribute-name, entity.name.function, variable.language",
+        "settings": {
+          "fontStyle": "italic"
+        }
+      }
+    ]
   }
 }
