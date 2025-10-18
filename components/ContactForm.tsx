@@ -111,7 +111,7 @@ const ContactForm = () => {
       className='relative z-50 w-full max-w-7xl mx-auto my-16 px-4'
       id='contact'
     >
-      <h1 className='text-2xl md:text-5xl font-light text-gray-900 dark:text-white text-center mb-16 tracking-wide'>
+      <h1 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center my-20 tracking-widest'>
         Let&apos;s Connect
       </h1>
 

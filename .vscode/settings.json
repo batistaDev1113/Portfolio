@@ -11,7 +11,7 @@
   
   // Terminal font configuration
   "terminal.integrated.fontFamily": "'MonoLisa Variable', 'MonoLisa', 'CaskaydiaCove Nerd Font', 'Fira Code', Menlo, Monaco, monospace",
-  "terminal.integrated.fontSize": 14,
+  "terminal.integrated.fontSize": 12,
   "terminal.integrated.fontWeight": "400",
   "terminal.integrated.lineHeight": 1.4,
   

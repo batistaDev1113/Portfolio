@@ -12,6 +12,8 @@ import profile from '/public/picofme.webp';
 
 const Hero = () => {
   const [mounted, setMounted] = useState<Boolean>(false);
+  const HERO_ABOUT_TEXT =
+    "Hi, I'm Yunior Batista – a passionate Senior Front-end developer who transforms ideas into elegant digital experiences. I specialize in creating modern web applications using Next.js, React, and TypeScript, with a keen eye for both beautiful UI/UX design and robust backend architecture. From interactive contact forms with 3D CSS animations to scalable enterprise solutions, I love bringing creativity and technical excellence together in every project I build.";
 
   useEffect(() => {
     setMounted(true);
@@ -76,9 +78,7 @@ const Hero = () => {
                 transition={{ delay: 2, ease: 'easeInOut' }}
               >
                 <p className='text-sm text-gray-500 dark:text-gray-400 max-w-md text-center leading-6'>
-                  I&apos;m a Frontend Developer with 5+ years of experience,
-                  creating beautiful user experiences using technologies such as
-                  React, Nextjs, TypeScript and JavaScript.
+                  {HERO_ABOUT_TEXT}
                 </p>
               </m.div>
               <section className='grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-3 grid-flow-col'>
