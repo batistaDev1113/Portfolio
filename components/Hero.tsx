@@ -13,7 +13,7 @@ import profile from '/public/picofme.webp';
 const Hero = () => {
   const [mounted, setMounted] = useState<Boolean>(false);
   const HERO_ABOUT_TEXT =
-    "Hi, I'm Yunior Batista – a passionate Senior Front-end developer who transforms ideas into elegant digital experiences. I specialize in creating modern web applications using Next.js, React, and TypeScript, with a keen eye for both beautiful UI/UX design and robust backend architecture. From interactive contact forms with 3D CSS animations to scalable enterprise solutions, I love bringing creativity and technical excellence together in every project I build.";
+    "Hi, I'm Yunior Batista – a passionate Senior Front-end developer who transforms ideas into elegant digital experiences. I specialize in creating modern web applications using Next.js, React, and TypeScript, with a keen eye for both beautiful UI/UX design and robust, scalable enterprise solutions. I love bringing creativity and technical excellence together in every project I build.";
 
   useEffect(() => {
     setMounted(true);
