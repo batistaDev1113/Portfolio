@@ -1,10 +1,14 @@
 'use client';
 
-import { domAnimation, LazyMotion, m } from 'framer-motion';
-import { FormEvent, useState } from 'react';
+import { LazyMotion, m } from 'framer-motion';
+import { FormEvent, memo, useCallback, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
-const ContactForm = () => {
+// Optimize animation features loading
+const loadFeatures = () =>
+  import('framer-motion').then((res) => res.domAnimation);
+
+const ContactForm = memo(() => {
   const [sending, setSending] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [errors, setErrors] = useState<{
@@ -38,15 +42,18 @@ const ContactForm = () => {
     return undefined;
   };
 
-  // Handle input changes
-  const handleInputChange = (field: string, value: string) => {
+  // Handle input changes (memoized for performance)
+  const handleInputChange = useCallback((field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
 
     // Clear error when user starts typing
-    if (errors[field as keyof typeof errors]) {
-      setErrors((prev) => ({ ...prev, [field]: undefined }));
-    }
-  };
+    setErrors((prev) => {
+      if (prev[field as keyof typeof prev]) {
+        return { ...prev, [field]: undefined };
+      }
+      return prev;
+    });
+  }, []);
 
   // Validate form
   const validateForm = (): boolean => {
@@ -115,7 +122,7 @@ const ContactForm = () => {
         Let&apos;s Connect
       </h1>
 
-      <LazyMotion features={domAnimation}>
+      <LazyMotion features={loadFeatures} strict>
         <m.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -369,6 +376,8 @@ const ContactForm = () => {
       </LazyMotion>
     </section>
   );
-};
+});
+
+ContactForm.displayName = 'ContactForm';
 
 export default ContactForm;

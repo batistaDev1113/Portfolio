@@ -1,7 +1,41 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  webpack: (config) => {
+  // Performance optimizations
+  experimental: {
+    optimizePackageImports: ['framer-motion', 'react-icons'],
+    turbo: {
+      rules: {
+        '*.svg': {
+          loaders: ['@svgr/webpack'],
+          as: '*.js',
+        },
+      },
+    },
+  },
+
+  // Compiler optimizations
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+
+  // Image optimizations
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'flowbite.com',
+      },
+    ],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 60,
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
+  },
+
+  // Bundle optimization
+  webpack: (config, { dev, isServer }) => {
+    // PDF file handling
     config.module.rules.push({
       test: /\.pdf$/,
       use: {
@@ -11,19 +45,64 @@ const nextConfig = {
         },
       },
     });
+
+    // Tree shaking optimization
+    if (!dev && !isServer) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          // Vendor chunk
+          vendor: {
+            chunks: 'all',
+            name: 'vendor',
+            test: /[\\/]node_modules[\\/]/,
+            priority: 20,
+          },
+          // Common chunk
+          common: {
+            name: 'common',
+            minChunks: 2,
+            chunks: 'all',
+            priority: 10,
+            reuseExistingChunk: true,
+            enforce: true,
+          },
+        },
+      };
+    }
+
     return config;
   },
-  images: {
-    remotePatterns: [
+
+  // Performance headers
+  async headers() {
+    return [
       {
-        protocol: 'https',
-        hostname: 'flowbite.com',
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload',
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN',
+          },
+        ],
       },
-    ],
-    formats: ['image/webp'],
+    ];
   },
+
   reactStrictMode: true,
   outputFileTracingRoot: __dirname,
+  poweredByHeader: false,
+  compress: true,
 };
 
 // const nextConfig = {}

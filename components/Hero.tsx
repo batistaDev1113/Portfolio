@@ -1,27 +1,43 @@
 'use client';
 
 // Using custom glassmorphism card instead of Flowbite
-import { LazyMotion, domAnimation, m } from 'framer-motion';
+import { LazyMotion, m } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
 import Skeleton from '../components/Skeleton';
 import profile from '/public/picofme.webp';
 
-const Hero = () => {
+// Preload critical resources
+const loadFeatures = () =>
+  import('framer-motion').then((res) => res.domAnimation);
+
+const Hero = memo(() => {
   const [mounted, setMounted] = useState<Boolean>(false);
   const HERO_ABOUT_TEXT =
     "Hi, I'm Yunior – a passionate Senior Frontend developer who transforms ideas into elegant digital experiences. I specialize in creating modern web applications using Next.js, React, and TypeScript, with a keen eye for both beautiful UI/UX design and robust, scalable enterprise solutions. I love bringing creativity and technical excellence together in every project I build.";
 
   useEffect(() => {
     setMounted(true);
+
+    // Preload resume PDF for faster access
+    const link = document.createElement('link');
+    link.rel = 'prefetch';
+    link.href = '/Yunior-Batista-Resume.pdf';
+    document.head.appendChild(link);
+
+    return () => {
+      if (document.head.contains(link)) {
+        document.head.removeChild(link);
+      }
+    };
   }, []);
 
   if (!mounted) return <Skeleton />;
 
   return (
-    <LazyMotion features={domAnimation}>
+    <LazyMotion features={loadFeatures} strict>
       <section
         className='z-50 relative w-full h-screen items-center justify-center flex animated-background'
         data-testid='hero-section'
@@ -44,12 +60,15 @@ const Hero = () => {
               >
                 <div className='profile-image mb-6'>
                   <Image
-                    alt=' Yunior Batista'
-                    height='120'
+                    alt='Yunior Batista - Senior Frontend Developer'
+                    height={120}
                     src={profile}
-                    width='120'
-                    sizes='(max-width: 600px) 100vw, (max-width: 1400px) 50vw, 1000px'
+                    width={120}
+                    sizes='(max-width: 768px) 96px, 120px'
                     className='rounded-full shadow-2xl'
+                    priority
+                    quality={90}
+                    placeholder='blur'
                   />
                 </div>
               </m.div>
@@ -107,6 +126,8 @@ const Hero = () => {
       </section>
     </LazyMotion>
   );
-};
+});
+
+Hero.displayName = 'Hero';
 
 export default Hero;
