@@ -13,7 +13,7 @@ import profile from '/public/picofme.webp';
 const Hero = () => {
   const [mounted, setMounted] = useState<Boolean>(false);
   const HERO_ABOUT_TEXT =
-    "Hi, I'm Yunior Batista – a passionate Senior Front-end developer who transforms ideas into elegant digital experiences. I specialize in creating modern web applications using Next.js, React, and TypeScript, with a keen eye for both beautiful UI/UX design and robust, scalable enterprise solutions. I love bringing creativity and technical excellence together in every project I build.";
+    "Hi, I'm Yunior – a passionate Senior Frontend developer who transforms ideas into elegant digital experiences. I specialize in creating modern web applications using Next.js, React, and TypeScript, with a keen eye for both beautiful UI/UX design and robust, scalable enterprise solutions. I love bringing creativity and technical excellence together in every project I build.";
 
   useEffect(() => {
     setMounted(true);
@@ -67,7 +67,7 @@ const Hero = () => {
                 className='my-5'
               >
                 <span className='text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-2xl md:text-4xl font-semibold'>
-                  Frontend Developer
+                  Senior Frontend Developer
                 </span>
               </m.div>
               <m.div
@@ -77,7 +77,7 @@ const Hero = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 2, ease: 'easeInOut' }}
               >
-                <p className='text-sm text-gray-500 dark:text-gray-400 max-w-md text-center leading-6'>
+                <p className='text-sm text-gray-500 dark:text-gray-400 max-w-md text-left leading-6'>
                   {HERO_ABOUT_TEXT}
                 </p>
               </m.div>
