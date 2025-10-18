@@ -15,14 +15,11 @@ const Projects = async () => {
   const projects: ProjectProps[] = (await fetchData()) || [];
 
   return (
-    <div
-      className='bg-white w-4/5 mx-auto my-20 dark:bg-gray-900 z-50'
-      id='projects'
-    >
-      <h3 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center my-20 tracking-widest'>
+    <div className='w-full max-w-7xl mx-auto my-20 px-4 z-50' id='projects'>
+      <h3 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center mb-16 tracking-widest'>
         Some Projects I&apos;ve Built
       </h3>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-2 w-full gap-6 justify-items-center'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center'>
         {projects.map((project) => (
           <Project key={project.id} project={project} />
         ))}

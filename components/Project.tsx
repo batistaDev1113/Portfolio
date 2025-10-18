@@ -1,5 +1,5 @@
 'use client';
-import { Button, Card } from 'flowbite-react';
+// Using custom glassmorphism cards and buttons
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import Image from 'next/image';
 import { useState } from 'react';
@@ -34,39 +34,45 @@ const Project = ({ project }: ProjectProps) => {
         transition={{ delay: 1, ease: 'easeInOut', duration: 2 }}
         viewport={{ once: true }}
       >
-        <div className='dark:bg-transparent w-full hover:cursor-pointer flex justify-center'>
-          <Card className='w-full max-w-sm flowbite-card hover:shadow-xl hover:shadow-slate-600 transition duration-500 ease-in-out'>
-            <Image
-              src={imageUrl || '/No-Image-Placeholder.svg'}
-              width={400}
-              height={250}
-              alt={imageUrl ? 'Project image' : 'No image available'}
-              className='image w-full object-cover rounded-t-lg !h-48'
-              style={{ height: '12rem' }}
-              loading='lazy'
-              placeholder='blur'
-              blurDataURL='data:image/png'
-              fetchPriority='low'
-            />
-            <div className='p-4 flex flex-col justify-between h-44'>
-              <div>
-                <h4 className='text-xl font-bold tracking-tight text-gray-900 dark:text-white mb-2'>
+        <div className='w-full max-w-sm hover:cursor-pointer'>
+          <div className='project-card w-full'>
+            <div className='project-image-overlay'>
+              <Image
+                src={imageUrl || '/No-Image-Placeholder.svg'}
+                width={400}
+                height={250}
+                alt={imageUrl ? 'Project image' : 'No image available'}
+                className='w-full object-cover h-48'
+                loading='lazy'
+                placeholder='blur'
+                blurDataURL='data:image/png'
+                fetchPriority='low'
+              />
+            </div>
+            <div className='p-6 flex flex-col h-auto min-h-[240px]'>
+              <div className='flex-1 space-y-3 pb-4'>
+                <h4 className='text-xl font-bold tracking-tight text-gray-900 dark:text-white'>
                   {name}
                 </h4>
-                <p className='font-normal text-gray-700 dark:text-gray-400 text-sm line-clamp-3'>
+                <p className='font-normal text-gray-700 dark:text-gray-300 text-sm line-clamp-2 leading-relaxed'>
                   {description}
                 </p>
+                <div className='flex flex-wrap gap-2'>
+                  {technologies.slice(0, 3).map((tech, index) => (
+                    <span key={index} className='tech-tag'>
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
-              <Button
-                gradientDuoTone='purpleToBlue'
-                size='sm'
+              <button
                 onClick={() => setOpenModal(!openModal)}
-                className='mt-3'
+                className='modern-button w-full flex-shrink-0'
               >
-                More Details
-              </Button>
+                View Details
+              </button>
             </div>
-          </Card>
+          </div>
 
           <ProjectModal
             openModal={openModal}

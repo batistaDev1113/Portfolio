@@ -1,13 +1,12 @@
 'use client';
 
-import { Card } from 'flowbite-react';
+// Using custom glassmorphism card instead of Flowbite
 import { LazyMotion, domAnimation, m } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
 import Skeleton from '../components/Skeleton';
-import heroImage from '/public/heroBackground.webp';
 import profile from '/public/picofme.webp';
 
 const Hero = () => {
@@ -24,10 +23,7 @@ const Hero = () => {
   return (
     <LazyMotion features={domAnimation}>
       <section
-        style={{
-          backgroundImage: `url(${heroImage.src})`,
-        }}
-        className='z-50 relative w-full h-screen items-center justify-center flex bg-no-repeat bg-center bg-auto md:bg-fixed'
+        className='z-50 relative w-full h-screen items-center justify-center flex animated-background'
         data-testid='hero-section'
       >
         <m.div
@@ -37,7 +33,7 @@ const Hero = () => {
           viewport={{ once: true }}
           className='w-full flex justify-center items-center'
         >
-          <Card className='w-11/12 lg:w-10/12 xl:w-1/2 items-center'>
+          <div className='hero-card w-11/12 lg:w-10/12 xl:w-1/2 p-8 md:p-12'>
             <div className='flex flex-col items-center'>
               <m.div
                 initial={{ translateX: 120, opacity: 0 }}
@@ -46,16 +42,18 @@ const Hero = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 1, ease: 'easeInOut' }}
               >
-                <Image
-                  alt=' Yunior Batista'
-                  height='96'
-                  src={profile}
-                  width='96'
-                  sizes='(max-width: 600px) 100vw, (max-width: 1400px) 50vw, 1000px'
-                  className='mb-3 rounded-full shadow-lg'
-                />
+                <div className='profile-image mb-6'>
+                  <Image
+                    alt=' Yunior Batista'
+                    height='120'
+                    src={profile}
+                    width='120'
+                    sizes='(max-width: 600px) 100vw, (max-width: 1400px) 50vw, 1000px'
+                    className='rounded-full shadow-2xl'
+                  />
+                </div>
               </m.div>
-              <h5 className='mb-1 text-2xl opacity-70 font-semibold text-gray-900 dark:text-white'>
+              <h5 className='mb-2 text-3xl font-bold text-white drop-shadow-lg'>
                 Yunior Batista
               </h5>
               <m.div
@@ -64,9 +62,9 @@ const Hero = () => {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 1.5, ease: 'easeInOut' }}
-                className='my-5'
+                className='my-5 text-center w-full'
               >
-                <span className='text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-2xl md:text-4xl font-semibold'>
+                <span className='text-transparent bg-gradient-to-r from-blue-200 via-purple-200 to-indigo-200 bg-clip-text text-2xl md:text-3xl font-semibold drop-shadow-lg'>
                   Senior Frontend Developer
                 </span>
               </m.div>
@@ -77,7 +75,7 @@ const Hero = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 2, ease: 'easeInOut' }}
               >
-                <p className='text-sm text-gray-500 dark:text-gray-400 max-w-md text-left leading-6'>
+                <p className='text-base text-white/85 max-w-lg text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-4 border border-white/10'>
                   {HERO_ABOUT_TEXT}
                 </p>
               </m.div>
@@ -104,7 +102,7 @@ const Hero = () => {
                 </Link>
               </section>
             </div>
-          </Card>
+          </div>
         </m.div>
       </section>
     </LazyMotion>
