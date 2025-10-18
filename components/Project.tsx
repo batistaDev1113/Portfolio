@@ -1,9 +1,9 @@
-"use client";
-import { Button, Card } from "flowbite-react";
-import { LazyMotion, domAnimation, m } from "framer-motion";
-import Image from "next/image";
-import { useState } from "react";
-import ProjectModal from "./ProjectModal";
+'use client';
+import { Button, Card } from 'flowbite-react';
+import { LazyMotion, domAnimation, m } from 'framer-motion';
+import Image from 'next/image';
+import { useState } from 'react';
+import ProjectModal from './ProjectModal';
 
 export type ProjectProps = {
   project: {
@@ -31,18 +31,18 @@ const Project = ({ project }: ProjectProps) => {
       <m.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        transition={{ delay: 1, ease: "easeInOut", duration: 2 }}
+        transition={{ delay: 1, ease: 'easeInOut', duration: 2 }}
         viewport={{ once: true }}
       >
         <div className='dark:bg-transparent w-full hover:cursor-pointer flex justify-center'>
           <Card className='w-full max-w-sm flowbite-card hover:shadow-xl hover:shadow-slate-600 transition duration-500 ease-in-out'>
             <Image
-              src={imageUrl || "/No-Image-Placeholder.svg"}
+              src={imageUrl || '/No-Image-Placeholder.svg'}
               width={400}
               height={250}
-              alt={imageUrl ? "Project image" : "No image available"}
+              alt={imageUrl ? 'Project image' : 'No image available'}
               className='image w-full object-cover rounded-t-lg !h-48'
-              style={{ height: "12rem" }}
+              style={{ height: '12rem' }}
               loading='lazy'
               placeholder='blur'
               blurDataURL='data:image/png'

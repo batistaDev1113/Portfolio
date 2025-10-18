@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { Card } from "flowbite-react";
-import { LazyMotion, domAnimation, m } from "framer-motion";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import { FaFileDownload } from "react-icons/fa";
-import Skeleton from "../components/Skeleton";
-import heroImage from "/public/heroBackground.webp";
-import profile from "/public/picofme.webp";
+import { Card } from 'flowbite-react';
+import { LazyMotion, domAnimation, m } from 'framer-motion';
+import Image from 'next/image';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { FaFileDownload } from 'react-icons/fa';
+import Skeleton from '../components/Skeleton';
+import heroImage from '/public/heroBackground.webp';
+import profile from '/public/picofme.webp';
 
 const Hero = () => {
   const [mounted, setMounted] = useState<Boolean>(false);
@@ -31,7 +31,7 @@ const Hero = () => {
         <m.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
-          transition={{ delay: 0.5, ease: "easeInOut" }}
+          transition={{ delay: 0.5, ease: 'easeInOut' }}
           viewport={{ once: true }}
           className='w-full flex justify-center items-center'
         >
@@ -42,7 +42,7 @@ const Hero = () => {
                 animate={{ x: -120 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: 1, ease: "easeInOut" }}
+                transition={{ delay: 1, ease: 'easeInOut' }}
               >
                 <Image
                   alt=' Yunior Batista'
@@ -61,7 +61,7 @@ const Hero = () => {
                 animate={{ x: -120 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: 1.5, ease: "easeInOut" }}
+                transition={{ delay: 1.5, ease: 'easeInOut' }}
                 className='my-5'
               >
                 <span className='text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text text-2xl md:text-4xl font-semibold'>
@@ -73,7 +73,7 @@ const Hero = () => {
                 animate={{ x: -120 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: 2, ease: "easeInOut" }}
+                transition={{ delay: 2, ease: 'easeInOut' }}
               >
                 <p className='text-sm text-gray-500 dark:text-gray-400 max-w-md text-center leading-6'>
                   I&apos;m a Frontend Developer with 5+ years of experience,

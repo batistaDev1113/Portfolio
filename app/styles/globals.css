@@ -59,4 +59,61 @@
   .button-about {
     @apply my-4 inline-flex items-center justify-center px-8 py-3 text-base text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-200 focus:ring-4 focus:ring-gray-100 dark:text-white dark:border-gray-700 dark:hover:bg-gray-800 dark:hover:border-indigo-500 dark:focus:ring-gray-800 hover:scale-110 duration-500 ease-in-out;
   }
+
+  /* 3D Envelope Styles */
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  .envelope-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .envelope-3d:hover {
+    transform: rotateY(15deg) rotateX(-5deg);
+  }
+
+  .envelope-back {
+    transform: rotateX(15deg) translateZ(-10px) translateY(8px);
+  }
+
+  .envelope-body {
+    transform-style: preserve-3d;
+  }
+
+  .envelope-flap {
+    transform-origin: bottom;
+    transform: rotateX(-45deg) translateZ(5px);
+    transition: transform 0.5s ease-in-out;
+  }
+
+  .envelope-3d:hover .envelope-flap {
+    transform: rotateX(-35deg) translateZ(5px);
+  }
+
+  .envelope-3d:hover .envelope-body {
+    transform: rotateY(5deg) translateZ(5px);
+  }
+
+  /* Custom 3D utilities */
+  .rotate-x-12 {
+    transform: rotateX(12deg);
+  }
+
+  .rotate-x-45 {
+    transform: rotateX(-45deg);
+  }
+
+  .rotate-x-35 {
+    transform: rotateX(-35deg);
+  }
+
+  .rotate-y-12 {
+    transform: rotateY(12deg);
+  }
+
+  .translate-y-2 {
+    transform: translateY(0.5rem);
+  }
 }

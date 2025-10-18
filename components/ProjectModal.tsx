@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Button, Modal } from "flowbite-react";
-import Link from "next/link";
+import { Button, Modal } from 'flowbite-react';
+import Link from 'next/link';
 
 type ProjectModalProps = {
   openModal: boolean;
@@ -18,7 +18,7 @@ export default function ProjectModal({
   githubLink,
   liveDemoLink,
 }: ProjectModalProps) {
-  const modalPlacement = "center";
+  const modalPlacement = 'center';
   return (
     <>
       <Modal
@@ -44,13 +44,13 @@ export default function ProjectModal({
             </section>
             <section>
               <p className='font-normal text-gray-700 dark:text-gray-400 mt-5 mb-5'>
-                Github Repo:{" "}
+                Github Repo:{' '}
                 <Button outline gradientDuoTone='purpleToBlue'>
                   <Link href={githubLink}>Click to visit Github Repo</Link>
                 </Button>
               </p>
               <p className='font-normal text-gray-700 dark:text-gray-400 mt-5 mb-5'>
-                Visit the live project:{" "}
+                Visit the live project:{' '}
                 <Button outline gradientDuoTone='purpleToBlue'>
                   <Link href={liveDemoLink}>Click to visit live project</Link>
                 </Button>

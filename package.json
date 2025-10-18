@@ -9,6 +9,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "format": "prettier --write \"{app,components,data,db}/**/*.{js,jsx,ts,tsx,json,css,md}\" \"*.{js,jsx,ts,tsx,json,css,md}\"",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
     "lint:check": "eslint . --ext .js,.jsx,.ts,.tsx",
     "test": "jest --watch"

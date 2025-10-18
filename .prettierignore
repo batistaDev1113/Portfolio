@@ -1,0 +1,100 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.js
+
+# Build outputs
+.next
+out
+dist
+build
+.turbo
+
+# Environment files
+.env*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage
+*.lcov
+.nyc_output
+
+# Package manager lock files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+
+# Testing
+__tests__/coverage/
+.jest/
+
+# Storybook build outputs
+storybook-static
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# TypeScript
+*.tsbuildinfo
+.tscache
+
+# ESLint cache
+.eslintcache
+
+# Prettier cache
+.prettierignore
+
+# Temporary folders
+tmp/
+temp/
+
+# Runtime configuration files
+.next/
+.cache/
+
+# Vercel
+.vercel
+
+# Sentry
+.sentryclirc
+
+# Local development
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Documentation that shouldn't be formatted
+CHANGELOG.md
+LICENSE
+*.md

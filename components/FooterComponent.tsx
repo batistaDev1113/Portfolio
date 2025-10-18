@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Footer } from "flowbite-react";
-import { BsGithub, BsLinkedin } from "react-icons/bs";
-import { RxCodesandboxLogo } from "react-icons/rx";
+import { Footer } from 'flowbite-react';
+import { BsGithub, BsLinkedin } from 'react-icons/bs';
+import { RxCodesandboxLogo } from 'react-icons/rx';
 
-const LINKEDIN_URL = "https://www.linkedin.com/in/yunior-profile/";
-const GITHUB_URL = "https://github.com/batistaDev1113";
+const LINKEDIN_URL = 'https://www.linkedin.com/in/yunior-profile/';
+const GITHUB_URL = 'https://github.com/batistaDev1113';
 
 const YEAR = new Date().getFullYear();
 

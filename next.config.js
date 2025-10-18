@@ -5,9 +5,9 @@ const nextConfig = {
     config.module.rules.push({
       test: /\.pdf$/,
       use: {
-        loader: "file-loader",
+        loader: 'file-loader',
         options: {
-          name: "[name].[ext]",
+          name: '[name].[ext]',
         },
       },
     });
@@ -16,11 +16,11 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "flowbite.com",
+        protocol: 'https',
+        hostname: 'flowbite.com',
       },
     ],
-    formats: ["image/webp"],
+    formats: ['image/webp'],
   },
   reactStrictMode: true,
   outputFileTracingRoot: __dirname,
@@ -32,7 +32,7 @@ module.exports = nextConfig;
 
 // Injected content via Sentry wizard below
 
-const { withSentryConfig } = require("@sentry/nextjs");
+const { withSentryConfig } = require('@sentry/nextjs');
 
 module.exports = withSentryConfig(
   module.exports,
@@ -42,8 +42,8 @@ module.exports = withSentryConfig(
 
     // Suppresses source map uploading logs during build
     silent: true,
-    org: "software-engineer-dn",
-    project: "portfolio-nextjs",
+    org: 'software-engineer-dn',
+    project: 'portfolio-nextjs',
   },
   {
     // For all available options, see:
@@ -56,7 +56,7 @@ module.exports = withSentryConfig(
     transpileClientSDK: true,
 
     // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-    tunnelRoute: "/monitoring",
+    tunnelRoute: '/monitoring',
 
     // Hides source maps from generated client bundles
     hideSourceMaps: true,
@@ -69,5 +69,5 @@ module.exports = withSentryConfig(
     // https://docs.sentry.io/product/crons/
     // https://vercel.com/docs/cron-jobs
     automaticVercelMonitors: true,
-  },
+  }
 );

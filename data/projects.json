@@ -3,28 +3,38 @@
     "id": 1,
     "name": "Portfolio",
     "description": "This is my Portfolio site to showcase some of the projects I have worked on my free time.",
-    "technologies": ["React", "Next.js", "TypeScript", "Framer Motion", "Tailwind CSS", "Flowbite-react", "Sendgrid"],
+    "technologies": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Framer Motion",
+      "Tailwind CSS",
+      "Flowbite-react",
+      "Sendgrid"
+    ],
     "imageUrl": "/projects/portfolio.webp",
     "githubLink": "https://github.com/batistaDev1113/Portfolio",
     "liveDemoLink": "https://www.yuniorbatista.com/",
     "features": [
       "Responsive Design",
-      "Project Showcase", 
+      "Project Showcase",
       "Contact Form with Email Integration"
     ]
   },
   {
     "id": 2,
-    "name": "Kanban Board", 
+    "name": "Kanban Board",
     "description": "A web app similar to a kanban board where users can add, drag and drop and eliminate tasks as they get them completed.",
-    "technologies": ["React", "TypeScript", "Tailwind CSS", "React DND", "Javascript"],
+    "technologies": [
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "React DND",
+      "Javascript"
+    ],
     "imageUrl": "/projects/kanban-cropped.png",
     "githubLink": "https://github.com/batistaDev1113/kanban-board",
     "liveDemoLink": "https://kanbanboardclone.vercel.app/",
-    "features": [
-      "Backend API",
-      "Database integration",
-      "Authentication"
-    ]
+    "features": ["Backend API", "Database integration", "Authentication"]
   }
 ]

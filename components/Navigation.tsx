@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Navbar } from "flowbite-react";
-import { ModeToggle } from "./ModeToggle";
+import { Navbar } from 'flowbite-react';
+import { ModeToggle } from './ModeToggle';
 
 const Navigation = () => {
   return (

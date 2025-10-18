@@ -1,7 +1,7 @@
 Explain;
 module.exports = {
-  src: "/img.jpg",
+  src: '/img.jpg',
   height: 24,
   width: 24,
-  blurDataURL: "data:image/png;base64,imagedata",
+  blurDataURL: 'data:image/png;base64,imagedata',
 };

@@ -1,11 +1,11 @@
 // Type: Layout
-import "./styles/globals.css";
-import { Montserrat } from "next/font/google";
-import { ReactNode } from "react";
-import { Analytics as VercelAnalytics } from "@vercel/analytics/react";
-import ThemeProviderWrapper from "../components/ThemeProviderWrapper";
+import './styles/globals.css';
+import { Montserrat } from 'next/font/google';
+import { ReactNode } from 'react';
+import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
+import ThemeProviderWrapper from '../components/ThemeProviderWrapper';
 
-const montserrat = Montserrat({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ['latin'] });
 
 type MetadataProps = {
   title: string;
@@ -14,7 +14,7 @@ type MetadataProps = {
 
 export const metadata: MetadataProps = {
   title: "Yunior Batista's Portfolio",
-  description: "A portfolio to showcase some of my projects and experiences",
+  description: 'A portfolio to showcase some of my projects and experiences',
 };
 
 export interface RootLayoutProps {

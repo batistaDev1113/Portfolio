@@ -1,5 +1,5 @@
-import { fetchData } from "../db/fetchData";
-import Project from "./Project";
+import { fetchData } from '../db/fetchData';
+import Project from './Project';
 
 type ProjectProps = {
   id: number;
