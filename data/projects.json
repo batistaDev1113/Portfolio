@@ -10,9 +10,9 @@
       "Framer Motion",
       "Tailwind CSS",
       "Flowbite-react",
-      "Sendgrid"
+      "Mailjet"
     ],
-    "imageUrl": "/projects/portfolio.webp",
+    "imageUrl": "/projects/portfolio-headshot.webp",
     "githubLink": "https://github.com/batistaDev1113/Portfolio",
     "liveDemoLink": "https://www.yuniorbatista.com/",
     "features": [

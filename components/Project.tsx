@@ -40,9 +40,9 @@ const Project = memo(({ project }: ProjectProps) => {
         transition={{ delay: 1, ease: 'easeInOut', duration: 2 }}
         viewport={{ once: true }}
       >
-        <div className='w-full max-w-sm hover:cursor-pointer'>
-          <div className='project-card w-full'>
-            <div className='project-image-overlay'>
+        <div className='w-full max-w-sm hover:cursor-pointer h-full flex flex-col'>
+          <div className='project-card w-full h-full flex flex-col'>
+            <div className='project-image-overlay flex-shrink-0'>
               <Image
                 src={imageUrl || '/No-Image-Placeholder.svg'}
                 width={400}
@@ -56,15 +56,15 @@ const Project = memo(({ project }: ProjectProps) => {
                 quality={75}
               />
             </div>
-            <div className='p-6 flex flex-col h-auto min-h-[240px]'>
-              <div className='flex-1 space-y-3 pb-4'>
-                <h4 className='text-xl font-bold tracking-tight text-gray-900 dark:text-white'>
+            <div className='p-6 flex flex-col flex-1'>
+              <div className='flex-1 space-y-3'>
+                <h4 className='text-xl font-bold tracking-tight text-gray-900 dark:text-white line-clamp-2'>
                   {name}
                 </h4>
-                <p className='font-normal text-gray-700 dark:text-gray-300 text-sm line-clamp-2 leading-relaxed'>
+                <p className='font-normal text-gray-700 dark:text-gray-300 text-sm line-clamp-3 leading-relaxed'>
                   {description}
                 </p>
-                <div className='flex flex-wrap gap-2'>
+                <div className='flex flex-wrap gap-2 min-h-[2rem] items-start'>
                   {technologies.slice(0, 3).map((tech, index) => (
                     <span key={index} className='tech-tag'>
                       {tech}
@@ -74,7 +74,7 @@ const Project = memo(({ project }: ProjectProps) => {
               </div>
               <button
                 onClick={() => setOpenModal(!openModal)}
-                className='modern-button w-full flex-shrink-0'
+                className='modern-button w-full flex-shrink-0 mt-4'
               >
                 View Details
               </button>
