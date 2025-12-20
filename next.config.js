@@ -142,6 +142,12 @@ module.exports = withSentryConfig(
     silent: true,
     org: 'software-engineer-dn',
     project: 'portfolio-nextjs',
+
+    // Source map configuration
+    sourcemaps: {
+      disable: process.env.NODE_ENV === 'development',
+      deleteSourcemapsAfterUpload: true,
+    },
   },
   {
     // For all available options, see:
