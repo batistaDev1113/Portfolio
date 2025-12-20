@@ -148,6 +148,23 @@ module.exports = withSentryConfig(
       disable: process.env.NODE_ENV === 'development',
       deleteSourcemapsAfterUpload: true,
     },
+
+    // Error handling for API timeouts
+    errorHandler: (err) => {
+      console.warn('Sentry CLI warning:', err);
+      // Don't fail the build on Sentry API errors
+      return false;
+    },
+
+    // Release configuration to prevent timeouts
+    release: {
+      finalize: false,
+    },
+
+    // Deploy configuration
+    deploy: {
+      env: process.env.NODE_ENV,
+    },
   },
   {
     // For all available options, see:
