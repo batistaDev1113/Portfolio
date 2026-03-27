@@ -1,12 +1,8 @@
 'use client';
 
-import { LazyMotion, m } from 'framer-motion';
+import { m } from 'framer-motion';
 import { FormEvent, memo, useCallback, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
-
-// Optimize animation features loading
-const loadFeatures = () =>
-  import('framer-motion').then((res) => res.domAnimation);
 
 const ContactForm = memo(() => {
   const [sending, setSending] = useState<boolean>(false);
@@ -122,14 +118,13 @@ const ContactForm = memo(() => {
         Let&apos;s Connect
       </h1>
 
-      <LazyMotion features={loadFeatures} strict>
-        <m.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className='relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden'
-        >
+      <m.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: 'easeOut' }}
+        className='relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden'
+      >
           {/* Desktop Split Layout */}
           <div className='lg:grid lg:grid-cols-2 lg:min-h-[600px]'>
             {/* 3D Envelope Section */}
@@ -373,7 +368,6 @@ const ContactForm = memo(() => {
             </main>
           </div>
         </m.div>
-      </LazyMotion>
     </section>
   );
 });

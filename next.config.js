@@ -23,12 +23,6 @@ const nextConfig = {
 
   // Image optimizations
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'flowbite.com',
-      },
-    ],
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
     dangerouslyAllowSVG: true,
@@ -169,12 +163,6 @@ module.exports = withSentryConfig(
   {
     // For all available options, see:
     // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
-
-    // Upload a larger set of source maps for prettier stack traces (increases build time)
-    widenClientFileUpload: true,
-
-    // Transpiles SDK to be compatible with IE11 (increases bundle size)
-    transpileClientSDK: true,
 
     // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
     tunnelRoute: '/monitoring',

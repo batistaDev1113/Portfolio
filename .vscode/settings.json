@@ -10,13 +10,13 @@
   "editor.fontLigatures": true,
   
   // Terminal font configuration
-  "terminal.integrated.fontFamily": "'Operator Mono', 'MonoLisa Variable', 'MonoLisa', 'CaskaydiaCove Nerd Font', 'Fira Code', Menlo, Monaco, monospace",
+  "terminal.integrated.fontFamily": "'MonoLisa', 'CaskaydiaCove Nerd Font', 'Fira Code', Menlo, Monaco, monospace",
   "terminal.integrated.fontSize": 13,
   "terminal.integrated.fontWeight": "400",
   "terminal.integrated.lineHeight": 1.4,
   
   // Debug console font
-  "debug.console.fontFamily": "'Operator Mono', 'MonoLisa Variable', 'MonoLisa', 'CaskaydiaCove Nerd Font'",
+  "debug.console.fontFamily": "'MonoLisa', 'CaskaydiaCove Nerd Font', 'Fira Code', Menlo, Monaco, monospace",
   "debug.console.fontSize": 14,
   
   // Editor appearance optimizations for MonoLisa
@@ -26,7 +26,7 @@
   "editor.smoothScrolling": true,
   
   // Dracula Theme (already configured)
-  "workbench.colorTheme": "Default Dark+",
+  "workbench.colorTheme": "Dark+",
   "workbench.iconTheme": "material-icon-theme",
   
   // Code formatting and linting
