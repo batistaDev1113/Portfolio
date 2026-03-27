@@ -1,5 +1,4 @@
 import { BsGithub, BsLinkedin } from 'react-icons/bs';
-import { RxCodesandboxLogo } from 'react-icons/rx';
 
 const LINKEDIN_URL = 'https://www.linkedin.com/in/yunior-profile/';
 const GITHUB_URL = 'https://github.com/batistaDev1113';
@@ -34,12 +33,6 @@ const FooterComponent = () => {
             >
               <BsGithub className='h-5 w-5' />
             </a>
-            <span
-              aria-label="Yunior's codesandbox profile"
-              className='text-gray-500'
-            >
-              <RxCodesandboxLogo className='h-5 w-5' />
-            </span>
           </div>
         </div>
       </div>
