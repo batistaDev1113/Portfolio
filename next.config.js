@@ -24,13 +24,13 @@ const nextConfig = {
   // Image optimizations
   images: {
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 60,
+    minimumCacheTTL: 2592000,
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
   // Bundle optimization
-  webpack: (config, { dev, isServer }) => {
+  webpack: (config) => {
     // PDF file handling
     config.module.rules.push({
       test: /\.pdf$/,
@@ -41,33 +41,6 @@ const nextConfig = {
         },
       },
     });
-
-    // Tree shaking optimization
-    if (!dev && !isServer) {
-      config.optimization.splitChunks = {
-        chunks: 'all',
-        cacheGroups: {
-          default: false,
-          vendors: false,
-          // Vendor chunk
-          vendor: {
-            chunks: 'all',
-            name: 'vendor',
-            test: /[\\/]node_modules[\\/]/,
-            priority: 20,
-          },
-          // Common chunk
-          common: {
-            name: 'common',
-            minChunks: 2,
-            chunks: 'all',
-            priority: 10,
-            reuseExistingChunk: true,
-            enforce: true,
-          },
-        },
-      };
-    }
 
     return config;
   },

@@ -85,6 +85,7 @@
   "explorer.confirmDragAndDrop": false,
   "files.autoSave": "afterDelay",
   "files.autoSaveDelay": 1000,
+  "files.eol": "\n",
   
   // Git integration
   "git.enableSmartCommit": true,

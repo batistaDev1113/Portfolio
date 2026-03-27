@@ -13,10 +13,7 @@ const FooterComponent = () => {
         <hr className='my-6 border-gray-200 dark:border-gray-700 sm:mx-auto' />
         <div className='w-full flex justify-between lg:justify-evenly md:text-center'>
           <span className='text-sm text-gray-500 dark:text-gray-400'>
-            &copy; {YEAR}{' '}
-            <a href='#' className='hover:underline'>
-              Yunior Batista
-            </a>
+            &copy; {YEAR} Yunior Batista
           </span>
           <div className='flex space-x-4 ml-8'>
             <a
@@ -37,15 +34,12 @@ const FooterComponent = () => {
             >
               <BsGithub className='h-5 w-5' />
             </a>
-            <a
-              href='#'
-              target='_blank'
-              rel='noopener noreferrer'
-              aria-label="Link to Yunior's codesandbox profile"
-              className='text-gray-500 hover:text-gray-900 dark:hover:text-white'
+            <span
+              aria-label="Yunior's codesandbox profile"
+              className='text-gray-500'
             >
               <RxCodesandboxLogo className='h-5 w-5' />
-            </a>
+            </span>
           </div>
         </div>
       </div>

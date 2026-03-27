@@ -1,8 +1,5 @@
 import projectsData from '../data/projects.json';
 
-// Local project data
-export const revalidate = 1;
-
 export async function fetchData() {
   try {
     // Return local projects data
