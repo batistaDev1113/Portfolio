@@ -3,7 +3,6 @@
 // Using custom glassmorphism card instead of Flowbite
 import { m } from 'framer-motion';
 import Image from 'next/image';
-import Link from 'next/link';
 import { memo, useEffect } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
 import profile from '/public/picofme.webp';
@@ -85,7 +84,7 @@ const Hero = memo(() => {
               </p>
             </m.div>
             <section className='grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-3 grid-flow-col'>
-              <Link
+              <a
                 href='/Yunior-Batista-Resume.pdf'
                 aria-label='View Resume'
                 className='button-about'
@@ -93,18 +92,18 @@ const Hero = memo(() => {
                 rel='noopener noreferrer'
               >
                 View Resume
-              </Link>
-              <Link
+              </a>
+              <a
                 href='/Yunior-Batista-Resume.pdf'
                 aria-label='Download Resume'
-                download='/Yunior-Batista-Resume.pdf'
+                download='Yunior-Batista-Resume.pdf'
                 className='button-about'
                 target='_blank'
                 rel='noopener noreferrer'
               >
                 Download Resume
                 <FaFileDownload className='ml-2' />
-              </Link>
+              </a>
             </section>
           </div>
         </div>
