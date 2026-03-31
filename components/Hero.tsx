@@ -5,7 +5,7 @@ import { m } from 'framer-motion';
 import Image from 'next/image';
 import { memo, useEffect } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
-import profile from '/public/picofme.webp';
+import profile from '../public/picofme.webp';
 
 const Hero = memo(() => {
   const HERO_ABOUT_TEXT =
