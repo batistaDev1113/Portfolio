@@ -1,9 +1,9 @@
 // Type: Layout
-import './styles/globals.css';
-import { Montserrat } from 'next/font/google';
-import { ReactNode } from 'react';
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
+import { Montserrat } from 'next/font/google';
+import { FC, ReactNode } from 'react';
 import ThemeProviderWrapper from '../components/ThemeProviderWrapper';
+import './styles/globals.css';
 
 const montserrat = Montserrat({ subsets: ['latin'] });
 
@@ -21,7 +21,7 @@ export interface RootLayoutProps {
   children: ReactNode;
 }
 
-const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
+const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang='en' suppressHydrationWarning>
       <body suppressHydrationWarning={true} className={montserrat.className}>

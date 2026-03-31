@@ -1,15 +1,13 @@
-import '../app/styles/globals.css';
 import { ThemeProvider } from 'next-themes';
+import { type FC, type ReactNode } from 'react';
+import '../app/styles/globals.css';
 
 interface MyThemeProviderProps {
-  children: React.ReactNode;
+  children: ReactNode;
   [key: string]: any;
 }
 
-const MyThemeProvider: React.FC<MyThemeProviderProps> = ({
-  children,
-  ...props
-}) => {
+const MyThemeProvider: FC<MyThemeProviderProps> = ({ children, ...props }) => {
   return (
     <ThemeProvider
       {...props}
