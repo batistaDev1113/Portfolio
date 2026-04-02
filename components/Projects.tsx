@@ -15,7 +15,10 @@ const Projects = async () => {
   const projects: ProjectProps[] = (await fetchData()) || [];
 
   return (
-    <div className='w-full max-w-7xl mx-auto my-20 px-4 z-50' id='projects'>
+    <div
+      className='w-full max-w-7xl mx-auto my-20 px-4 z-50 scroll-mt-20'
+      id='projects'
+    >
       <h3 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center mb-16 tracking-widest'>
         Some Projects I&apos;ve Built
       </h3>

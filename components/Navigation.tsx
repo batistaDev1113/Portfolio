@@ -7,7 +7,7 @@ const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className='bg-white border-b border-gray-200 px-4 py-2.5 rounded dark:bg-gray-900 dark:border-gray-700 w-full rounded-b-none lg:w-4/5'>
+    <nav className='sticky top-0 z-[100] w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 px-6 py-3 transition-all duration-300'>
       <div className='flex flex-wrap items-center justify-between'>
         <a
           href='/'

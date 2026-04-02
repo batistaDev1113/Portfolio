@@ -48,10 +48,8 @@
   "prettier.arrowParens": "avoid",
   
   // TypeScript/JavaScript specific
-  "typescript.preferences.quoteStyle": "single",
-  "javascript.preferences.quoteStyle": "single",
-  "typescript.format.semicolons": "insert",
-  "javascript.format.semicolons": "insert",
+  "js/ts.preferences.quoteStyle": "single",
+  "js/ts.format.semicolons": "insert",
   
   // File associations for Next.js
   "files.associations": {
