@@ -1,62 +1,72 @@
-#Portfolio Website
+# Yunior Batista — Portfolio
 
-Hi There 👋
-This is my portfolio website built with Next.js, showcasing a collection of my notable projects. The website provides a platform for me to display my creativity, skills, and expertise through various projects in different domains.
+A personal portfolio website built with **Next.js 16** and **React 19**, showcasing projects, skills, and a contact form. Features a modern glassmorphism design with animated backgrounds, dark mode, and smooth Framer Motion transitions.
 
-**Technologies Used**
+## Tech Stack
 
-<ul>
-<li>Next.js</li>
-<li>React</li>
-<li>Tailwind CSS</li>
-<li>HTML</li>
-<li>CSS</li>
-<li>JavaScript</li>
-<li>Sendgrid API for Email</li>
-<li>Flowbite-React</li>
-<li>Next Themes</li>
-<li>Framer Motion</li>
-</ul>
+| Category | Technology |
+|---|---|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript |
+| Styling | Tailwind CSS 3 + custom CSS (glassmorphism) |
+| Font | Inter (Google Fonts via `next/font`) |
+| Animations | Framer Motion 12 |
+| Dark Mode | next-themes |
+| Icons | react-icons |
+| Email | Mailjet API |
+| Analytics | Vercel Analytics |
+| Error Monitoring | Sentry |
+| Testing | Jest + React Testing Library |
 
-##Features
-**Project Showcase:** The website includes a dedicated section to showcase my projects. Each project is presented with a brief description, key features, technologies used, and a link to view more details.
+## Features
 
-**Responsive Design:** The website is designed to be fully responsive, ensuring a seamless experience across different devices and screen sizes.
+**Sticky Navigation** — Full-width header with blur backdrop (`backdrop-blur-md`) that stays above all content (`z-[100]`). Includes a dark/light mode toggle and smooth anchor links.
 
-**Navigation:** Easy navigation is provided through a well-structured and intuitive user interface, allowing visitors to explore the website and access project details effortlessly.
-Getting Started
-To run the website locally, follow these steps:
+**Animated Hero** — Full-screen section with an animated 4-color gradient background, glassmorphism card, floating profile image with rotating gradient ring, and staggered Framer Motion entrance animations. Links to view and download resume.
 
-Clone the repository:
+**Project Showcase** — Responsive 1→2→3 column grid of glassmorphism project cards with hover lift effects. Each card shows a screenshot, description, and up to 3 tech tags. A lazy-loaded modal reveals GitHub and live demo links with an Escape key handler and scroll-lock.
 
-```console
-git clone [https://github.com/batistaDev1113/Portfolio.git]
-```
+**Contact Form** — Split-layout section with a 3D CSS envelope illustration and a validated contact form (name, email, message). Submissions are sent via the Mailjet API through a Next.js API route.
 
-</span>
+**Dark Mode** — Full light and dark theme support throughout all components.
 
-Navigate to the project directory:
+**Responsive** — Mobile-first layout, tested across phone, tablet, and desktop breakpoints.
 
-```console
-cd portfolio-app
-```
+## Getting Started
 
-Install the dependencies:
-
-```console
+```bash
+git clone https://github.com/batistaDev1113/Portfolio.git
+cd Portfolio
 npm install
-```
-
-Start the development server:
-
-```console
 npm run dev
 ```
 
-Open your browser and visit http://localhost:3000 to view the website.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-**Contributing**
-Contributions to improve the portfolio website are welcome. If you encounter any issues or have suggestions for enhancements, please feel free to open an issue or submit a pull request.
+## Environment Variables
 
-License
-This project is licensed under the MIT License.
+Create a `.env.local` file in the project root with:
+
+```
+MAILJET_API_KEY=your_mailjet_api_key
+MAILJET_SECRET_KEY=your_mailjet_secret_key
+```
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server |
+| `npm run lint` | Lint and auto-fix |
+| `npm run format` | Format with Prettier |
+| `npm run test` | Run Jest tests in watch mode |
+
+## Contributing
+
+Issues and pull requests are welcome. Please open an issue first to discuss any significant changes.
+
+## License
+
+MIT
