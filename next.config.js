@@ -9,6 +9,7 @@ const nextConfig = {
   experimental: {
     optimizePackageImports: ['framer-motion', 'react-icons'],
     turbopackFileSystemCacheForDev: true,
+    optimizeCss: true,
   },
 
   // Turbopack configuration
