@@ -1,8 +1,10 @@
-import ContactForm from '../components/ContactForm';
-import FooterComponent from '../components/FooterComponent';
+import dynamic from 'next/dynamic';
 import Hero from '../components/Hero';
 import Navigation from '../components/Navigation';
 import Projects from '../components/Projects';
+
+const ContactForm = dynamic(() => import('../components/ContactForm'));
+const FooterComponent = dynamic(() => import('../components/FooterComponent'));
 
 export default function Home() {
   return (

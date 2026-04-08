@@ -1,9 +1,14 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
+  // Source maps for production debugging and Lighthouse insights
+  productionBrowserSourceMaps: true,
+
   // Performance optimizations
+  reactCompiler: true,
   experimental: {
     optimizePackageImports: ['framer-motion', 'react-icons'],
+    turbopackFileSystemCacheForDev: true,
   },
 
   // Turbopack configuration
