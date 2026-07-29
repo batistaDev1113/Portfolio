@@ -12,44 +12,18 @@ const nextConfig = {
     optimizeCss: true,
   },
 
-  // Turbopack configuration
-  turbopack: {
-    rules: {
-      '*.svg': {
-        loaders: ['@svgr/webpack'],
-        as: '*.js',
-      },
-    },
-  },
-
   // Compiler optimizations
   compiler: {
     removeConsole: process.env.NODE_ENV === 'production',
   },
 
-  // Image optimizations
+  // Image optimizations (Next.js handles SVG assets natively; no extra loader needed)
   images: {
     formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 2592000,
     qualities: [75, 90],
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
-  },
-
-  // Bundle optimization
-  webpack: (config) => {
-    // PDF file handling
-    config.module.rules.push({
-      test: /\.pdf$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          name: '[name].[ext]',
-        },
-      },
-    });
-
-    return config;
   },
 
   // Security headers
