@@ -1,0 +1,8 @@
+# Match the user's spec: *.js, *.tsx, *.json, *.md defaults to LF.
+# Overrides Windows global `core.autocrlf=true` so checkouts of these
+# file types keep LF line endings on disk, satisfying .prettierrc's
+# `endOfLine: "lf"` rule and stopping the 345 prevalentier/prettier CRLF errors.
+*.js    text eol=lf
+*.tsx   text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
