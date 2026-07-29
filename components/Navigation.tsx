@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { ModeToggle } from './ModeToggle';
 
 const Navigation = () => {
@@ -9,12 +10,12 @@ const Navigation = () => {
   return (
     <nav className='sticky top-0 z-[100] w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 px-6 py-3 transition-all duration-300'>
       <div className='flex flex-wrap items-center justify-between'>
-        <a
+        <Link
           href='/'
           className='self-center text-2xl font-semibold text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text md:text-4xl lg:text-3xl'
         >
           Yunior B.
-        </a>
+        </Link>
         <div className='flex items-center space-x-8'>
           <ModeToggle />
           <button
