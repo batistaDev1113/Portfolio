@@ -8,8 +8,7 @@
   "browserslist": [
     "last 2 versions",
     "not dead",
-    "not IE 11",
-    "not op_mini all"
+    "not IE 11"
   ],
   "scripts": {
     "dev": "next dev",
