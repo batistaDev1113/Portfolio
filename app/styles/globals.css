@@ -1,3 +1,136 @@
+/* ============================================================
+ * TAILWIND V3 -> V4 MIGRATION DISCOVERY DRAFT (added 2026-07-29)
+ *
+ * Branch: chore/tailwind-v4-discovery
+ * PR:     opened from this branch with body documenting the audit
+ *
+ * Scope: COMMENTS ONLY. NO BEHAVIOR CHANGE. The existing v3
+ * directive trio (base, components, utilities) below stays active
+ * and is untouched. The v4 directives reported PROSE-ONLY inside
+ * this comment block are NOT activated; they are documentation.
+ *
+ * Notation rule for this comment block:
+ *   We deliberately do NOT write any RECURSIVE FILE-GLOB PATTERN
+ *   verbatim inside this comment because the canonical glob form
+ *   (two-asterisks slash asterisk) contains byte pairs that close
+ *   a CSS slash-star slash-star comment block prematurely. The
+ *   SAME rule applies to any other pattern that mirrors CSS
+ *   comment syntax. Use PROSE for any pattern reference.
+ *
+ * Recon date: 2026-07-29, this repo only.
+ * ============================================================ */
+
+/*
+ * PRE-MIGRATION AUDIT -- empirical reconciliation between v3
+ * content-glob entries and Tailwind v4 auto-content-detection.
+ *
+ * The v3 tailwind.config.js content array listed three glob
+ * entries. Each is described below in prose, paired with the
+ * files it actually matched in this repository, and labeled with
+ * the corresponding v4 migration action.
+ *
+ * GLOB-1 -- v3 entry that targets the public directory via
+ *   recursive walk with a dot-html extension filter.
+ *   Files matched under public/: ZERO.
+ *   (The public directory actually holds SVG, WebP, PDF, and PNG
+ *   assets only. No dot-html files exist.)
+ *   Migration action: NO-OP. Neither v3 nor v4 needs a SOURCE
+ *   directive for this path.
+ *
+ * GLOB-2 -- v3 entry that targets the components directory via
+ *   recursive walk with a four-extension filter covering js,
+ *   jsx, ts, and tsx.
+ *   Files matched under components/: TEN tsx files (all 10 of
+ *   the actual component files in this repo).
+ *   Migration action: SAFE-ADD an explicit SOURCE directive for
+ *   the components directory in the migration PR, because v4
+ *   auto-detection may not reach SIBLING directories that sit
+ *   beside the app directory. The v3 behavior included them
+ *   because the explicit content glob enumerated them.
+ *
+ * GLOB-3 -- v3 entry that targets the app directory via recursive
+ *   walk with a four-extension filter covering js, jsx, ts, and
+ *   tsx.
+ *   Files matched under app/: SEVEN entries.
+ *     FOUR tsx files: page, layout, not-found, global-error.
+ *     THREE ts files: route handler, robots config, sitemap config.
+ *   Migration action: SAFE-NO-OP. v4 auto-detection walks upward
+ *   from the CSS file location and reaches the app directory
+ *   automatically.
+ *
+ * Extra files v4 will pick up beyond the v3 list (no harm if
+ * introduced because they contain no Tailwind class strings):
+ *   - the db folder TypeScript data loader (server-side only)
+ *   - the data folder JSON config file (no class strings)
+ *
+ * === end of audit ===
+ */
+
+/*
+ * DRAFT -- Tailwind v4 equivalent of the v3 tailwind.config.js.
+ * When the actual migration PR lands, the directives summarized
+ * below should be PLACED ABOVE the v3 trio below, the v3 trio
+ * below should be REMOVED, and tailwind.config.js should be
+ * DELETED.
+ *
+ * PSEUDOCODE BLOCK (NOT active CSS, for human reading only):
+ *
+ *   IMPORT the tailwindcss package.
+ *   DEFINE a custom dark variant matching the class dark plus
+ *     any descendant elements of dark.
+ *   LOAD the tailwindcss forms companion plugin.
+ *   REGISTER explicit SOURCE directives for the components
+ *     directory and the app directory.
+ *   DECLARE theme tokens -- an empty theme block is sufficient
+ *     for parity with v3 because this project does NOT define
+ *     custom colors, fonts, or spacing scales.
+ *
+ * The migration PR must ALSO update postcss.config.js:
+ *   - RENAME the tailwindcss plugin entry to reference the v4
+ *     scoped postcss adapter package name (a different package
+ *     on npm than the v3 tailwindcss PostCSS adapter).
+ *   - DROP the autoprefixer plugin entry entirely. Tailwind v4
+ *     uses Lightning CSS internally for vendor prefixing, and
+ *     the manual vendor prefixes already in this stylesheet
+ *     cover the few browser-specific edge cases.
+ * Both of those decisions align with the audit-policy comment
+ * posted on the PR #67 thread (open Dependabot PR for tailwindcss
+ * 3 to 4 bump).
+ *
+ * As part of the same migration PR:
+ *   npm install tailwindcss at v4 latest and the v4 scoped postcss adapter.
+ *   npm uninstall tailwindcss at v3 latest and autoprefixer.
+ *
+ * === end of draft directive list ===
+ */
+
+/*
+ * DRAFT -- the v3 tailwind.config.js that this discovery draft
+ * will eventually supersede (delete the file in the actual
+ * migration PR):
+ *
+ *   module-dot-exports equals an object literal with three
+ *   named properties:
+ *
+ *     PROPERTY NAMED "darkMode" EQUALS the LITERAL string
+ *       "class"
+ *       -- becomes the custom-variant directive in v4
+ *
+ *     PROPERTY NAMED "content" EQUALS an array of three glob
+ *       entries (described PROSE-only above as GLOB-1, GLOB-2,
+ *       and GLOB-3)
+ *       -- GLOB-1: becomes a NO-OP (no SOURCE needed)
+ *       -- GLOB-2: becomes an explicit SOURCE directive
+ *       -- GLOB-3: SAFE-NO-OP via auto-detect, but adding an
+ *          explicit SOURCE directive is harmless
+ *
+ *     PROPERTY NAMED "plugins" EQUALS an array of one entry
+ *       -- the tailwindcss forms plugin
+ *       -- becomes the plugin directive in v4
+ *
+ * === end of discovery draft ===
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
