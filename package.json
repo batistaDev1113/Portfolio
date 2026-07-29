@@ -40,7 +40,7 @@
     "@types/node": "^22.20.1",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "babel-jest": "^29.7.0",
+    "babel-jest": "^30.4.1",
     "baseline-browser-mapping": "^2.9.11",
     "critters": "^0.0.25",
     "eslint-config-prettier": "^9.0.0",
