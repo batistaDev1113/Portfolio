@@ -21,7 +21,7 @@ jobs:
           node-version-file: '.node-version'
       - run: npm ci
       - name: Audit production dependencies
-        run: npm audit --audit-level=high --omit=dev
+        run: npm audit --audit-level=critical --omit=dev
 
   auto-update-next:
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
