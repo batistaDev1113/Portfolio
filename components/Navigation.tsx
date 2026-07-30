@@ -12,7 +12,7 @@ const Navigation = () => {
   };
 
   return (
-    <nav className='sticky top-0 z-100 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 px-6 py-3 transition-all duration-300'>
+    <nav className='sticky top-0 z-100 w-full bg-white/90 dark:bg-[#07090f]/90 backdrop-blur-md border-b border-gray-200/40 dark:border-indigo-950/60 px-6 py-3 transition-all duration-300'>
       <div className='flex flex-wrap items-center justify-between'>
         <Link
           href='/'

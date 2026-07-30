@@ -1,13 +1,15 @@
 'use client';
 
 // Using custom glassmorphism card instead of Flowbite
-import { m, useReducedMotion } from 'framer-motion';
+import { m } from 'framer-motion';
 import Image from 'next/image';
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
 import profile from '../public/picofme.webp';
 
 const Hero = memo(() => {
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+
   const HERO_ABOUT_TEXT = `Hi, I'm Yunior—a product-minded Senior Frontend Engineer who turns complex ideas into intuitive, scalable digital experiences. I build modern web applications with React, Next.js, and TypeScript, bringing together strong UI/UX design, frontend architecture, and reliable product delivery.
 
 I care about creating accessible, high-performance interfaces that are not only polished visually, but also maintainable and built to evolve. From reusable component systems to enterprise applications, I enjoy solving real product problems through thoughtful engineering and user-centered design.`;
@@ -26,7 +28,20 @@ I care about creating accessible, high-performance interfaces that are not only 
     };
   }, []);
 
-  const shouldReduceMotion = useReducedMotion();
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const updateMotionPreference = () => {
+      setShouldReduceMotion(mediaQuery.matches);
+    };
+
+    updateMotionPreference();
+    mediaQuery.addEventListener('change', updateMotionPreference);
+
+    return () => {
+      mediaQuery.removeEventListener('change', updateMotionPreference);
+    };
+  }, []);
 
   const handleDownloadResume = () => {
     const link = document.createElement('a');
@@ -113,7 +128,7 @@ I care about creating accessible, high-performance interfaces that are not only 
             >
               <p
                 data-testid='hero-bio'
-                className='w-full max-w-2xl mx-auto text-sm sm:text-base text-white/85 text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10 whitespace-pre-line'
+                className='w-full max-w-2xl mx-auto text-sm sm:text-base text-white/90 text-center leading-6 drop-shadow-sm backdrop-blur-md bg-black/20 rounded-lg p-3 sm:p-4 border border-white/20 whitespace-pre-line'
               >
                 {HERO_ABOUT_TEXT}
               </p>

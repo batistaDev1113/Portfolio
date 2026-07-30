@@ -1,7 +1,7 @@
 'use client';
 
-import { m, useReducedMotion } from 'framer-motion';
-import { FormEvent, memo, useCallback, useState } from 'react';
+import { m } from 'framer-motion';
+import { FormEvent, memo, useCallback, useEffect, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
 const ContactForm = memo(() => {
@@ -17,7 +17,15 @@ const ContactForm = memo(() => {
     email: '',
     message: '',
   });
-  const shouldReduceMotion = useReducedMotion();
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setShouldReduceMotion(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
 
   const fullNameErrorId = 'full-name-error';
   const emailErrorId = 'email-error';
@@ -132,12 +140,12 @@ const ContactForm = memo(() => {
             ? { duration: 0 }
             : { duration: 0.8, ease: 'easeOut' }
         }
-        className='relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden'
+        className='relative bg-white dark:bg-[#0c0f1e] rounded-2xl shadow-2xl overflow-hidden'
       >
         {/* Desktop Split Layout */}
         <div className='lg:grid lg:grid-cols-2 lg:min-h-150'>
           {/* 3D Envelope Section */}
-          <section className='relative h-64 lg:h-full bg-linear-to-br from-blue-600 via-purple-600 to-indigo-700 overflow-hidden flex items-center justify-center'>
+          <section className='relative h-64 lg:h-full bg-linear-to-br from-[#1a0a4e] via-[#0d1a4e] to-[#0a0f2e] overflow-hidden flex items-center justify-center'>
             {/* Animated Background Elements */}
             <div className='absolute inset-0 opacity-20'>
               <div
