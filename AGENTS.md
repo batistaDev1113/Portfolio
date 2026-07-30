@@ -94,6 +94,8 @@ diagnostic runs) are the working examples of this pattern — clone
 their structure for any future upstream-watcher issue rather than
 re-deriving.
 
+Companion in-repo ADR: [`docs/adr/0010-tool-quirks-journey.md`](https://github.com/batistaDev1113/Portfolio/blob/main/docs/adr/0010-tool-quirks-journey.md) — captures the multi-turn basher-shape + gh-file-path-resolution failure-mode audit trail discovered while authoring this runbook (PRs #102-#105).
+
 ## Tool quirks: `basher` shape failure
 
 A recurring failure mode in agentic runs: spawning basher commands of
