@@ -27,7 +27,7 @@ describe('Hero', () => {
   test('renders hero title', () => {
     render(<Hero />);
 
-    const heroTitle = screen.getByText('Senior Frontend Developer');
+    const heroTitle = screen.getByText('Senior Frontend Engineer');
 
     expect(heroTitle).toBeInTheDocument();
   });
@@ -36,7 +36,7 @@ describe('Hero', () => {
     render(<Hero />);
 
     const heroDescription = screen.getByText(
-      /passionate Senior Frontend developer/i
+      /product-minded Senior Frontend Engineer/i
     );
 
     expect(heroDescription).toBeInTheDocument();
@@ -57,7 +57,7 @@ describe('Hero', () => {
     render(<Hero />);
 
     const heroImage = screen.getByAltText(
-      'Yunior Batista - Senior Frontend Developer'
+      'Yunior Batista - Senior Frontend Engineer'
     );
     const heroAttribute = heroImage.getAttribute('src');
     expect(heroAttribute).toContain('img.jpg');
