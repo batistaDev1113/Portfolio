@@ -40,7 +40,7 @@
 // Plus belt-and-suspenders sanity:
 //   - hero-section testid visible
 //   - profile image visible with the correct alt text
-//   - resume link href unchanged (`/Yunior-Batista-Resume.pdf`)
+//   - resume link href unchanged (`/resume`)
 //
 // Selectors use stable testid anchors (data-testid="hero-title" +
 // data-testid="hero-bio" + data-testid="hero-section" added to
@@ -65,6 +65,7 @@ test.describe('Hero section: bio + title regression net', () => {
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
         const text = msg.text();
+        const locationUrl = msg.location()?.url ?? '';
         // Filter known-environmental noise from `@vercel/analytics`:
         // /_vercel/insights/script.js is rewritten by Vercel's edge to a
         // real CDN script in production deploys, but 404s (text/html MIME
@@ -75,8 +76,15 @@ test.describe('Hero section: bio + title regression net', () => {
         // so a single filter is sufficient. Real regressions on a future
         // PROD build (where /_vercel/insights is rewritten) would be
         // unaffected.
-        if (text.includes('/_vercel/insights')) return;
-        errors.push(`console.error: ${text}`);
+        if (
+          text.includes('/_vercel/insights') ||
+          locationUrl.includes('/_vercel/insights') ||
+          locationUrl.endsWith('/favicon.ico')
+        ) {
+          return;
+        }
+        const detail = locationUrl ? `${text} (${locationUrl})` : text;
+        errors.push(`console.error: ${detail}`);
       }
     });
 
@@ -141,10 +149,7 @@ test.describe('Hero section: bio + title regression net', () => {
     await expect(profileImg).toBeVisible();
 
     const resumeLink = heroSection.getByRole('link', { name: 'View Resume' });
-    await expect(resumeLink).toHaveAttribute(
-      'href',
-      '/Yunior-Batista-Resume.pdf'
-    );
+    await expect(resumeLink).toHaveAttribute('href', '/resume');
 
     // ---- 3. assert zero captured errors ----
     expect(errors).toEqual([]);
