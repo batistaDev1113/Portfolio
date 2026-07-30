@@ -1,0 +1,323 @@
+# Weekly upstream-poll for the next.js vendor-unblock tracked in Issue #114.
+#
+# Self-policing replacement for the "Dec 2026 reminder" burden on the
+# audit-trail of when a `next@16.2.13+` release ships enough to make a
+# `chore/deps-next` bump PR worthwhile (5 distinct HIGH leaf-cert
+# advisories tracked in Issue #114 close at upstreams: brace-expansion
+# >=5.0.8, postcss >=8.5.18, sharp >=0.35.x — all transitive through
+# `next`).
+#
+# Style mirrors `.github/workflows/weekly-jsx-a11y-watch.yml` exactly:
+# single-quoted cron strings, workflow-level `permissions: {}` for
+# futureproof zero-grant default, per-job minimal `permissions:`
+# overrides, `runs-on: ubuntu-latest`, `node-version-file:
+# '.node-version'` for setup-node, evidence-chain comment format with
+# ISO date + commit SHA + run URL.
+#
+# Triggers:
+#   - cron: Mondays 01:00 UTC (staggered 60 min after security-audit's
+#     `0 0 * * 1` AND 30 min after weekly-jsx-a11y-watch's
+#     `30 0 * * 1`, so three watchers don't pile up on the npm registry
+#     at the same minute)
+#   - workflow_dispatch: manual ad-hoc run from GitHub UI / CLI / API
+#
+# Close-triggers (verbatim from Issue #114 body):
+#   (a) `next@latest` version > baseline `16.2.12` (i.e., any 16.2.13+
+#       or 16.3.x release has shipped).
+#   (b) `next@latest`'s bundled `postcss` >= `8.5.18` (closes GHSA-6g55
+#       -p6wh-862q + GHSA-r28c-9q8g-f849 per Issue #114).
+#   (c) `next@latest`'s bundled `sharp` >= `0.35.0` (closes GHSA-f88m-
+#       g3jw-g9cj per Issue #114).
+#
+# (a) is the primary trigger per the user's request: the watcher
+# fires whenever any `next@16.2.13+` release ships. (b)+(c) are the
+# GHSA-probe secondary triggers: they add deployment-readiness context
+# to the comment so the maintainer can decide whether the new release
+# is bundle-worthy.
+#
+# IMPORTANT semver-comparison note: we use `printf '%s\n%s\n' BASE
+# LATEST | sort -V | tail -1` rather than string ordering — string
+# ordering would conflate lexicographic and semver order, so e.g.
+# `16.2.13 < 16.2.9` lexically but `16.2.13 > 16.2.9` semver. `sort
+# -V` correctly orders semver-valid identifiers. We pipe BOTH values
+# through and take the last; if it equals the baseline, latest has
+# not advanced.
+#
+# IMPORTANT cron-staggering note: weekly-jsx-a11y-watch fires 30 min
+# after security-audit (00:30 UTC Mon); this workflow fires 30 min
+# AFTER that (01:00 UTC Mon) — three consecutive half-hour slots keep
+# registry latency from compounding.
+
+name: weekly-next-vendor-watch
+
+on:
+  schedule:
+    - cron: '0 1 * * 1'
+  workflow_dispatch:
+
+# Cron-specific concurrency: if a previous run is still in flight (e.g.,
+# npm registry latency pushes the run past the next cron firing), drop
+# the new one to avoid hammering the registry with parallel probes.
+concurrency:
+  group: weekly-next-vendor-watch
+  cancel-in-progress: true
+
+# Workflow-level zero-grant blocks any future step from inheriting
+# default broad token grants without an explicit per-job override.
+# Mirrors weekly-jsx-a11y-watch + security-audit + prod-smoke.yml
+# zero-grant precedent.
+permissions: {}
+
+jobs:
+  watch:
+    name: probe upstream next.js + comment if 16.2.13+ shipped
+    runs-on: ubuntu-latest
+    # Per-job minimal grants:
+    #   - contents: read: required by actions/checkout@v4 (the per-job
+    #     block REPLACES — does not add to — the workflow-level grants,
+    #     so contents: read must be explicit here)
+    #   - issues: write: required by the conditional github-script
+    #     createComment on Issue #114
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+
+      # ============================================================
+      # Constraint (a) — next@latest version > 16.2.12 baseline
+      # ============================================================
+      # semver-correct comparison via `sort -V`. Returns the higher of
+      # the two versions as the last line; if it equals the baseline,
+      # latest has not advanced past 16.2.12 (no-op week). The probe
+      # output captures:
+      #   - `latest`: current npm registry `latest` dist-tag
+      #   - `sorted_max`: the lexicographically-and-semver largest
+      #     identifier of (baseline, latest) (semver-via-sort-V)
+      #   - `resolved_eq_baseline`: "true" if latest == 16.2.12
+      #   - `satisfied`: "true" iff latest > 16.2.12
+      # `resolved_eq_baseline` is captured separately so the comment
+      # can distinguish "registry says still 16.2.12" (true no-op)
+      # from "registry ambiguous / sort-V rolled back" (probe error).
+      - name: Constraint (a) — next@latest version > 16.2.12
+        id: probe-next-latest
+        run: |
+          set -euo pipefail
+          BASELINE='16.2.12'
+          LATEST=$(npm view next@latest version)
+          # sort -V: capital -V is required for semver mode (lowercase -v
+          # is "version sort" with different semantics — version-numbers
+          # only, no prerelease handling). With only -V, sort correctly
+          # orders 16.2.9 < 16.2.13.
+          SORTED_MAX=$(printf '%s\n%s\n' "${BASELINE}" "${LATEST}" | sort -V | tail -1)
+          RESOLVED_EQ="false"
+          SATISFIED="false"
+          if [ "${SORTED_MAX}" = "${BASELINE}" ]; then
+            RESOLVED_EQ="true"
+            SATISFIED="false"
+          elif [ "${SORTED_MAX}" = "${LATEST}" ]; then
+            RESOLVED_EQ="false"
+            SATISFIED="true"
+          fi
+          echo "baseline: ${BASELINE} | latest: ${LATEST} | sorted_max: ${SORTED_MAX}"
+          echo "baseline=${BASELINE}" >> "${GITHUB_OUTPUT}"
+          echo "latest=${LATEST}" >> "${GITHUB_OUTPUT}"
+          echo "sorted_max=${SORTED_MAX}" >> "${GITHUB_OUTPUT}"
+          echo "resolved_eq_baseline=${RESOLVED_EQ}" >> "${GITHUB_OUTPUT}"
+
+      # ============================================================
+      # Constraint (b) — next@latest bundles postcss >= 8.5.18
+      # ============================================================
+      # Issue #114's HIGH leaf-cert #3 + #4 are postcss (GHSAs
+      # 6g55-p6wh-862q + r28c-9q8g-f849). Both close at postcss 8.5.18.
+      # We probe next@latest's bundled postcss via `npm view next@latest
+      # dependencies.postcss` (RangeResolver decision documented in
+      # weekly-jsx-a11y-watch.yml probe-b — same jq -r 'if type=="array"
+      # then .[-1] else . end' pattern to handle the array-vs-string
+      # npm view shape difference).
+      - name: Constraint (b) — next@latest bundled postcss >= 8.5.18
+        id: probe-postcss
+        run: |
+          set -euo pipefail
+          POSTCSS_THRESHOLD='8.5.18'
+          POSTCSS_RANGE=$(npm view next@latest dependencies.postcss)
+          # Defensive empty-range guard: if a future next.js removes
+          # postcss from its dependency list, `npm view next@latest
+          # dependencies.postcss` returns empty string. Treat as
+          # vacuously satisfied (no transitive = no reachable GHSA).
+          # Without this guard, the next `npm view "postcss@"` call
+          # would fail with EINVALIDTAGNAME and abort the whole probe
+          # job via `set -euo pipefail`, losing Constraint (a)'s
+          # version-info from the comment payload.
+          if [ -z "${POSTCSS_RANGE}" ]; then
+            echo "next@latest does not bundle postcss — constraint vacuously satisfied (no transitive GHSA path)"
+            echo "postcss_range=" >> "${GITHUB_OUTPUT}"
+            echo "postcss_resolved_version=" >> "${GITHUB_OUTPUT}"
+            echo "postcss_satisfied=true" >> "${GITHUB_OUTPUT}"
+          else
+            POSTCSS_RESOLVED=$(npm view "postcss@${POSTCSS_RANGE}" version --json | jq -r 'if type=="array" then .[-1] else . end')
+            POSTCSS_SORTED_MAX=$(printf '%s\n%s\n' "${POSTCSS_THRESHOLD}" "${POSTCSS_RESOLVED}" | sort -V | tail -1)
+            POSTCSS_SATISFIED="false"
+            if [ "${POSTCSS_SORTED_MAX}" = "${POSTCSS_RESOLVED}" ] && [ "${POSTCSS_RESOLVED}" != "${POSTCSS_THRESHOLD}" ]; then
+              POSTCSS_SATISFIED="true"
+            fi
+            echo "next@latest bundles postcss@${POSTCSS_RANGE}; resolved to ${POSTCSS_RESOLVED} (threshold ${POSTCSS_THRESHOLD})"
+            echo "postcss_range=${POSTCSS_RANGE}" >> "${GITHUB_OUTPUT}"
+            echo "postcss_resolved_version=${POSTCSS_RESOLVED}" >> "${GITHUB_OUTPUT}"
+            echo "postcss_satisfied=${POSTCSS_SATISFIED}" >> "${GITHUB_OUTPUT}"
+          fi
+
+      # ============================================================
+      # Constraint (c) — next@latest bundles sharp >= 0.35.0
+      # ============================================================
+      # Issue #114's HIGH leaf-cert #5 is sharp (GHSA-f88m-g3jw-g9cj,
+      # composite CVE bundle). Closes at sharp 0.35.x. Same array-vs-
+      # string resolution pattern as constraint (b).
+      - name: Constraint (c) — next@latest bundled sharp >= 0.35.0
+        id: probe-sharp
+        run: |
+          set -euo pipefail
+          SHARP_THRESHOLD='0.35.0'
+          SHARP_RANGE=$(npm view next@latest dependencies.sharp)
+          # Defensive empty-range guard: same rationale as the postcss
+          # probe above (comment in steps.probe-postcss). Future next.js
+          # could remove the sharp dep entirely (e.g., rebundle @next/
+          # image); without the guard the EINVALIDTAGNAME abort would
+          # lose Constraint (a)'s version-info from the comment.
+          if [ -z "${SHARP_RANGE}" ]; then
+            echo "next@latest does not bundle sharp — constraint vacuously satisfied (no transitive GHSA path)"
+            echo "sharp_range=" >> "${GITHUB_OUTPUT}"
+            echo "sharp_resolved_version=" >> "${GITHUB_OUTPUT}"
+            echo "sharp_satisfied=true" >> "${GITHUB_OUTPUT}"
+          else
+            SHARP_RESOLVED=$(npm view "sharp@${SHARP_RANGE}" version --json | jq -r 'if type=="array" then .[-1] else . end')
+            SHARP_SORTED_MAX=$(printf '%s\n%s\n' "${SHARP_THRESHOLD}" "${SHARP_RESOLVED}" | sort -V | tail -1)
+            SHARP_SATISFIED="false"
+            if [ "${SHARP_SORTED_MAX}" = "${SHARP_RESOLVED}" ] && [ "${SHARP_RESOLVED}" != "${SHARP_THRESHOLD}" ]; then
+              SHARP_SATISFIED="true"
+            fi
+            echo "next@latest bundles sharp@${SHARP_RANGE}; resolved to ${SHARP_RESOLVED} (threshold ${SHARP_THRESHOLD})"
+            echo "sharp_range=${SHARP_RANGE}" >> "${GITHUB_OUTPUT}"
+            echo "sharp_resolved_version=${SHARP_RESOLVED}" >> "${GITHUB_OUTPUT}"
+            echo "sharp_satisfied=${SHARP_SATISFIED}" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Run summary
+        run: |
+          echo "Constraint (a) — next@latest > 16.2.12: ${{ steps.probe-next-latest.outputs.sorted_max == steps.probe-next-latest.outputs.latest && steps.probe-next-latest.outputs.latest != '16.2.12' }}"
+          echo "Constraint (b) — bundled postcss >= 8.5.18: ${{ steps.probe-postcss.outputs.postcss_satisfied }}"
+          echo "Constraint (c) — bundled sharp >= 0.35.0: ${{ steps.probe-sharp.outputs.sharp_satisfied }}"
+          echo "(comment step is conditional: only fires on (a))"
+
+      # Comment on Issue #114 ONLY when Constraint (a) — primary
+      # trigger per the user's request: any 16.2.13+ release ships.
+      # Constraints (b)+(c) appear in the comment body as
+      # deployment-readiness context (whether the new release bundles
+      # the postcss/sharp versions that close Issue #114's HIGH
+      # leaf-cert GHSAs).
+      - name: Comment on Issue #114 if next@16.2.13+ has shipped
+        if: steps.probe-next-latest.outputs.sorted_max == steps.probe-next-latest.outputs.latest && steps.probe-next-latest.outputs.latest != '16.2.12'
+        uses: actions/github-script@v7
+        env:
+          PROBE_A_LATEST: ${{ steps.probe-next-latest.outputs.latest }}
+          PROBE_A_BASELINE: ${{ steps.probe-next-latest.outputs.baseline }}
+          PROBE_POSTCSS_RANGE: ${{ steps.probe-postcss.outputs.postcss_range }}
+          PROBE_POSTCSS_RESOLVED: ${{ steps.probe-postcss.outputs.postcss_resolved_version }}
+          PROBE_POSTCSS_SATISFIED: ${{ steps.probe-postcss.outputs.postcss_satisfied }}
+          PROBE_SHARP_RANGE: ${{ steps.probe-sharp.outputs.sharp_range }}
+          PROBE_SHARP_RESOLVED: ${{ steps.probe-sharp.outputs.sharp_resolved_version }}
+          PROBE_SHARP_SATISFIED: ${{ steps.probe-sharp.outputs.sharp_satisfied }}
+        with:
+          script: |
+            // Strict-gt comparison: re-confirm the trigger condition
+            // defensively. We've already gated on it in the workflow's
+            // `if:` clause, but a re-check in the script body catches
+            // the case where env-vars are partially set due to a
+            // step-output race (defensive belt-and-suspenders mirror
+            // of weekly-jsx-a11y-watch's peer-output guard).
+            const latest = (process.env.PROBE_A_LATEST || '').trim();
+            const baseline = (process.env.PROBE_A_BASELINE || '').trim();
+            if (!latest || !baseline) {
+              core.setFailed('Trigger condition met but env vars empty — refusing to post a vacuous comment. Re-run via workflow_dispatch after verifying npm view connectivity.');
+              return;
+            }
+            if (latest === baseline) {
+              // Should not happen given the workflow `if:` clause, but
+              // guards against future drift.
+              core.setFailed('latest == baseline but trigger condition was met — workflow `if:` clause and probe output are inconsistent. Do NOT auto-merge this workflow file until the clause is re-verified.');
+              return;
+            }
+            const postcssRange = (process.env.PROBE_POSTCSS_RANGE || '').trim();
+            const postcssResolved = (process.env.PROBE_POSTCSS_RESOLVED || '').trim();
+            const postcssSatisfied = process.env.PROBE_POSTCSS_SATISFIED === 'true';
+            const sharpRange = (process.env.PROBE_SHARP_RANGE || '').trim();
+            const sharpResolved = (process.env.PROBE_SHARP_RESOLVED || '').trim();
+            const sharpSatisfied = process.env.PROBE_SHARP_SATISFIED === 'true';
+            // Audit-trail evidence chain (Issue #114 Monitoring schedule
+            // format): ISO date + commit SHA + run URL.
+            const isoDate = new Date().toISOString().slice(0, 10);
+            const sha = process.env.GITHUB_SHA || 'sha-unknown';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const lines = [];
+            lines.push('### :robot: `weekly-next-vendor-watch` — next@16.2.13+ ships — vendor-unblock probe fired');
+            lines.push('');
+            lines.push('**Observation evidence (audit trail per Issue #114 Monitoring schedule):**');
+            lines.push('');
+            lines.push(`- **ISO date**: \`${isoDate}\``);
+            lines.push(`- **Commit SHA**: \`${sha}\``);
+            lines.push(`- **Run URL**: <${runUrl}>`);
+            lines.push('');
+            lines.push('**Constraint (a) — `next@latest` > `16.2.12` baseline:**');
+            lines.push(`- Result: :white_check_mark: SATISFIED \`(latest=${latest}, baseline=${baseline})\``);
+            lines.push('');
+            lines.push('**GHSA probe — deployment-readiness context (whether Issue #114\'s HIGH leaf-certs are closed in the new release):**');
+            lines.push('');
+            lines.push(`- **Constraint (b)** — bundled \`postcss >= 8.5.18\` (closes GHSA-6g55-p6wh-862q + GHSA-r28c-9q8g-f849):`);
+            lines.push(`  - Result: ${postcssSatisfied ? ':white_check_mark: SATISFIED' : ':x: not yet'}`);
+            lines.push(`  - Transitive \`postcss\` range: \`${postcssRange}\``);
+            lines.push(`  - Transitive resolved: \`${postcssResolved}\``);
+            lines.push(`- **Constraint (c)** — bundled \`sharp >= 0.35.0\` (closes GHSA-f88m-g3jw-g9cj):`);
+            lines.push(`  - Result: ${sharpSatisfied ? ':white_check_mark: SATISFIED' : ':x: not yet'}`);
+            lines.push(`  - Transitive \`sharp\` range: \`${sharpRange}\``);
+            lines.push(`  - Transitive resolved: \`${sharpResolved}\``);
+            lines.push('');
+            if (postcssSatisfied && sharpSatisfied) {
+              lines.push(':arrow_right: GHSA-probe Constraint (b)+(c) both SATISFIED — the new release closes 3 of the 5 distinct HIGH leaf-certs in Issue #114. A `chore/deps-next` PR is now warranted (the remaining 2 leaf-certs trace to `brace-expansion`, which is upgraded separately via the upstream chain).');
+            } else if (postcssSatisfied || sharpSatisfied) {
+              lines.push(':arrow_right: GHSA-probe partially SATISFIED — the new release closes some of Issue #114\'s HIGH leaf-certs but not all. Decide whether the partial-closure benefit justifies a `chore/deps-next` PR or whether to wait for the next patch.');
+            } else {
+              lines.push(':arrow_right: GHSA-probe CONSTRAINTS NOT YET MET — the new release ships (Constraint (a) fired) but does not yet close the postcss/sharp HIGH leaf-certs. Likely cause: this is a feature release (e.g., 16.3.0) rather than a security patch. Continue watching weekly. The next 16.x security patch is likely to satisfy (b)+(c).');
+            }
+            lines.push('');
+            lines.push('> _This comment was posted automatically by `.github/workflows/weekly-next-vendor-watch.yml`. Manual action still requires: (1) verify the new release passes the audit gate at `--omit=dev --audit-level=critical` per PR #57, (2) review Issue #114\'s `final-state` table, (3) open a `chore/deps-next` PR per AGENTS.md\'s `Auto-update-next` lifecycle._');
+
+            // CR NIT-1 one-shot suppression: structurally different from
+            // the sibling `weekly-jsx-a11y-watch.yml` watcher (whose
+            // Constraints (a)/(b) check for permanent peer-dep properties
+            // and naturally fire one-shot per publish). Constraint (a)
+            // here fires EVERY WEEK while `next@latest != 16.2.12`.
+            // Fetch Issue #114's state and skip the comment on closed
+            // issues — the maintainer's Reversal Procedure closure is
+            // the natural one-shot boundary, and we want to avoid
+            // visual accumulation of N identical weekly comments.
+            const issueState = await github.rest.issues.get({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: 114,
+            });
+            if (issueState.data.state !== 'open') {
+              core.info(`Issue #114 is in state '${issueState.data.state}' — skipping weekly comment (one-shot watcher behavior). Maintainer has already closed via Reversal Procedure.`);
+              return;
+            }
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: 114,
+              body: lines.join('\n'),
+            });
