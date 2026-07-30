@@ -24,6 +24,9 @@ export interface RootLayoutProps {
 const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang='en' suppressHydrationWarning>
+      <head>
+        <link rel='icon' href='data:,' />
+      </head>
       <body
         suppressHydrationWarning={true}
         className={`${inter.variable} ${inter.className}`}

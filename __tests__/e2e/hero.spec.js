@@ -65,6 +65,7 @@ test.describe('Hero section: bio + title regression net', () => {
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
         const text = msg.text();
+        const locationUrl = msg.location()?.url ?? '';
         // Filter known-environmental noise from `@vercel/analytics`:
         // /_vercel/insights/script.js is rewritten by Vercel's edge to a
         // real CDN script in production deploys, but 404s (text/html MIME
@@ -75,8 +76,15 @@ test.describe('Hero section: bio + title regression net', () => {
         // so a single filter is sufficient. Real regressions on a future
         // PROD build (where /_vercel/insights is rewritten) would be
         // unaffected.
-        if (text.includes('/_vercel/insights')) return;
-        errors.push(`console.error: ${text}`);
+        if (
+          text.includes('/_vercel/insights') ||
+          locationUrl.includes('/_vercel/insights') ||
+          locationUrl.endsWith('/favicon.ico')
+        ) {
+          return;
+        }
+        const detail = locationUrl ? `${text} (${locationUrl})` : text;
+        errors.push(`console.error: ${detail}`);
       }
     });
 
