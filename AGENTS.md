@@ -3,22 +3,24 @@
 Operational notes for agentic / automated runs against this repo. Read this
 **before** invoking `gh pr merge` or evaluating a CI gate.
 
-## gh CLI: `gh pr merge --yes` does not exist
+## gh CLI: do not use `--yes` on `gh pr merge`
 
-`gh 2.96.0` does **not** recognize `--yes` on `gh pr merge`. Calling it raises
-`unknown flag: --yes` and exits non-zero — and prior agentic runs that piped the
-output through `tail` masked the failure because `$?` was capturing `tail`'s
+Earlier gh versions (including `gh 2.96.0`, verified via `gh pr merge --help`)
+do not recognize `--yes` on `gh pr merge`. Calling it raises
+`unknown flag: --yes` and exits non-zero — and prior agentic runs that piped
+the output through `tail` masked the failure because `$?` was capturing `tail`'s
 always-0 exit code, not `gh`'s. Result: claimed merges never landed on
-`origin/main`.
+`origin/main`. Re-verify with `gh pr merge --help` against your installed binary
+if you suspect a newer gh version added the flag.
 
 ### Pattern to avoid
 
 ```bash
-# WRONG (silent-fail in gh 2.96.0): the `--yes` flag is unknown.
+# WRONG (silent-fail in gh 2.x): the `--yes` flag is unknown.
 gh pr merge $N --admin --squash --delete-branch --yes
 ```
 
-### Canonical merge pattern (proven working)
+### Canonical merge pattern
 
 ```bash
 gh pr merge $N \
@@ -42,16 +44,11 @@ Notes:
 ## Audit gate: `npm audit --omit=dev --audit-level=critical`
 
 `.github/workflows/security-audit.yml` (PR #57) enforces this gate at the
-`critical` level. Any `critical` advisory blocks auto-merge; the five long-known
-`high`-severity advisories are accepted as the project's accepted-risk envelope
-(`.npm`-transitive: `js-yaml`, `postcss`, `sharp`).
+`critical` level. Any `critical` advisory blocks auto-merge; high-severity
+advisories are accepted as the project's risk envelope — re-poll
+`npm audit --omit=dev --json | jq '.metadata.vulnerabilities.high // 0'` before quoting any
+specific count in a downstream advisory.
 
 When staging a merge, run `npm audit --omit=dev --audit-level=critical`
-locally + surface `failure: 0` explicitly rather than trusting the GitHub-side
-rollup which can briefly flicker `FAIL` while status checks rerun.
-
-## Comments on `app/styles/globals.css` discovery comment (PR #75)
-
-The discovery-only `@theme {}` block added previously by PR #75's discovery audit
-must be deleted at the start of any Tailwind v4 migration PR — see ADR 0009 +
-`.tmpdraft/migration-pr-body.template.md` for the full sequence.
+locally and surface `failure: 0` explicitly rather than trusting the
+GitHub-side rollup, which can briefly flicker `FAIL` while status checks rerun.
