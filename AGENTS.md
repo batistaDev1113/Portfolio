@@ -93,3 +93,61 @@ schedule, with `workflow_dispatch` available for ad-hoc manual
 diagnostic runs) are the working examples of this pattern — clone
 their structure for any future upstream-watcher issue rather than
 re-deriving.
+
+## Tool quirks: `basher` shape failure
+
+A recurring failure mode in agentic runs: spawning basher commands of
+**~12 KB with nested single quotes inside JSON-escaped content**.
+The JSON serialization + bash tokenization interaction mangles the
+content, surfacing as
+
+```
+bash: -c: line N: unexpected EOF while looking for matching '`'
+```
+
+and silently aborting the entire command — not a single sub-line.
+`| tail -N` after `gh …` further masks the exit code (tail always
+returns 0, not `gh`'s actual exit). Cost this week: **2 retry turns per episode** (the user's literal
+"this week alone" estimate), based on recent `--admin --squash
+--delete-branch` merge sequences.
+
+### Operational discipline (both, not instead)
+
+- **6 KB cap on the `command` parameter.** When exceeded, **split into
+  multiple chained bashers** (each ≤6 KB). Bashers run sequentially;
+  2-3 small spawns cost less than 1 failed-and-debug spawn.
+- **Body-file writes**: for content destined for `--body-file <path>`
+  or `gh api --input <path>`, use plain `printf '%s\n' '...' > path`
+  from short simple content. Avoid embedding heredoc-with-single-
+  quoted-markers (`<< 'EOF' … EOF`) **inside** the basher `command`
+  JSON parameter — JSON-escape + bash-quote interaction bites.
+  Heredocs are fine in a stand-alone basher whose command starts
+  with `<< 'EOF'`, but the practical discipline is: keep body-file
+  writes as `printf` and never entangle heredocs inside a complex
+  basher command parameter.
+- **`$?` capture**: with any `| tail -N` after `gh …`, capture the
+  exit code from `gh` itself:
+
+  ```bash
+  set +e; gh …; rc=$?; echo "rc=$rc"; tail -5 …
+  ```
+
+  Otherwise `$?` reflects `tail` (always 0), masking any `gh` failure.
+
+### Self-test before any large basher spawn
+
+- Command body close to 6 KB? → split into chained spawns.
+- Heredoc inside complex JSON-escaped content? → refactor to
+  `printf '...' > path` or move the heredoc to its own basher.
+- `| tail -N` after a `gh …` call? → use the `set +e; gh …; rc=$?`
+  pattern above.
+
+### Working examples (do, then verify)
+
+Reference patterns that successfully closed prior episodes:
+
+- `printf '%s\n' '...' > tmp_pr_N_merge.md` + `gh pr merge N --body-file tmp_pr_N_merge.md` — used in PR #98 #100 #101 merges, no debug cycle.
+- Chained small bashers (`<=4 KB each`) for `git ls-files | xargs git rm --` + branch cleanup — used in PR #100.
+- Heredoc at top-level basher command (`<< 'EOF'\n… body …\nEOF`) for multi-paragraph body when the command is short — used in PR #100 `.tmpdraft` cleanup.
+
+
