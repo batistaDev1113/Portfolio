@@ -1,0 +1,29 @@
+chore(tailwind): add discovery-only v4 migration draft comment block
+
+No behavior change. Comments-only prepend to app/styles/globals.css
+documenting the empirical reconciliation between v3's content-glob
+array and Tailwind v4's auto-content-detection defaults.
+
+Block structure (4 closed sections inside the comment):
+  1. Header noting branch, scope, and notation rule.
+  2. PRE-MIGRATION AUDIT -- empirical content-glob reconciliation
+     against v3's three explicit content entries.
+  3. DRAFT -- Tailwind v4 equivalent directive set for the planned
+     migration PR (prose-only, no live CSS directives).
+  4. DRAFT -- the v3 tailwind.config.js this draft supersedes
+     (delete in the migration PR).
+
+Notation rule: this comment deliberately avoids writing any
+recursive file-glob verbatim (the canonical form contains byte
+pairs that would close the outer comment early), and instead
+describes every glob via prose. This is to prevent the build
+from crashing at PostCSS parse time -- the prior two attempts at
+this draft contained `**/*`-style patterns and crashed the build
+with CssSyntaxError at line N column M.
+
+The existing v3 directive trio below the new comment is untouched.
+v3 Tailwind base, components, utilities still emit as before.
+
+Next-step signal: if v4 auto-detect misses any path that v3's
+explicit content array covered, an explicit SOURCE directive will
+need to be added in the actual migration PR.
