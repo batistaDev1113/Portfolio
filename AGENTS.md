@@ -173,9 +173,29 @@ returns 0, not `gh`'s actual exit). Cost this week: **2 retry turns per episode*
 Reference patterns that successfully closed prior episodes:
 
 - `printf '%s\n' '...' > tmp_pr_N_merge.md` + `gh pr merge N --body-file tmp_pr_N_merge.md` — used in PR #98 #100 #101 merges, no debug cycle.
-- Chained small bashers (`<=4 KB each`) for `git ls-files | xargs git rm --` + branch cleanup — used in PR #100.
-- Heredoc at top-level basher command (`<< 'EOF'\n… body …\nEOF`) for multi-paragraph body when the command is short — used in PR #100 `.tmpdraft` cleanup.
+- Chained small bashers (`<=4 KB each`) for `git ls-files | xargs git rm --` + branch cleanup — used in PR #100.- Heredoc at top-level basher command (`<< 'EOF'\n… body …\nEOF`) for multi-paragraph body when the command is short — used in PR #100 `.tmpdraft` cleanup.
 
+
+
+## Tool quirks: `npm run lint:check` cold-start timeout on Windows Git Bash
+
+A second recurring failure mode in agentic runs: spawning a basher that runs `time npm run lint:check` (= `eslint .`) on **Windows Git Bash with `core.autocrlf=true`** consistently times out at 60-180s. Root cause is `eslint-config-next/core-web-vitals` preset cold-start latency under the Windows Node 22 file-resolution stack — not a code or config regression in `eslint.config.js`. The same command runs normally (~30s) on the CI Linux runner in `.github/workflows/`. Symptom: a basher `time npm run lint:check 2>&1 | tail -40` invocation hits the basher's 90s/180s/360s timeout with **no stderr output captured** — the interface is silent during the cold-start. Practical cost: 1-3 retry turns per episode (re-running with progressively larger timeouts that don't help), based on the most recent content-ship turns (observed during PR #118 `feat(content): update Hero bio + title`).
+
+### Operational discipline
+
+- **Trust CI `lint:check` as the source of truth.** Any Linux GitHub-Actions runner in `.github/workflows/*` reports the gate in ~30s. Treat any local Windows Git Bash `eslint .` timeout as an env lock, **not** as evidence of an actual lint regression. Do not gate the merge on the local ESLint run while CI is still queued.
+- **Do not downgrade the gate** to recover from the env lock. Specifically: avoid `--max-warnings 999`, avoid removing `lint:check` from `npm scripts`, avoid commenting-out `eslint-plugin-jsx-a11y` rules. Each of those weakens the real `lint:check` enforcement that CI is running and silently regresses project hygiene.
+- **Don't retry with progressively larger timeouts.** The cold-start latency is environmental — `eslint .` either completes in ~30s (success path) or hangs for the full `core.autocrlf=true` Windows-Node22 timeout window. Any basher timeout ≥180s is the env lock confirmed — cap invocations of this command at 180s and trust CI rather than retrying at 360s.
+- **Self-resolves if dev env moves to Linux.** WSL2, Codespaces, or any Linux-based dev container sidesteps the cold-start entirely. No code action needed; the only durable fix is changing the primary dev environment, not the project's `lint:check` script.
+
+### Self-test
+
+- Hit the basher timeout with `rc=$?` matching `gh`'s actual exit code (rather than `tail`'s always-0 echo) and no stderr? → It's the cold-start env lock; trust CI. Don't loop.
+- CI's `lint:check` job itself failed with a real lint error message? → That's a real regression; iterate on the lint finding (use `npx eslint --no-warn-ignored path/to/file.tsx` for targeted diagnosis), not on the basher timeout.
+
+### Working example
+
+PR #118 (`feat(content): update Hero bio + title to Senior Frontend Engineer`) shipped despite local Windows `npm run lint:check` timing out at 180s on the agentic basher. The code-reviewer verdict was SHIP, `tsc --noEmit`/`jest --watchAll=false`/`prettier --check` all green locally, and CI's Linux `lint:check` (in `.github/workflows/dependency-review.yml`) reported SUCCESS on PR #118's run. The local Windows timeout was correctly diagnosed as the env lock, not a code issue — and the merge proceeded via the canonical safe pattern (`gh pr merge --admin --squash --delete-branch --body-file`) without any gate downgrade.
 
 
 
