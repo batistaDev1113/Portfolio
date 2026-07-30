@@ -56,10 +56,8 @@ I care about creating accessible, high-performance interfaces that are not only 
         <div className='hero-card w-11/12 lg:w-10/12 xl:w-2/3 2xl:w-3/5 p-5 sm:p-6 md:p-10 lg:p-12 overflow-visible max-h-none'>
           <div className='flex flex-col items-center'>
             <m.div
-              initial={shouldReduceMotion ? false : { x: 120, opacity: 0 }}
-              whileInView={
-                shouldReduceMotion ? { opacity: 1 } : { x: 0, opacity: 1 }
-              }
+              initial={shouldReduceMotion ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={
                 shouldReduceMotion
@@ -85,10 +83,8 @@ I care about creating accessible, high-performance interfaces that are not only 
               Yunior Batista
             </h5>
             <m.div
-              initial={shouldReduceMotion ? false : { x: 120, opacity: 0 }}
-              whileInView={
-                shouldReduceMotion ? { opacity: 1 } : { x: 0, opacity: 1 }
-              }
+              initial={shouldReduceMotion ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={
                 shouldReduceMotion
@@ -105,21 +101,19 @@ I care about creating accessible, high-performance interfaces that are not only 
               </span>
             </m.div>
             <m.div
-              initial={shouldReduceMotion ? false : { x: 120, opacity: 0 }}
-              whileInView={
-                shouldReduceMotion ? { opacity: 1 } : { x: 0, opacity: 1 }
-              }
+              initial={shouldReduceMotion ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={
                 shouldReduceMotion
                   ? { duration: 0 }
                   : { delay: 2, ease: 'easeInOut' }
               }
-              className='w-full flex justify-center'
+              className='w-full flex justify-center items-center'
             >
               <p
                 data-testid='hero-bio'
-                className='text-sm sm:text-base text-white/85 max-w-2xl text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10 whitespace-pre-line'
+                className='w-full max-w-2xl mx-auto text-sm sm:text-base text-white/85 text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-3 sm:p-4 border border-white/10 whitespace-pre-line'
               >
                 {HERO_ABOUT_TEXT}
               </p>
