@@ -2,6 +2,18 @@
 
 A personal portfolio website built with **Next.js 16** and **React 19**, showcasing projects, skills, and a contact form. Features a modern glassmorphism design with animated backgrounds, dark mode, and smooth Framer Motion transitions.
 
+## Recent migration events
+
+Modern toolchain — **SWC-only** (no Babel dep), **Tailwind v4** (CSS-first,
+no autoprefixer), **LF line endings enforced by `.gitattributes`**.
+
+- [#78](https://github.com/batistaDev1113/Portfolio/pull/78) Prettier CRLF auto-fix across 7 files
+- [#79](https://github.com/batistaDev1113/Portfolio/pull/79) Tailwind v3 → v4 (dropped autoprefixer)
+- [#80](https://github.com/batistaDev1113/Portfolio/pull/80) `.gitattributes` LF gate on `*.js/tsx/json/md`
+- [#83](https://github.com/batistaDev1113/Portfolio/pull/83) Drop Babel devDeps; next/jest SWC compiles tests
+
+Full Path 4 rationale: [ADR 0009](docs/adr/0009-drop-babel-toolchain.md).
+
 ## Tech Stack
 
 | Category | Technology |
