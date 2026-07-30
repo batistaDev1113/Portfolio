@@ -16,6 +16,7 @@
     "build": "next build",
     "start": "next start",
     "format": "prettier --write \"{app,components,data,db}/**/*.{js,jsx,ts,tsx,json,css,md}\" \"*.{js,jsx,ts,tsx,json,css,md}\"",
+    "hygiene:branches": "node scripts/check-branch-clean.mjs",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
     "test": "jest --watch"
