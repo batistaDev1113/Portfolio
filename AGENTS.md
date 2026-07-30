@@ -155,8 +155,13 @@ returns 0, not `gh`'s actual exit). Cost this week: **2 retry turns per episode*
 
   - For short bodies without `(`, `=>`, or backticks, pass via
     `--body 'inline'` with single-quote wrap. Trim problematic
-    characters first (this falls back to the basher-quote landmines
-    documented above).
+    characters first (this falls back to the basher-quote landmines documented above).
+- **Test violation bullet (validation only)** — Intentional cross-
+  reference wiring test. This bullet violates Operational discipline 2
+  above by using Unicode arrows `→` and em-dashes `—` in its content,
+  and references a non-existent forward section `## gh CLI fast-
+  forward caveat` to exercise the "cross-link forward references"
+  half of the PR template's Reviewer checklist bullet.
 
 ### Self-test before any large basher spawn
 
