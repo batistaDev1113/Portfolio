@@ -8,8 +8,9 @@ import { FaFileDownload } from 'react-icons/fa';
 import profile from '../public/picofme.webp';
 
 const Hero = memo(() => {
-  const HERO_ABOUT_TEXT =
-    "Hi, I'm Yunior – a passionate Senior Frontend developer who transforms ideas into elegant digital experiences. I specialize in creating modern web applications using Next.js, React, and TypeScript, with a keen eye for both beautiful UI/UX design and robust, scalable enterprise solutions. I love bringing creativity and technical excellence together in every project I build.";
+  const HERO_ABOUT_TEXT = `Hi, I'm Yunior—a product-minded Senior Frontend Engineer who turns complex ideas into intuitive, scalable digital experiences. I build modern web applications with React, Next.js, and TypeScript, bringing together strong UI/UX design, frontend architecture, and reliable product delivery.
+
+I care about creating accessible, high-performance interfaces that are not only polished visually, but also maintainable and built to evolve. From reusable component systems to enterprise applications, I enjoy solving real product problems through thoughtful engineering and user-centered design.`;
 
   useEffect(() => {
     // Preload resume PDF for faster access
@@ -37,7 +38,7 @@ const Hero = memo(() => {
         viewport={{ once: true }}
         className='w-full flex justify-center items-center'
       >
-        <div className='hero-card w-11/12 lg:w-10/12 xl:w-1/2 p-8 md:p-12'>
+        <div className='hero-card w-11/12 lg:w-10/12 xl:w-1/2 p-8 md:p-12 overflow-y-auto max-h-[calc(100vh-2rem)]'>
           <div className='flex flex-col items-center'>
             <m.div
               initial={{ x: 120, opacity: 0 }}
@@ -47,7 +48,7 @@ const Hero = memo(() => {
             >
               <div className='profile-image mb-6'>
                 <Image
-                  alt='Yunior Batista - Senior Frontend Developer'
+                  alt='Yunior Batista - Senior Frontend Engineer'
                   height={120}
                   src={profile}
                   width={120}
@@ -70,7 +71,7 @@ const Hero = memo(() => {
               className='my-5 text-center w-full'
             >
               <span className='text-transparent bg-gradient-to-r from-blue-200 via-purple-200 to-indigo-200 bg-clip-text text-2xl md:text-3xl font-semibold drop-shadow-lg'>
-                Senior Frontend Developer
+                Senior Frontend Engineer
               </span>
             </m.div>
             <m.div
@@ -79,7 +80,7 @@ const Hero = memo(() => {
               viewport={{ once: true }}
               transition={{ delay: 2, ease: 'easeInOut' }}
             >
-              <p className='text-base text-white/85 max-w-lg text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-4 border border-white/10'>
+              <p className='text-base text-white/85 max-w-lg text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-4 border border-white/10 whitespace-pre-line'>
                 {HERO_ABOUT_TEXT}
               </p>
             </m.div>
