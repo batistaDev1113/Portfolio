@@ -12,11 +12,11 @@ const Navigation = () => {
   };
 
   return (
-    <nav className='sticky top-0 z-[100] w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 px-6 py-3 transition-all duration-300'>
+    <nav className='sticky top-0 z-100 w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 px-6 py-3 transition-all duration-300'>
       <div className='flex flex-wrap items-center justify-between'>
         <Link
           href='/'
-          className='self-center text-2xl font-semibold text-transparent bg-gradient-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text md:text-4xl lg:text-3xl'
+          className='self-center text-2xl font-semibold text-transparent bg-linear-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text md:text-4xl lg:text-3xl'
         >
           Yunior B.
         </Link>

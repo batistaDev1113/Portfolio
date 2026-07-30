@@ -51,7 +51,7 @@ const ProjectModal = memo(
     if (!openModal) return null;
 
     return (
-      <div className='fixed inset-0 z-[100] flex items-center justify-center p-4'>
+      <div className='fixed inset-0 z-100 flex items-center justify-center p-4'>
         {/* Backdrop */}
         <div
           className='absolute inset-0 bg-black/50 backdrop-blur-sm'
@@ -116,7 +116,7 @@ const ProjectModal = memo(
                   rel='noopener noreferrer'
                   className='flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-xl transition-colors duration-200 group'
                 >
-                  <div className='flex items-center justify-center w-10 h-10 bg-gradient-to-r from-gray-900 to-gray-700 dark:from-gray-600 dark:to-gray-500 rounded-full'>
+                  <div className='flex items-center justify-center w-10 h-10 bg-linear-to-r from-gray-900 to-gray-700 dark:from-gray-600 dark:to-gray-500 rounded-full'>
                     <FaGithub className='w-5 h-5 text-white' />
                   </div>
                   <div className='flex-1'>
@@ -135,9 +135,9 @@ const ProjectModal = memo(
                   href={liveDemoLink}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='flex items-center gap-3 p-4 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 rounded-xl transition-colors duration-200 group border border-blue-200 dark:border-blue-800'
+                  className='flex items-center gap-3 p-4 bg-linear-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 rounded-xl transition-colors duration-200 group border border-blue-200 dark:border-blue-800'
                 >
-                  <div className='flex items-center justify-center w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full'>
+                  <div className='flex items-center justify-center w-10 h-10 bg-linear-to-r from-blue-500 to-purple-600 rounded-full'>
                     <FaExternalLinkAlt className='w-4 h-4 text-white' />
                   </div>
                   <div className='flex-1'>

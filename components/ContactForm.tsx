@@ -135,9 +135,9 @@ const ContactForm = memo(() => {
         className='relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden'
       >
         {/* Desktop Split Layout */}
-        <div className='lg:grid lg:grid-cols-2 lg:min-h-[600px]'>
+        <div className='lg:grid lg:grid-cols-2 lg:min-h-150'>
           {/* 3D Envelope Section */}
-          <section className='relative h-64 lg:h-full bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 overflow-hidden flex items-center justify-center'>
+          <section className='relative h-64 lg:h-full bg-linear-to-br from-blue-600 via-purple-600 to-indigo-700 overflow-hidden flex items-center justify-center'>
             {/* Animated Background Elements */}
             <div className='absolute inset-0 opacity-20'>
               <div
@@ -162,50 +162,50 @@ const ContactForm = memo(() => {
             <div className='relative transform-gpu perspective-1000'>
               <div className='envelope-3d group cursor-pointer'>
                 {/* Envelope Back */}
-                <div className='envelope-back absolute w-32 h-24 lg:w-40 lg:h-32 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-100 dark:via-gray-200 dark:to-gray-300 rounded-lg shadow-2xl transform rotate-x-12 translate-y-2'></div>
+                <div className='envelope-back absolute w-32 h-24 lg:w-40 lg:h-32 bg-linear-to-br from-white via-gray-50 to-gray-100 dark:from-gray-100 dark:via-gray-200 dark:to-gray-300 rounded-lg shadow-2xl transform rotate-x-12 translate-y-2'></div>
 
                 {/* Envelope Main Body */}
-                <div className='envelope-body relative w-32 h-24 lg:w-40 lg:h-32 bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-50 dark:via-blue-100 dark:to-purple-100 rounded-lg shadow-xl transform transition-all duration-500 group-hover:rotate-y-12 group-hover:translate-y-1'>
+                <div className='envelope-body relative w-32 h-24 lg:w-40 lg:h-32 bg-linear-to-br from-white via-blue-50 to-purple-50 dark:from-gray-50 dark:via-blue-100 dark:to-purple-100 rounded-lg shadow-xl transform transition-all duration-500 group-hover:rotate-y-12 group-hover:translate-y-1'>
                   {/* Envelope Flap */}
-                  <div className='envelope-flap absolute -top-2 left-0 right-0 h-12 lg:h-16 bg-gradient-to-b from-blue-500 to-purple-600 transform rotate-x-45 origin-bottom rounded-t-lg shadow-lg group-hover:rotate-x-35 transition-all duration-500'>
+                  <div className='envelope-flap absolute -top-2 left-0 right-0 h-12 lg:h-16 bg-linear-to-b from-blue-500 to-purple-600 transform rotate-x-45 origin-bottom rounded-t-lg shadow-lg group-hover:rotate-x-35 transition-all duration-500'>
                     {/* Flap Highlight */}
-                    <div className='absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/10 rounded-t-lg'></div>
+                    <div className='absolute inset-0 bg-linear-to-r from-white/20 via-transparent to-white/10 rounded-t-lg'></div>
                   </div>
 
                   {/* Email Icon Inside */}
                   <div className='absolute inset-0 flex items-center justify-center'>
-                    <div className='w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300'>
+                    <div className='w-8 h-8 lg:w-10 lg:h-10 bg-linear-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300'>
                       <FaRegPaperPlane className='text-white text-sm lg:text-base transform group-hover:translate-x-1 transition-transform duration-300' />
                     </div>
                   </div>
 
                   {/* Envelope Lines */}
                   <div className='absolute bottom-4 left-4 right-4 space-y-1'>
-                    <div className='h-0.5 bg-gradient-to-r from-gray-300 to-transparent rounded'></div>
-                    <div className='h-0.5 bg-gradient-to-r from-gray-300 via-gray-200 to-transparent rounded w-3/4'></div>
-                    <div className='h-0.5 bg-gradient-to-r from-gray-300 to-transparent rounded w-1/2'></div>
+                    <div className='h-0.5 bg-linear-to-r from-gray-300 to-transparent rounded'></div>
+                    <div className='h-0.5 bg-linear-to-r from-gray-300 via-gray-200 to-transparent rounded w-3/4'></div>
+                    <div className='h-0.5 bg-linear-to-r from-gray-300 to-transparent rounded w-1/2'></div>
                   </div>
 
                   {/* Border Highlights */}
-                  <div className='absolute inset-0 rounded-lg bg-gradient-to-br from-white/30 via-transparent to-transparent pointer-events-none'></div>
+                  <div className='absolute inset-0 rounded-lg bg-linear-to-br from-white/30 via-transparent to-transparent pointer-events-none'></div>
                 </div>
 
                 {/* Floating Message Dots */}
                 <div className='absolute -top-6 -right-6 lg:-top-8 lg:-right-8'>
                   <div className='relative'>
-                    <div className='w-3 h-3 bg-gradient-to-r from-green-400 to-blue-500 rounded-full animate-ping'></div>
-                    <div className='absolute inset-0 w-3 h-3 bg-gradient-to-r from-green-400 to-blue-500 rounded-full animate-pulse'></div>
+                    <div className='w-3 h-3 bg-linear-to-r from-green-400 to-blue-500 rounded-full animate-ping'></div>
+                    <div className='absolute inset-0 w-3 h-3 bg-linear-to-r from-green-400 to-blue-500 rounded-full animate-pulse'></div>
                   </div>
                 </div>
                 <div className='absolute -top-3 -right-10 lg:-top-4 lg:-right-12'>
                   <div
-                    className='w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse'
+                    className='w-2 h-2 bg-linear-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse'
                     style={{ animationDelay: '0.5s' }}
                   ></div>
                 </div>
                 <div className='absolute -top-8 -right-2 lg:-top-10 lg:-right-3'>
                   <div
-                    className='w-1.5 h-1.5 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full animate-pulse'
+                    className='w-1.5 h-1.5 bg-linear-to-r from-pink-400 to-purple-500 rounded-full animate-pulse'
                     style={{ animationDelay: '1s' }}
                   ></div>
                 </div>
@@ -213,7 +213,7 @@ const ContactForm = memo(() => {
             </div>
 
             {/* Gradient Overlay */}
-            <div className='absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none' />
+            <div className='absolute inset-0 bg-linear-to-t from-black/10 via-transparent to-transparent pointer-events-none' />
           </section>
 
           {/* Form Section */}
@@ -233,7 +233,7 @@ const ContactForm = memo(() => {
                 transition={shouldReduceMotion ? { duration: 0 } : undefined}
                 className='flex flex-col items-center justify-center w-full text-center'
               >
-                <div className='w-20 h-20 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mb-6'>
+                <div className='w-20 h-20 bg-linear-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mb-6'>
                   <FaRegPaperPlane className='text-2xl text-white animate-bounce' />
                 </div>
                 <h2 className='text-2xl font-semibold text-gray-900 dark:text-white mb-2'>
@@ -367,7 +367,7 @@ const ContactForm = memo(() => {
                   <button
                     type='submit'
                     disabled={sending}
-                    className='w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3'
+                    className='w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3'
                   >
                     {sending ? (
                       <>
