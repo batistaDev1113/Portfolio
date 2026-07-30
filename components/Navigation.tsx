@@ -7,6 +7,10 @@ import { ModeToggle } from './ModeToggle';
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
 
+  const handleNavLinkClick = () => {
+    setIsOpen(false);
+  };
+
   return (
     <nav className='sticky top-0 z-[100] w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200/50 dark:border-gray-700/50 px-6 py-3 transition-all duration-300'>
       <div className='flex flex-wrap items-center justify-between'>
@@ -66,6 +70,7 @@ const Navigation = () => {
               <a
                 href='#projects'
                 aria-label='Some projects I have built'
+                onClick={handleNavLinkClick}
                 className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
               >
                 <span className='pb-1 hover:text-teal-600 dark:hover:text-teal-300 hover:border-b-2 hover:border-indigo-500 hover:border-spacing-4'>
@@ -77,6 +82,7 @@ const Navigation = () => {
               <a
                 href='#contact'
                 aria-label='Contact me'
+                onClick={handleNavLinkClick}
                 className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
               >
                 <span className='pb-1 hover:text-teal-600 dark:hover:text-teal-300 hover:border-b-2 hover:border-indigo-500 hover:border-spacing-4'>

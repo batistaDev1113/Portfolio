@@ -1,6 +1,6 @@
 'use client';
 
-import { m } from 'framer-motion';
+import { m, useReducedMotion } from 'framer-motion';
 import { FormEvent, memo, useCallback, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
@@ -17,6 +17,11 @@ const ContactForm = memo(() => {
     email: '',
     message: '',
   });
+  const shouldReduceMotion = useReducedMotion();
+
+  const fullNameErrorId = 'full-name-error';
+  const emailErrorId = 'email-error';
+  const messageErrorId = 'message-error';
 
   // Validation functions
   const validateEmail = (email: string): string | undefined => {
@@ -111,7 +116,7 @@ const ContactForm = memo(() => {
   };
   return (
     <section
-      className='relative z-50 w-full max-w-7xl mx-auto my-16 px-4'
+      className='relative z-50 w-full max-w-7xl mx-auto my-16 px-4 scroll-mt-20'
       id='contact'
     >
       <h1 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center my-20 tracking-widest'>
@@ -119,10 +124,14 @@ const ContactForm = memo(() => {
       </h1>
 
       <m.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : { duration: 0.8, ease: 'easeOut' }
+        }
         className='relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden'
       >
         {/* Desktop Split Layout */}
@@ -217,8 +226,11 @@ const ContactForm = memo(() => {
 
             {sending ? (
               <m.div
-                initial={{ scale: 0.8, opacity: 0 }}
+                initial={
+                  shouldReduceMotion ? false : { scale: 0.8, opacity: 0 }
+                }
                 animate={{ scale: 1, opacity: 1 }}
+                transition={shouldReduceMotion ? { duration: 0 } : undefined}
                 className='flex flex-col items-center justify-center w-full text-center'
               >
                 <div className='w-20 h-20 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mb-6'>
@@ -255,6 +267,10 @@ const ContactForm = memo(() => {
                       onChange={(e) =>
                         handleInputChange('fullName', e.target.value)
                       }
+                      aria-invalid={Boolean(errors.fullName)}
+                      aria-describedby={
+                        errors.fullName ? fullNameErrorId : undefined
+                      }
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.fullName
                           ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
@@ -263,7 +279,11 @@ const ContactForm = memo(() => {
                       placeholder='Enter your full name'
                     />
                     {errors.fullName && (
-                      <p className='mt-1 text-sm text-red-600 dark:text-red-400'>
+                      <p
+                        id={fullNameErrorId}
+                        role='alert'
+                        className='mt-1 text-sm text-red-600 dark:text-red-400'
+                      >
                         {errors.fullName}
                       </p>
                     )}
@@ -285,6 +305,8 @@ const ContactForm = memo(() => {
                       onChange={(e) =>
                         handleInputChange('email', e.target.value)
                       }
+                      aria-invalid={Boolean(errors.email)}
+                      aria-describedby={errors.email ? emailErrorId : undefined}
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.email
                           ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
@@ -293,7 +315,11 @@ const ContactForm = memo(() => {
                       placeholder='your.email@example.com'
                     />
                     {errors.email && (
-                      <p className='mt-1 text-sm text-red-600 dark:text-red-400'>
+                      <p
+                        id={emailErrorId}
+                        role='alert'
+                        className='mt-1 text-sm text-red-600 dark:text-red-400'
+                      >
                         {errors.email}
                       </p>
                     )}
@@ -315,6 +341,10 @@ const ContactForm = memo(() => {
                       onChange={(e) =>
                         handleInputChange('message', e.target.value)
                       }
+                      aria-invalid={Boolean(errors.message)}
+                      aria-describedby={
+                        errors.message ? messageErrorId : undefined
+                      }
                       placeholder='Tell me about your project or just say hello...'
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.message
@@ -323,7 +353,11 @@ const ContactForm = memo(() => {
                       } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-gray-600 resize-none`}
                     />
                     {errors.message && (
-                      <p className='mt-1 text-sm text-red-600 dark:text-red-400'>
+                      <p
+                        id={messageErrorId}
+                        role='alert'
+                        className='mt-1 text-sm text-red-600 dark:text-red-400'
+                      >
                         {errors.message}
                       </p>
                     )}
@@ -351,8 +385,17 @@ const ContactForm = memo(() => {
                   {/* Status Message */}
                   {message && (
                     <m.div
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={
+                        shouldReduceMotion ? false : { opacity: 0, y: 10 }
+                      }
                       animate={{ opacity: 1, y: 0 }}
+                      transition={
+                        shouldReduceMotion ? { duration: 0 } : undefined
+                      }
+                      role={message.includes('Error') ? 'alert' : 'status'}
+                      aria-live={
+                        message.includes('Error') ? 'assertive' : 'polite'
+                      }
                       className={`p-4 rounded-xl text-sm font-medium ${
                         message.includes('Error')
                           ? 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800'

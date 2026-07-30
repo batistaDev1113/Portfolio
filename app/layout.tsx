@@ -31,6 +31,12 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
         suppressHydrationWarning={true}
         className={`${inter.variable} ${inter.className}`}
       >
+        <a
+          href='#main-content'
+          className='sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:px-4 focus:py-2 focus:rounded focus:bg-white focus:text-black dark:focus:bg-gray-900 dark:focus:text-white'
+        >
+          Skip to main content
+        </a>
         <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
         <VercelAnalytics />
       </body>

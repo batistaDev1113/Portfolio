@@ -14,23 +14,28 @@ export function ModeToggle() {
   );
   const { theme, setTheme } = useTheme();
 
+  const isDarkMode = theme === 'dark';
+
+  const toggleTheme = () => {
+    setTheme(isDarkMode ? 'light' : 'dark');
+  };
+
   if (!mounted) return null;
 
   return (
-    <div
-      role='button'
-      aria-label='Toggle theme mode'
-      tabIndex={0}
-      onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      onKeyDown={() => setTheme(theme === 'light' ? 'dark' : 'light')}
-      className='w-6 h-6 flex items-center justify-center cursor-pointer transition:ease-in-out hover:scale-110 duration-200'
+    <button
+      type='button'
+      aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+      aria-pressed={isDarkMode}
+      onClick={toggleTheme}
+      className='w-6 h-6 flex items-center justify-center cursor-pointer transition:ease-in-out hover:scale-110 duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500/60 rounded'
     >
-      {theme === 'dark' ? (
+      {isDarkMode ? (
         <BsSunFill size={15} className='text-white' />
       ) : (
         <BsMoonFill className='text-black' size={15} />
       )}
-    </div>
+    </button>
   );
 }
 

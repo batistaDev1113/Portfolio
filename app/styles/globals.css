@@ -253,40 +253,24 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* 3D Envelope Styles */
-  .perspective-1000 {
-    perspective: 1000px;
+}
+
+/* On touch devices, keep scrolling but hide visual scrollbars to avoid
+   distracting overlay bars on small screens. */
+@media (hover: none) and (pointer: coarse) {
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
-  .envelope-3d {
-    transform-style: preserve-3d;
-    transition: transform 0.5s ease-in-out;
+  *::-webkit-scrollbar {
+    width: 0 !important;
+    height: 0 !important;
+    display: none;
   }
 
-  .envelope-3d:hover {
-    transform: rotateY(15deg) rotateX(-5deg);
-  }
-
-  .envelope-back {
-    transform: rotateX(15deg) translateZ(-10px) translateY(8px);
-  }
-
-  .envelope-body {
-    transform-style: preserve-3d;
-  }
-
-  .envelope-flap {
-    transform-origin: bottom;
-    transform: rotateX(-45deg) translateZ(5px);
-    transition: transform 0.5s ease-in-out;
-  }
-
-  .envelope-3d:hover .envelope-flap {
-    transform: rotateX(-35deg) translateZ(5px);
-  }
-
-  .envelope-3d:hover .envelope-body {
-    transform: rotateY(5deg) translateZ(5px);
+  *::-webkit-scrollbar-thumb {
+    background: transparent;
   }
 }
 
@@ -316,4 +300,37 @@
 
 .translate-y-2 {
   transform: translateY(0.5rem);
+}
+
+/* 3D Envelope Styles */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.envelope-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease-in-out;
+}
+
+.envelope-3d:hover {
+  transform: rotateY(15deg) rotateX(-5deg);
+}
+
+.envelope-back {
+  transform: rotateX(15deg) translateZ(-10px) translateY(8px);
+}
+
+.envelope-body {
+  transform-style: preserve-3d;
+  transition: transform 0.5s ease-in-out;
+}
+
+.envelope-flap {
+  transform-origin: bottom;
+  transform: rotateX(-45deg) translateZ(5px);
+  transition: transform 0.5s ease-in-out;
+}
+
+.envelope-3d:hover .envelope-flap {
+  transform: rotateX(-35deg) translateZ(5px);
 }
