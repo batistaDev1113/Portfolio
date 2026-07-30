@@ -12,6 +12,7 @@
   ],
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/check-deps-aligned.mjs",
     "build": "next build",
     "start": "next start",
     "format": "prettier --write \"{app,components,data,db}/**/*.{js,jsx,ts,tsx,json,css,md}\" \"*.{js,jsx,ts,tsx,json,css,md}\"",
