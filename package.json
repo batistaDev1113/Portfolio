@@ -37,15 +37,12 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.23.3",
-    "@babel/preset-react": "^7.23.3",
     "@tailwindcss/forms": "^0.5.11",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^16.0.0",
     "@types/node": "^26.1.2",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
-    "babel-jest": "^30.4.1",
     "baseline-browser-mapping": "^2.9.11",
     "critters": "^0.0.25",
     "eslint-config-prettier": "^9.0.0",
