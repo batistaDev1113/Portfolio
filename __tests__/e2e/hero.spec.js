@@ -40,7 +40,7 @@
 // Plus belt-and-suspenders sanity:
 //   - hero-section testid visible
 //   - profile image visible with the correct alt text
-//   - resume link href unchanged (`/Yunior-Batista-Resume.pdf`)
+//   - resume link href unchanged (`/resume`)
 //
 // Selectors use stable testid anchors (data-testid="hero-title" +
 // data-testid="hero-bio" + data-testid="hero-section" added to
@@ -141,10 +141,7 @@ test.describe('Hero section: bio + title regression net', () => {
     await expect(profileImg).toBeVisible();
 
     const resumeLink = heroSection.getByRole('link', { name: 'View Resume' });
-    await expect(resumeLink).toHaveAttribute(
-      'href',
-      '/Yunior-Batista-Resume.pdf'
-    );
+    await expect(resumeLink).toHaveAttribute('href', '/resume');
 
     // ---- 3. assert zero captured errors ----
     expect(errors).toEqual([]);

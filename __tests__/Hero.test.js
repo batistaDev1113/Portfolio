@@ -48,9 +48,7 @@ describe('Hero', () => {
     const resumeLink = screen.getByText('View Resume');
 
     expect(resumeLink).toBeInTheDocument();
-    expect(resumeLink).toHaveAttribute('href', '/Yunior-Batista-Resume.pdf');
-    expect(resumeLink).toHaveAttribute('target', '_blank');
-    expect(resumeLink).toHaveAttribute('rel', 'noopener noreferrer');
+    expect(resumeLink).toHaveAttribute('href', '/resume');
   });
 
   test('renders hero image', () => {

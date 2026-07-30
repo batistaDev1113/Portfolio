@@ -26,6 +26,15 @@ I care about creating accessible, high-performance interfaces that are not only 
     };
   }, []);
 
+  const handleDownloadResume = () => {
+    const link = document.createElement('a');
+    link.href = '/Yunior-Batista-Resume.pdf';
+    link.download = 'Yunior-Batista-Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <section
       className='z-50 relative w-full h-screen items-center justify-center flex animated-background'
@@ -38,7 +47,7 @@ I care about creating accessible, high-performance interfaces that are not only 
         viewport={{ once: true }}
         className='w-full flex justify-center items-center'
       >
-        <div className='hero-card w-11/12 lg:w-10/12 xl:w-1/2 p-8 md:p-12 overflow-y-auto max-h-[calc(100vh-2rem)]'>
+        <div className='hero-card w-11/12 lg:w-10/12 xl:w-2/3 2xl:w-3/5 p-8 md:p-12 overflow-y-auto lg:overflow-visible max-h-[calc(100vh-2rem)] lg:max-h-none'>
           <div className='flex flex-col items-center'>
             <m.div
               initial={{ x: 120, opacity: 0 }}
@@ -72,7 +81,7 @@ I care about creating accessible, high-performance interfaces that are not only 
             >
               <span
                 data-testid='hero-title'
-                className='text-transparent bg-gradient-to-r from-blue-200 via-purple-200 to-indigo-200 bg-clip-text text-2xl md:text-3xl font-semibold drop-shadow-lg'
+                className='text-transparent bg-linear-to-r from-blue-200 via-purple-200 to-indigo-200 bg-clip-text text-2xl md:text-3xl font-semibold drop-shadow-lg'
               >
                 Senior Frontend Engineer
               </span>
@@ -82,36 +91,40 @@ I care about creating accessible, high-performance interfaces that are not only 
               whileInView={{ x: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 2, ease: 'easeInOut' }}
+              className='w-full flex justify-center'
             >
               <p
                 data-testid='hero-bio'
-                className='text-base text-white/85 max-w-lg text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-4 border border-white/10 whitespace-pre-line'
+                className='text-base text-white/85 max-w-2xl text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-4 border border-white/10 whitespace-pre-line'
               >
                 {HERO_ABOUT_TEXT}
               </p>
             </m.div>
             <section className='grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-3 grid-flow-col'>
               <a
-                href='/Yunior-Batista-Resume.pdf'
-                aria-label='View Resume'
+                href='/resume'
+                aria-label='View Resume as HTML'
                 className='button-about'
-                target='_blank'
-                rel='noopener noreferrer'
               >
                 View Resume
               </a>
-              <a
-                href='/Yunior-Batista-Resume.pdf'
+              <button
+                type='button'
                 aria-label='Download Resume'
-                download='Yunior-Batista-Resume.pdf'
                 className='button-about'
-                target='_blank'
-                rel='noopener noreferrer'
+                onClick={handleDownloadResume}
               >
                 Download Resume
                 <FaFileDownload className='ml-2' />
-              </a>
+              </button>
             </section>
+            <p
+              id='resume-format-note'
+              className='mt-2 text-sm text-white/90 text-center max-w-2xl'
+            >
+              View Resume opens the accessible HTML version. Use Download Resume
+              for the PDF file.
+            </p>
           </div>
         </div>
       </m.div>
