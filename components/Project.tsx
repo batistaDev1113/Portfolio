@@ -37,7 +37,7 @@ const Project = memo(({ project }: ProjectProps) => {
     >
       <div className='w-full max-w-sm hover:cursor-pointer h-full flex flex-col'>
         <div className='project-card w-full h-full flex flex-col'>
-          <div className='project-image-overlay flex-shrink-0'>
+          <div className='project-image-overlay shrink-0'>
             <Image
               src={imageUrl || '/No-Image-Placeholder.svg'}
               width={400}
@@ -57,7 +57,7 @@ const Project = memo(({ project }: ProjectProps) => {
               <p className='font-normal text-gray-700 dark:text-gray-300 text-sm line-clamp-3 leading-relaxed'>
                 {description}
               </p>
-              <div className='flex flex-wrap gap-2 min-h-[2rem] items-start'>
+              <div className='flex flex-wrap gap-2 min-h-8 items-start'>
                 {technologies.slice(0, 3).map((tech, index) => (
                   <span key={index} className='tech-tag'>
                     {tech}
@@ -67,7 +67,7 @@ const Project = memo(({ project }: ProjectProps) => {
             </div>
             <button
               onClick={() => setOpenModal(!openModal)}
-              className='modern-button w-full flex-shrink-0 mt-4'
+              className='modern-button w-full shrink-0 mt-4 hover:cursor-pointer'
             >
               View Details
             </button>

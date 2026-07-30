@@ -3,11 +3,13 @@
 // Using custom glassmorphism card instead of Flowbite
 import { m } from 'framer-motion';
 import Image from 'next/image';
-import { memo, useEffect } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
 import profile from '../public/picofme.webp';
 
 const Hero = memo(() => {
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+
   const HERO_ABOUT_TEXT = `Hi, I'm Yunior—a product-minded Senior Frontend Engineer who turns complex ideas into intuitive, scalable digital experiences. I build modern web applications with React, Next.js, and TypeScript, bringing together strong UI/UX design, frontend architecture, and reliable product delivery.
 
 I care about creating accessible, high-performance interfaces that are not only polished visually, but also maintainable and built to evolve. From reusable component systems to enterprise applications, I enjoy solving real product problems through thoughtful engineering and user-centered design.`;
@@ -26,6 +28,21 @@ I care about creating accessible, high-performance interfaces that are not only 
     };
   }, []);
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const updateMotionPreference = () => {
+      setShouldReduceMotion(mediaQuery.matches);
+    };
+
+    updateMotionPreference();
+    mediaQuery.addEventListener('change', updateMotionPreference);
+
+    return () => {
+      mediaQuery.removeEventListener('change', updateMotionPreference);
+    };
+  }, []);
+
   const handleDownloadResume = () => {
     const link = document.createElement('a');
     link.href = '/Yunior-Batista-Resume.pdf';
@@ -37,23 +54,31 @@ I care about creating accessible, high-performance interfaces that are not only 
 
   return (
     <section
-      className='z-50 relative w-full h-screen items-center justify-center flex animated-background'
+      className='z-50 relative w-full min-h-screen md:h-screen flex justify-center md:items-center items-start py-6 md:py-0 animated-background'
       data-testid='hero-section'
     >
       <m.div
-        initial={{ opacity: 0 }}
+        initial={shouldReduceMotion ? false : { opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        transition={{ delay: 0.5, ease: 'easeInOut' }}
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : { delay: 0.5, ease: 'easeInOut' }
+        }
         viewport={{ once: true }}
-        className='w-full flex justify-center items-center'
+        className='w-full flex justify-center md:items-center items-start py-2 md:py-0'
       >
-        <div className='hero-card w-11/12 lg:w-10/12 xl:w-2/3 2xl:w-3/5 p-8 md:p-12 overflow-y-auto lg:overflow-visible max-h-[calc(100vh-2rem)] lg:max-h-none'>
+        <div className='hero-card w-11/12 lg:w-10/12 xl:w-2/3 2xl:w-3/5 p-5 sm:p-6 md:p-10 lg:p-12 overflow-visible max-h-none'>
           <div className='flex flex-col items-center'>
             <m.div
-              initial={{ x: 120, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
+              initial={shouldReduceMotion ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 1, ease: 'easeInOut' }}
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0 }
+                  : { delay: 1, ease: 'easeInOut' }
+              }
             >
               <div className='profile-image mb-6'>
                 <Image
@@ -73,37 +98,46 @@ I care about creating accessible, high-performance interfaces that are not only 
               Yunior Batista
             </h5>
             <m.div
-              initial={{ x: 120, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
+              initial={shouldReduceMotion ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 1.5, ease: 'easeInOut' }}
-              className='my-5 text-center w-full'
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0 }
+                  : { delay: 1.5, ease: 'easeInOut' }
+              }
+              className='my-4 md:my-5 text-center w-full'
             >
               <span
                 data-testid='hero-title'
-                className='text-transparent bg-linear-to-r from-blue-200 via-purple-200 to-indigo-200 bg-clip-text text-2xl md:text-3xl font-semibold drop-shadow-lg'
+                className='text-transparent bg-linear-to-r from-blue-200 via-purple-200 to-indigo-200 bg-clip-text text-xl sm:text-2xl md:text-3xl font-semibold drop-shadow-lg'
               >
                 Senior Frontend Engineer
               </span>
             </m.div>
             <m.div
-              initial={{ x: 120, opacity: 0 }}
-              whileInView={{ x: 0, opacity: 1 }}
+              initial={shouldReduceMotion ? false : { opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              transition={{ delay: 2, ease: 'easeInOut' }}
-              className='w-full flex justify-center'
+              transition={
+                shouldReduceMotion
+                  ? { duration: 0 }
+                  : { delay: 2, ease: 'easeInOut' }
+              }
+              className='w-full flex justify-center items-center'
             >
               <p
                 data-testid='hero-bio'
-                className='text-base text-white/85 max-w-2xl text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-4 border border-white/10 whitespace-pre-line'
+                className='w-full max-w-2xl mx-auto text-sm sm:text-base text-white/90 text-center leading-6 drop-shadow-sm backdrop-blur-md bg-black/20 rounded-lg p-3 sm:p-4 border border-white/20 whitespace-pre-line'
               >
                 {HERO_ABOUT_TEXT}
               </p>
             </m.div>
-            <section className='grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-3 grid-flow-col'>
+            <section className='grid w-full max-w-2xl grid-cols-1 md:grid-cols-2 gap-3 mt-3'>
               <a
                 href='/resume'
                 aria-label='View Resume as HTML'
+                aria-describedby='resume-format-note'
                 className='button-about'
               >
                 View Resume
@@ -111,7 +145,8 @@ I care about creating accessible, high-performance interfaces that are not only 
               <button
                 type='button'
                 aria-label='Download Resume'
-                className='button-about'
+                aria-describedby='resume-format-note'
+                className='button-about hover:cursor-pointer'
                 onClick={handleDownloadResume}
               >
                 Download Resume

@@ -8,7 +8,11 @@ const FooterComponent = dynamic(() => import('../components/FooterComponent'));
 
 export default function Home() {
   return (
-    <main className='flex min-h-screen flex-col items-center w-full scroll-smooth'>
+    <main
+      id='main-content'
+      tabIndex={-1}
+      className='flex min-h-screen flex-col items-center w-full scroll-smooth'
+    >
       <Navigation />
       <Hero />
       <Projects />

@@ -1,7 +1,7 @@
 'use client';
 
 import { m } from 'framer-motion';
-import { FormEvent, memo, useCallback, useState } from 'react';
+import { FormEvent, memo, useCallback, useEffect, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
 const ContactForm = memo(() => {
@@ -17,6 +17,19 @@ const ContactForm = memo(() => {
     email: '',
     message: '',
   });
+  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const update = () => setShouldReduceMotion(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
+
+  const fullNameErrorId = 'full-name-error';
+  const emailErrorId = 'email-error';
+  const messageErrorId = 'message-error';
 
   // Validation functions
   const validateEmail = (email: string): string | undefined => {
@@ -111,7 +124,7 @@ const ContactForm = memo(() => {
   };
   return (
     <section
-      className='relative z-50 w-full max-w-7xl mx-auto my-16 px-4'
+      className='relative z-50 w-full max-w-7xl mx-auto my-16 px-4 scroll-mt-20'
       id='contact'
     >
       <h1 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center my-20 tracking-widest'>
@@ -119,16 +132,20 @@ const ContactForm = memo(() => {
       </h1>
 
       <m.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        className='relative bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden'
+        transition={
+          shouldReduceMotion
+            ? { duration: 0 }
+            : { duration: 0.8, ease: 'easeOut' }
+        }
+        className='relative bg-white dark:bg-[#0c0f1e] rounded-2xl shadow-2xl overflow-hidden'
       >
         {/* Desktop Split Layout */}
-        <div className='lg:grid lg:grid-cols-2 lg:min-h-[600px]'>
+        <div className='lg:grid lg:grid-cols-2 lg:min-h-150'>
           {/* 3D Envelope Section */}
-          <section className='relative h-64 lg:h-full bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-700 overflow-hidden flex items-center justify-center'>
+          <section className='relative h-64 lg:h-full bg-linear-to-br from-[#1a0a4e] via-[#0d1a4e] to-[#0a0f2e] overflow-hidden flex items-center justify-center'>
             {/* Animated Background Elements */}
             <div className='absolute inset-0 opacity-20'>
               <div
@@ -153,50 +170,50 @@ const ContactForm = memo(() => {
             <div className='relative transform-gpu perspective-1000'>
               <div className='envelope-3d group cursor-pointer'>
                 {/* Envelope Back */}
-                <div className='envelope-back absolute w-32 h-24 lg:w-40 lg:h-32 bg-gradient-to-br from-white via-gray-50 to-gray-100 dark:from-gray-100 dark:via-gray-200 dark:to-gray-300 rounded-lg shadow-2xl transform rotate-x-12 translate-y-2'></div>
+                <div className='envelope-back absolute w-32 h-24 lg:w-40 lg:h-32 bg-linear-to-br from-white via-gray-50 to-gray-100 dark:from-gray-100 dark:via-gray-200 dark:to-gray-300 rounded-lg shadow-2xl transform rotate-x-12 translate-y-2'></div>
 
                 {/* Envelope Main Body */}
-                <div className='envelope-body relative w-32 h-24 lg:w-40 lg:h-32 bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-50 dark:via-blue-100 dark:to-purple-100 rounded-lg shadow-xl transform transition-all duration-500 group-hover:rotate-y-12 group-hover:translate-y-1'>
+                <div className='envelope-body relative w-32 h-24 lg:w-40 lg:h-32 bg-linear-to-br from-white via-blue-50 to-purple-50 dark:from-gray-50 dark:via-blue-100 dark:to-purple-100 rounded-lg shadow-xl transform transition-all duration-500 group-hover:rotate-y-12 group-hover:translate-y-1'>
                   {/* Envelope Flap */}
-                  <div className='envelope-flap absolute -top-2 left-0 right-0 h-12 lg:h-16 bg-gradient-to-b from-blue-500 to-purple-600 transform rotate-x-45 origin-bottom rounded-t-lg shadow-lg group-hover:rotate-x-35 transition-all duration-500'>
+                  <div className='envelope-flap absolute -top-2 left-0 right-0 h-12 lg:h-16 bg-linear-to-b from-blue-500 to-purple-600 transform rotate-x-45 origin-bottom rounded-t-lg shadow-lg group-hover:rotate-x-35 transition-all duration-500'>
                     {/* Flap Highlight */}
-                    <div className='absolute inset-0 bg-gradient-to-r from-white/20 via-transparent to-white/10 rounded-t-lg'></div>
+                    <div className='absolute inset-0 bg-linear-to-r from-white/20 via-transparent to-white/10 rounded-t-lg'></div>
                   </div>
 
                   {/* Email Icon Inside */}
                   <div className='absolute inset-0 flex items-center justify-center'>
-                    <div className='w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300'>
+                    <div className='w-8 h-8 lg:w-10 lg:h-10 bg-linear-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300'>
                       <FaRegPaperPlane className='text-white text-sm lg:text-base transform group-hover:translate-x-1 transition-transform duration-300' />
                     </div>
                   </div>
 
                   {/* Envelope Lines */}
                   <div className='absolute bottom-4 left-4 right-4 space-y-1'>
-                    <div className='h-0.5 bg-gradient-to-r from-gray-300 to-transparent rounded'></div>
-                    <div className='h-0.5 bg-gradient-to-r from-gray-300 via-gray-200 to-transparent rounded w-3/4'></div>
-                    <div className='h-0.5 bg-gradient-to-r from-gray-300 to-transparent rounded w-1/2'></div>
+                    <div className='h-0.5 bg-linear-to-r from-gray-300 to-transparent rounded'></div>
+                    <div className='h-0.5 bg-linear-to-r from-gray-300 via-gray-200 to-transparent rounded w-3/4'></div>
+                    <div className='h-0.5 bg-linear-to-r from-gray-300 to-transparent rounded w-1/2'></div>
                   </div>
 
                   {/* Border Highlights */}
-                  <div className='absolute inset-0 rounded-lg bg-gradient-to-br from-white/30 via-transparent to-transparent pointer-events-none'></div>
+                  <div className='absolute inset-0 rounded-lg bg-linear-to-br from-white/30 via-transparent to-transparent pointer-events-none'></div>
                 </div>
 
                 {/* Floating Message Dots */}
                 <div className='absolute -top-6 -right-6 lg:-top-8 lg:-right-8'>
                   <div className='relative'>
-                    <div className='w-3 h-3 bg-gradient-to-r from-green-400 to-blue-500 rounded-full animate-ping'></div>
-                    <div className='absolute inset-0 w-3 h-3 bg-gradient-to-r from-green-400 to-blue-500 rounded-full animate-pulse'></div>
+                    <div className='w-3 h-3 bg-linear-to-r from-green-400 to-blue-500 rounded-full animate-ping'></div>
+                    <div className='absolute inset-0 w-3 h-3 bg-linear-to-r from-green-400 to-blue-500 rounded-full animate-pulse'></div>
                   </div>
                 </div>
                 <div className='absolute -top-3 -right-10 lg:-top-4 lg:-right-12'>
                   <div
-                    className='w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse'
+                    className='w-2 h-2 bg-linear-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse'
                     style={{ animationDelay: '0.5s' }}
                   ></div>
                 </div>
                 <div className='absolute -top-8 -right-2 lg:-top-10 lg:-right-3'>
                   <div
-                    className='w-1.5 h-1.5 bg-gradient-to-r from-pink-400 to-purple-500 rounded-full animate-pulse'
+                    className='w-1.5 h-1.5 bg-linear-to-r from-pink-400 to-purple-500 rounded-full animate-pulse'
                     style={{ animationDelay: '1s' }}
                   ></div>
                 </div>
@@ -204,7 +221,7 @@ const ContactForm = memo(() => {
             </div>
 
             {/* Gradient Overlay */}
-            <div className='absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent pointer-events-none' />
+            <div className='absolute inset-0 bg-linear-to-t from-black/10 via-transparent to-transparent pointer-events-none' />
           </section>
 
           {/* Form Section */}
@@ -217,11 +234,14 @@ const ContactForm = memo(() => {
 
             {sending ? (
               <m.div
-                initial={{ scale: 0.8, opacity: 0 }}
+                initial={
+                  shouldReduceMotion ? false : { scale: 0.8, opacity: 0 }
+                }
                 animate={{ scale: 1, opacity: 1 }}
+                transition={shouldReduceMotion ? { duration: 0 } : undefined}
                 className='flex flex-col items-center justify-center w-full text-center'
               >
-                <div className='w-20 h-20 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mb-6'>
+                <div className='w-20 h-20 bg-linear-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mb-6'>
                   <FaRegPaperPlane className='text-2xl text-white animate-bounce' />
                 </div>
                 <h2 className='text-2xl font-semibold text-gray-900 dark:text-white mb-2'>
@@ -255,6 +275,10 @@ const ContactForm = memo(() => {
                       onChange={(e) =>
                         handleInputChange('fullName', e.target.value)
                       }
+                      aria-invalid={Boolean(errors.fullName)}
+                      aria-describedby={
+                        errors.fullName ? fullNameErrorId : undefined
+                      }
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.fullName
                           ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
@@ -263,7 +287,11 @@ const ContactForm = memo(() => {
                       placeholder='Enter your full name'
                     />
                     {errors.fullName && (
-                      <p className='mt-1 text-sm text-red-600 dark:text-red-400'>
+                      <p
+                        id={fullNameErrorId}
+                        role='alert'
+                        className='mt-1 text-sm text-red-600 dark:text-red-400'
+                      >
                         {errors.fullName}
                       </p>
                     )}
@@ -285,6 +313,8 @@ const ContactForm = memo(() => {
                       onChange={(e) =>
                         handleInputChange('email', e.target.value)
                       }
+                      aria-invalid={Boolean(errors.email)}
+                      aria-describedby={errors.email ? emailErrorId : undefined}
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.email
                           ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
@@ -293,7 +323,11 @@ const ContactForm = memo(() => {
                       placeholder='your.email@example.com'
                     />
                     {errors.email && (
-                      <p className='mt-1 text-sm text-red-600 dark:text-red-400'>
+                      <p
+                        id={emailErrorId}
+                        role='alert'
+                        className='mt-1 text-sm text-red-600 dark:text-red-400'
+                      >
                         {errors.email}
                       </p>
                     )}
@@ -315,6 +349,10 @@ const ContactForm = memo(() => {
                       onChange={(e) =>
                         handleInputChange('message', e.target.value)
                       }
+                      aria-invalid={Boolean(errors.message)}
+                      aria-describedby={
+                        errors.message ? messageErrorId : undefined
+                      }
                       placeholder='Tell me about your project or just say hello...'
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.message
@@ -323,7 +361,11 @@ const ContactForm = memo(() => {
                       } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-gray-600 resize-none`}
                     />
                     {errors.message && (
-                      <p className='mt-1 text-sm text-red-600 dark:text-red-400'>
+                      <p
+                        id={messageErrorId}
+                        role='alert'
+                        className='mt-1 text-sm text-red-600 dark:text-red-400'
+                      >
                         {errors.message}
                       </p>
                     )}
@@ -333,7 +375,7 @@ const ContactForm = memo(() => {
                   <button
                     type='submit'
                     disabled={sending}
-                    className='w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3'
+                    className='w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:cursor-pointer text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3'
                   >
                     {sending ? (
                       <>
@@ -351,8 +393,17 @@ const ContactForm = memo(() => {
                   {/* Status Message */}
                   {message && (
                     <m.div
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={
+                        shouldReduceMotion ? false : { opacity: 0, y: 10 }
+                      }
                       animate={{ opacity: 1, y: 0 }}
+                      transition={
+                        shouldReduceMotion ? { duration: 0 } : undefined
+                      }
+                      role={message.includes('Error') ? 'alert' : 'status'}
+                      aria-live={
+                        message.includes('Error') ? 'assertive' : 'polite'
+                      }
                       className={`p-4 rounded-xl text-sm font-medium ${
                         message.includes('Error')
                           ? 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800'
