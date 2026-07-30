@@ -12,6 +12,7 @@ module.exports = [
       'coverage/',
       '.vercel/',
       '__tests__/coverage/',
+      '__tests__/e2e/',
       '.jest/',
     ],
   },

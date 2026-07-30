@@ -1,0 +1,101 @@
+# Playwright integration test for the Hero bio + title regression net.
+#
+# Captures the 3 manual visual regressions (bio 2-paragraph visibility,
+# title-text match, pageerror capture) that were verified against the Vercel
+# preview-deploy URL during PR #118's merge via browser-use.  After this
+# workflow lands, those manual verifications become a CI gate that blocks
+# any future revert without human-in-the-loop intervention.
+#
+# Triggers:
+#   - push to main: catches Hero content drift on the main branch
+#   - pull_request: blocks PR merges that regress the bio+title content
+#   - workflow_dispatch: manual ad-hoc run from GitHub UI / CLI / API
+#
+# Hardening (mirrors .github/workflows/prod-smoke.yml's pattern):
+#   - permissions: {} (zero GITHUB_TOKEN grants, future-proof against
+#     accidental over-broad permission inheritance if a future step is
+#     added.  Default github.token perms over-grant silently.)
+#   - timeout-minutes: 10 (Playwright + chromium install + Next.js prod
+#     build can be slow on cold cache; 5-min job timeout would flake.)
+#   - explicit build split (build failures vs test failures are reported
+#     SEPARATELY, so the audit-trail pinpoints "is the build broken" vs
+#     "is the regression net broken" without ambiguity).
+#   - browser-binary cache via actions/cache@v4 keyed on package-lock.json
+#     (~400MB chromium download per cold run == hits the GHA rate limit;
+#     caching keyed on lockfile makes follow-up runs restoration-only.)
+#   - artifact upload on failure (Playwright trace + HTML report are
+#     uploaded so a CI failure can be debugged from the GitHub UI without
+#     needing a local re-run.)
+#
+# Failure semantics:
+#   - Build step exit non-zero: workflow aborts before the playwright
+#     step runs.  Audit-trail: "build broke, check the build" not
+#     "playwright test broke".
+#   - Playwright step exit non-zero: workflow fails, the playwright-report
+#     + test-results/ artifacts are uploaded, the PR is blocked.
+#
+# Reference sibling workflows (.github/workflows/):
+#   - dependency-review.yml — minimal single-step pattern
+#   - prod-smoke.yml — 5-minute cron + dispatch + zero-perms hardening
+#   - security-audit.yml — cron + push + PR + dispatch trigger pattern
+
+name: e2e-hero
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Explicit zero-permissions block, mirroring prod-smoke.yml (PR #85).
+# Default would over-grant (contents: read, pull-requests: read/write,
+# etc.) and silently activate if any future step adds a `uses:` action.
+permissions: {}
+
+jobs:
+  test:
+    timeout-minutes: 10
+    runs-on: ubuntu-latest
+    env:
+      CI: 'true'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+          cache: 'npm'
+
+      - name: Install dependencies (legacy-peer-deps via .npmrc from PR #96)
+        run: npm ci
+
+      - name: Cache Playwright browser binary
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build production app (fail-fast on build errors)
+        run: npm run build
+
+      - name: Run Playwright tests
+        run: npm run test:e2e
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 7
+          if-no-files-found: ignore

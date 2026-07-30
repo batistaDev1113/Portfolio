@@ -199,6 +199,11 @@ PR #118 (`feat(content): update Hero bio + title to Senior Frontend Engineer`) s
 
 
 
+## Tool quirks: Playwright `webServer` requires prior `npm run build`
+
+A small follow-up to the `pretest:e2e` lifecycle-hook decision (CR-NIT-2 from the post-NIT-3rd-pass review of `chore/playwright-hero-regression-test`): `npm run test:e2e` does **NOT** auto-build the production app. `.github/workflows/e2e-hero.yml`'s explicit `name: Build production app` step sequences `npm run build` immediately before `npm run test:e2e`, so CI is unaffected. But local shells (developer machines, agent basher invocations, ad-hoc `npm run test:e2e:ui` debugging) MUST run `npm run build && npm run test:e2e` manually for the playwright `webServer` to find a `.next/` build directory. The previously-attempted `pretest:e2e` npm hook (`npm run build` before every `test:e2e` invocation) was removed because it would have caused a CI double-build (workflow builds, then pretest hook re-builds). **Operational discipline:** always prefix local `npm run test:e2e` / `npm run test:e2e:ui` invocations with `npm run build` to ensure the playwright webServer starts cleanly. **Symptom of forgetting:** playwright will fail loudly with `url 'http://localhost:3000' didn't respond` within the `webServer.timeout: 120_000` window (set in `playwright.config.js`), surfacing the build-missing failure as a playwright timeout (NOT a confusing 'why did next dev fail' message). The `playwright.config.js` header comment also documents this sequence, but this AGENTS.md entry is the canonical reminder for agentic runs.
+
+
 ## Audit tooling snapshots
 
 `scripts/audit-tally.mjs` and `scripts/audit-leaf.mjs` (introduced by the `chore/audit-scripts` PR for the Issue #114 audit-tracker turn) reconcile `npm audit --json`'s `meta.vulnerabilities.high` (propagation-path count through the dep graph, includes multi-path chains aggregated) against the **distinct leaf-cert GHSA count** (the actual upstream fixes needed). Re-run on any new audit snapshot:
