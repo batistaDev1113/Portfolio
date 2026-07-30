@@ -1,0 +1,192 @@
+# Weekly upstream-poll for the unblock criteria tracked in Issue #95.
+#
+# Self-policing replacement for the manual "Dec 2026 reminder" burden.
+# Runs the two-step Constraint (a) + Constraint (b) probe from Issue #95's
+# Monitoring schedule; posts a comment on Issue #95 ONLY when either
+# close-trigger is satisfied (no spam when neither is met).
+#
+# Triggers:
+#   - cron: Mondays 00:30 UTC (staggered 30 min after security-audit's
+#     `0 0 * * 1` so npm registry is at lower load when this hits)
+#   - workflow_dispatch: manual ad-hoc run from GitHub UI / CLI / API
+#
+# Style mirrors `.github/workflows/security-audit.yml` (PR #57) + the
+# prod-smoke.yml hardening (PR #85): single-quoted cron strings, workflow-
+# level `permissions: {}` for futureproof zero-grant default, per-job
+# minimal `permissions:` overrides, `runs-on: ubuntu-latest`,
+# `node-version-file: '.node-version'` for setup-node.
+#
+# Close-triggers (verbatim from Issue #95 Monitoring schedule):
+#   (a) `eslint-plugin-jsx-a11y@latest` ships with `peer.eslint` accepting
+#       `^10` (i.e., a `jsx-a11y@7+` major).
+#   (b) `eslint-config-next@latest` transitively pins an `eslint-plugin-
+#       jsx-a11y` whose `peer.eslint` accepts `^10`.
+#
+# Detection regex (intentionally permissive — pattern matches "caret-10"
+# wherever it appears in disjunction, with two alternatives joined via
+# alternation `|`):
+#   (\|\s*\^10(\.0\.0)?\b|\^\s*10(\.0\.0)?\b( *\|| *$))
+#     alt-1: `|\s*^10(.0.0)?\b`         — `^10` preceded by `|` (mid-list)
+#     alt-2: `^\s*^10(.0.0)?\b( *\|| *$)` — `^10` at start-of-string,
+#                                          followed by space+pipe OR end.
+#   matches `^10 | ^11`, `|| ^10`, `^10.0.0`, `^10`, etc.
+
+name: weekly-jsx-a11y-watch
+
+on:
+  schedule:
+    - cron: '30 0 * * 1'
+  workflow_dispatch:
+
+# Cron-specific concurrency: if a previous run is still in flight (e.g.,
+# npm registry latency pushes the run past the next cron firing), drop
+# the new one to avoid hammering the registry with parallel probes.
+concurrency:
+  group: weekly-jsx-a11y-watch
+  cancel-in-progress: true
+
+# Workflow-level zero-grant blocks any future step from inheriting
+# default broad token grants without an explicit per-job override.
+# Matches prod-smoke.yml precedent (PR #85 hardening).
+permissions: {}
+
+jobs:
+  watch:
+    name: probe upstream + comment if unblock criteria met
+    runs-on: ubuntu-latest
+    # Per-job minimal grants:
+    #   - contents: read: required by actions/checkout@v4 (the per-job
+    #     block REPLACES — does not add to — the workflow-level grants,
+    #     so contents: read must be explicit here)
+    #   - issues: write: required by the conditional github-script
+    #     createComment on Issue #95
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+
+      - name: Constraint (a) — eslint-plugin-jsx-a11y@latest peer.eslint
+        id: probe-a
+        run: |
+          set -euo pipefail
+          PEER=$(npm view eslint-plugin-jsx-a11y@latest peerDependencies.eslint)
+          echo "peerDependency.eslint (latest jsx-a11y): ${PEER}"
+          echo "peer=${PEER}" >> "${GITHUB_OUTPUT}"
+          if echo "${PEER}" | grep -qE '(\|\s*\^10(\.0\.0)?\b|\^\s*10(\.0\.0)?\b( *\|| *$)'; then
+            echo "satisfied=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "satisfied=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      # NOTE: bash single-quoted regex is passed verbatim to grep; the
+      # literal `$` survives the shell and reaches grep -E as the
+      # end-of-string anchor (NOT escaped as `\$` — that would match a
+      # literal `$` character and BREAK the singleton-`^10` case).
+
+      - name: Constraint (b) — eslint-config-next@latest transitive jsx-a11y peer.eslint
+        id: probe-b
+        run: |
+          set -euo pipefail
+          # `peerDependencies` of a package lists what it demands from
+          # its consumer — not its own transitive pins — so for (b) we
+          # read `eslint-config-next@latest`'s *dependencies* first to
+          # discover the `eslint-plugin-jsx-a11y` range it transitively
+          # pulls, then resolve + query the transitive peer.
+          #
+          # Two-hop probe captures BOTH the semver range AND the resolved
+          # exact version: if `^6.10.0` later resolves to `6.10.5`
+          # instead of `6.10.2` (e.g., a future patch publish), the
+          # audit trail records exactly what was queried, not just the
+          # range as-of some earlier observation.
+          JSX_A11Y_RANGE=$(npm view eslint-config-next@latest dependencies.eslint-plugin-jsx-a11y)
+          RESOLVED=$(npm view "eslint-plugin-jsx-a11y@${JSX_A11Y_RANGE}" version)
+          PEER=$(npm view "eslint-plugin-jsx-a11y@${RESOLVED}" peerDependencies.eslint)
+          echo "eslint-config-next transitively pins eslint-plugin-jsx-a11y@${JSX_A11Y_RANGE}; resolved to ${RESOLVED}"
+          echo "transitive peerDependency.eslint (next's jsx-a11y): ${PEER}"
+          echo "transitive_jsx_range=${JSX_A11Y_RANGE}" >> "${GITHUB_OUTPUT}"
+          echo "transitive_resolved_version=${RESOLVED}" >> "${GITHUB_OUTPUT}"
+          echo "transitive_peer=${PEER}" >> "${GITHUB_OUTPUT}"
+          if echo "${PEER}" | grep -qE '(\|\s*\^10(\.0\.0)?\b|\^\s*10(\.0\.0)?\b( *\|| *$)'; then
+            echo "satisfied=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "satisfied=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Run summary
+        run: |
+          echo "Constraint (a) satisfied: ${{ steps.probe-a.outputs.satisfied }}"
+          echo "Constraint (b) satisfied: ${{ steps.probe-b.outputs.satisfied }}"
+          echo "(comment step is conditional: only fires if either is 'true')"
+
+      - name: Comment on Issue #95 if either criterion met
+        if: steps.probe-a.outputs.satisfied == 'true' || steps.probe-b.outputs.satisfied == 'true'
+        uses: actions/github-script@v7
+        env:
+          PROBE_A_SATISFIED: ${{ steps.probe-a.outputs.satisfied }}
+          PROBE_B_SATISFIED: ${{ steps.probe-b.outputs.satisfied }}
+          PROBE_A_PEER: ${{ steps.probe-a.outputs.peer }}
+          PROBE_B_RANGE: ${{ steps.probe-b.outputs.transitive_jsx_range }}
+          PROBE_B_RESOLVED: ${{ steps.probe-b.outputs.transitive_resolved_version }}
+          PROBE_B_PEER: ${{ steps.probe-b.outputs.transitive_peer }}
+        with:
+          script: |
+            const aSatisfied = process.env.PROBE_A_SATISFIED === 'true';
+            const bSatisfied = process.env.PROBE_B_SATISFIED === 'true';
+            const aPeer = (process.env.PROBE_A_PEER || '').trim();
+            const bRange = (process.env.PROBE_B_RANGE || '').trim();
+            const bResolved = (process.env.PROBE_B_RESOLVED || '').trim();
+            const bPeer = (process.env.PROBE_B_PEER || '').trim();
+            // Defensive guard: if a constraint claims `satisfied=true`
+            // but the corresponding peer output is empty, npm view
+            // likely failed silently — fail loudly rather than post a
+            // vacuous comment that future maintainers would have to
+            // triage.
+            if ((aSatisfied && !aPeer) || (bSatisfied && (!bRange || !bResolved || !bPeer))) {
+              core.setFailed('Constraint claims satisfied=true but its corresponding peer output is empty — refusing to post a vacuous comment. Re-run via workflow_dispatch after verifying npm view connectivity.');
+              return;
+            }
+            // ISO date + commit SHA + run URL form the audit-trail
+            // evidence chain mandated by Issue #95's Reversal Procedure.
+            const isoDate = new Date().toISOString().slice(0, 10);
+            const sha = process.env.GITHUB_SHA || 'sha-unknown';
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+
+            const lines = [];
+            lines.push('### :robot: `weekly-jsx-a11y-watch` — upstream-unblock probe fired');
+            lines.push('');
+            lines.push('**Observation evidence (audit trail per Issue #95 Reversal Procedure):**');
+            lines.push('');
+            lines.push(`- **ISO date**: \`${isoDate}\``);
+            lines.push(`- **Commit SHA**: \`${sha}\``);
+            lines.push(`- **Run URL**: <${runUrl}>`);
+            lines.push('');
+            lines.push('**Constraint (a) — `eslint-plugin-jsx-a11y@latest` `peer.eslint` includes `^10`:**');
+            lines.push(`- Result: ${aSatisfied ? ':white_check_mark: SATISFIED' : ':x: not yet'}`);
+            lines.push(`- Verbatim peer: \`${aPeer}\``);
+            lines.push('');
+            lines.push('**Constraint (b) — `eslint-config-next@latest` transitive `eslint-plugin-jsx-a11y` `peer.eslint` includes `^10`:**');
+            lines.push(`- Result: ${bSatisfied ? ':white_check_mark: SATISFIED' : ':x: not yet'}`);
+            lines.push(`- Transitive \`eslint-plugin-jsx-a11y\` range: \`${bRange}\``);
+            lines.push(`- Transitive resolved version: \`${bResolved}\``);
+            lines.push(`- Transitive peer: \`${bPeer}\``);
+            lines.push('');
+            if (aSatisfied) {
+              lines.push(':arrow_right: Constraint (a) close-trigger met. Issue is eligible to close per Issue #95 Reversal criteria (drop `.npmrc` `legacy-peer-deps=true`, verify 5 CI gates, re-run `npm install eslint@latest` without the flag).');
+            }
+            if (bSatisfied) {
+              lines.push(':arrow_right: Constraint (b) close-trigger met. Issue is eligible to close per Issue #95 Reversal criteria (drop `.npmrc` `legacy-peer-deps=true`, verify 5 CI gates, re-run `npm install eslint@latest` without the flag).');
+            }
+            lines.push('');
+            lines.push('> _This comment was posted automatically by `.github/workflows/weekly-jsx-a11y-watch.yml`. Manual close still requires the reversal-procedure checklist in Issue #95._');
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: 95,
+              body: lines.join('\n'),
+            });
