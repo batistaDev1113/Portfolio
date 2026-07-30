@@ -103,8 +103,24 @@ jobs:
           # instead of `6.10.2` (e.g., a future patch publish), the
           # audit trail records exactly what was queried, not just the
           # range as-of some earlier observation.
+          #
+          # Range resolution: `npm view <pkg>@<semi-range> version`
+          # returns a multi-line list of all matching versions
+          # (e.g., for `^6.10.0` it lists 6.10.0, 6.10.1, 6.10.2).
+          # Piping through `jq -r` over `--json` normalises: an
+          # array-of-versions comes back as a JSON array (pick the LAST
+          # entry, which npm emits in ascending semver order so it is
+          # the highest matching version); a single-version query
+          # returns a JSON string and passes through unchanged. This
+          # avoids the previous `RESOLVED` containing multi-line +
+          # whitespace content, which the downstream
+          # `npm view "eslint-plugin-jsx-a11y@${RESOLVED}" peer` was
+          # rejecting with EINVALIDTAGNAME and aborting the entire
+          # probe-b step via `set -euo pipefail` (Run Summary and
+          # Comment-on-#95 steps then got skipped due to GitHub Actions
+          # default next-step-on-failure behaviour).
           JSX_A11Y_RANGE=$(npm view eslint-config-next@latest dependencies.eslint-plugin-jsx-a11y)
-          RESOLVED=$(npm view "eslint-plugin-jsx-a11y@${JSX_A11Y_RANGE}" version)
+          RESOLVED=$(npm view "eslint-plugin-jsx-a11y@${JSX_A11Y_RANGE}" version --json | jq -r 'if type=="array" then .[-1] else . end')
           PEER=$(npm view "eslint-plugin-jsx-a11y@${RESOLVED}" peerDependencies.eslint)
           echo "eslint-config-next transitively pins eslint-plugin-jsx-a11y@${JSX_A11Y_RANGE}; resolved to ${RESOLVED}"
           echo "transitive peerDependency.eslint (next's jsx-a11y): ${PEER}"
