@@ -19,7 +19,9 @@
     "hygiene:branches": "node scripts/check-branch-clean.mjs",
     "lint": "eslint . --fix",
     "lint:check": "eslint .",
-    "test": "jest --watch"
+    "test": "jest --watch",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@sentry/nextjs": "^10.69.0",
@@ -39,6 +41,7 @@
     "tailwindcss": "^4.3.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/forms": "^0.5.11",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.1.4",

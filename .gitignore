@@ -48,3 +48,11 @@ nul
 # Used during deep work sessions to template GitHub-side artifacts before
 # committing.  Never to be tracked in git.
 .tmpdraft/
+
+# Playwright test artifacts (regenerable on each test run, not source)
+# The HTML report, traces, screenshots, and videos belong here.
+# Tracked test code lives in __tests__/e2e/ + playwright.config.js.
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

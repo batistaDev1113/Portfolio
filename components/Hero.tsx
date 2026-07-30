@@ -70,7 +70,10 @@ I care about creating accessible, high-performance interfaces that are not only 
               transition={{ delay: 1.5, ease: 'easeInOut' }}
               className='my-5 text-center w-full'
             >
-              <span className='text-transparent bg-gradient-to-r from-blue-200 via-purple-200 to-indigo-200 bg-clip-text text-2xl md:text-3xl font-semibold drop-shadow-lg'>
+              <span
+                data-testid='hero-title'
+                className='text-transparent bg-gradient-to-r from-blue-200 via-purple-200 to-indigo-200 bg-clip-text text-2xl md:text-3xl font-semibold drop-shadow-lg'
+              >
                 Senior Frontend Engineer
               </span>
             </m.div>
@@ -80,7 +83,10 @@ I care about creating accessible, high-performance interfaces that are not only 
               viewport={{ once: true }}
               transition={{ delay: 2, ease: 'easeInOut' }}
             >
-              <p className='text-base text-white/85 max-w-lg text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-4 border border-white/10 whitespace-pre-line'>
+              <p
+                data-testid='hero-bio'
+                className='text-base text-white/85 max-w-lg text-center leading-6 drop-shadow-sm backdrop-blur-sm bg-white/5 rounded-lg p-4 border border-white/10 whitespace-pre-line'
+              >
                 {HERO_ABOUT_TEXT}
               </p>
             </m.div>
