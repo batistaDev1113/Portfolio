@@ -8,6 +8,10 @@
 // surfaces as a CI failure on this spec without needing human-in-the-loop
 // verification.
 //
+// Filter in this spec: ignores known-environmental console.error noise from
+// `@vercel/analytics` injecting `/_vercel/insights/script.js`. See the
+// page.on('console', ...) listener below for the rationale + future-extension guide.
+//
 // Three primary assertions:
 //   1. bio 2-paragraph visibility — `whitespace-pre-line` + literal `\n\n`
 //      in the template literal must render as a visible blank line AND both
@@ -18,8 +22,20 @@
 //      "Senior Frontend Developer" anywhere INSIDE the hero section.
 //   3. pageerror / console.error capture — zero uncaught exceptions OR
 //      console.error messages during the full page lifecycle (catches
-//      hydration mismatches + Next.js dev/prod drifts + Sentry tunnelRoute
-//      /monitoring failures + 4xx/5xx network errors on prerender payloads).
+//      hydration mismatches + Next.js dev/prod drifts + 4xx/5xx network
+//      errors on prerender payloads).
+//      Note: known-environmental noise from `@vercel/analytics` is
+//      filtered at the console-error listener below (the only error
+//      observed on the first CI run was `/_vercel/insights/script.js`
+//      404, see `page.on('console')`).  Vercel's edge rewrites that URL
+//      only on Vercel deploys; on `npm run start` (local + GitHub Actions
+//      runners) it 404s with text/html MIME type from Next.js's 404
+//      fallback.  This is documented behavior of @vercel/analytics, NOT
+//      a regression in our code.  Filter at the listener -- do NOT
+//      disable the analytics package globally (that would silently
+//      regress the prod observability surface).  Future contributors
+//      adding new known-environmental noise (e.g., `/_vercel/speed-insights/*`)
+//      should ADD to the filter, not remove it.
 //
 // Plus belt-and-suspenders sanity:
 //   - hero-section testid visible
@@ -48,7 +64,19 @@ test.describe('Hero section: bio + title regression net', () => {
     page.on('pageerror', (err) => errors.push(`pageerror: ${err.message}`));
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
-        errors.push(`console.error: ${msg.text()}`);
+        const text = msg.text();
+        // Filter known-environmental noise from `@vercel/analytics`:
+        // /_vercel/insights/script.js is rewritten by Vercel's edge to a
+        // real CDN script in production deploys, but 404s (text/html MIME
+        // type) on `npm run start` against any non-Vercel host = our local
+        // + CI setup. Both `Failed to load resource` (Chrome resource
+        // loader) AND `Refused to execute script ... MIME type` (Chrome
+        // script loader) errors include `/_vercel/insights` as a substring,
+        // so a single filter is sufficient. Real regressions on a future
+        // PROD build (where /_vercel/insights is rewritten) would be
+        // unaffected.
+        if (text.includes('/_vercel/insights')) return;
+        errors.push(`console.error: ${text}`);
       }
     });
 
