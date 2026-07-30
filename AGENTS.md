@@ -177,3 +177,13 @@ Reference patterns that successfully closed prior episodes:
 - Heredoc at top-level basher command (`<< 'EOF'\n… body …\nEOF`) for multi-paragraph body when the command is short — used in PR #100 `.tmpdraft` cleanup.
 
 
+
+
+## Audit tooling snapshots
+
+`scripts/audit-tally.mjs` and `scripts/audit-leaf.mjs` (introduced by the `chore/audit-scripts` PR for the Issue #114 audit-tracker turn) reconcile `npm audit --json`'s `meta.vulnerabilities.high` (propagation-path count through the dep graph, includes multi-path chains aggregated) against the **distinct leaf-cert GHSA count** (the actual upstream fixes needed). Re-run on any new audit snapshot:
+
+    node scripts/audit-tally.mjs audit.json 8    # group-by-package top-8 summary
+    node scripts/audit-leaf.mjs audit.json       # canonical meta-vs-leaf reconciliation
+
+Used in the body of [Issue #114](https://github.com/batistaDev1113/Portfolio/issues/114) (Track upstream unblock: next@16.2.13+ …) and any future audit-tracker issue. CR-SHIP-verdicted twice each during the original authoring turn.
