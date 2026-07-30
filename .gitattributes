@@ -1,8 +1,27 @@
-# Match the user's spec: *.js, *.tsx, *.json, *.md defaults to LF.
-# Overrides Windows global `core.autocrlf=true` so checkouts of these
-# file types keep LF line endings on disk, satisfying .prettierrc's
-# `endOfLine: "lf"` rule and stopping the 345 prevalentier/prettier CRLF errors.
+# Force LF line endings on all canonical project text files.
+#
+# This file overrides the local Windows `core.autocrlf=true` config at
+# checkout time. Git reads the globs listed below and writes those
+# file types with LF line endings on disk, regardless of the local
+# autocrlf setting. Likewise, `git add` normalizes file content to LF
+# before staging, which closes the CRLF hazard that produced the
+# 345 npm run lint:check errors prior to the prettier-chore cleanup.
+#
+# LF rule group -- text files that must commit to git with LF line
+# endings. Order is alphabetical for stable diffs.
 *.js    text eol=lf
 *.tsx   text eol=lf
 *.json  text eol=lf
 *.md    text eol=lf
+*.yml   text eol=lf
+*.yaml  text eol=lf
+*.css   text eol=lf
+*.html  text eol=lf
+*.svg   text eol=lf
+*.sh    text eol=lf
+
+# CRLF counter-rule -- preserve Windows-native line endings ONLY on
+# Windows batch scripts. This makes the rule above (LF-default) safe
+# to apply globally: any future *.bat addition will keep working on
+# Windows machines without further config.
+*.bat   text eol=crlf
