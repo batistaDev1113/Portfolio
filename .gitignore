@@ -43,3 +43,8 @@ next-env.d.ts
 
 # Windows reserved device name artifact
 nul
+
+# Local-only PR-body / commit-msg / issue-body draft directory
+# Used during deep work sessions to template GitHub-side artifacts before
+# committing.  Never to be tracked in git.
+.tmpdraft/
