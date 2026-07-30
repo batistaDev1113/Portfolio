@@ -131,7 +131,7 @@ I care about creating accessible, high-performance interfaces that are not only 
                 type='button'
                 aria-label='Download Resume'
                 aria-describedby='resume-format-note'
-                className='button-about'
+                className='button-about hover:cursor-pointer'
                 onClick={handleDownloadResume}
               >
                 Download Resume
