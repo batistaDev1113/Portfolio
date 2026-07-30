@@ -1,0 +1,121 @@
+# Nightly 6-route prod smoke-test for the production Vercel deployment.
+#
+# Catches prod regressions even when no PR is in flight (e.g., a Vercel-side
+# incident, a DNS issue, a silent feature-flag toggle, a post-deploy config
+# drift) by running the same 6-route curl smoke battery that was validated
+# manually during PR #79 (Tailwind v3 \u2192 v4) and PR #83 (Drop babel toolchain)
+# gate-acceptance phases.
+#
+# Triggers:
+#   - cron: nightly at 06:00 UTC (1:00 AM EST / 2:00 AM EDT)
+#   - workflow_dispatch: manual ad-hoc run from GitHub UI / CLI / API,
+#     optional PROD_URL input override
+#
+# Failure semantics:
+#   - Routes 1\u20135 (GET /, sitemap.xml, robots.txt, /api/contact, non-existent):
+#     exact-match expected status.  Mismatch = fail.
+#   - Route 6 (POST /api/contact with omission JSON): the route-handler-runtime
+#     crash signal is HTTP 500.  HTTP 200/4xx is acceptable because the route
+#     is documented to return 400 for missing fields and the smoke payload
+#     deliberately omits `full_name` and `textarea`.  HTTP 500 = fail.
+
+name: prod-smoke
+
+on:
+  schedule:
+    - cron: '0 6 * * *'
+  workflow_dispatch:
+    inputs:
+      PROD_URL:
+        description: 'Production URL to smoke-test (default: https://yuniorbatista.com)'
+        required: false
+        default: 'https://yuniorbatista.com'
+        type: string
+
+jobs:
+  smoke-test:
+    name: 6-route prod smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      PROD_URL: ${{ github.event.inputs.PROD_URL || 'https://yuniorbatista.com' }}
+    steps:
+      - name: 6-route curl smoke-test
+        run: |
+          set -euo pipefail
+          PROD="${PROD_URL%/}"
+
+          # check_status <url> <method> <expected> [body]
+          check_status() {
+            local url="$1"
+            local method="$2"
+            local expected="$3"
+            local body="${4:-}"
+            local actual
+            if [ -n "$body" ]; then
+              actual=$(curl -sS -o /tmp/smoke-body -w '%{http_code}' \
+                -X "$method" \
+                -H 'Content-Type: application/json' \
+                -d "$body" \
+                "$url")
+            else
+              actual=$(curl -sS -o /tmp/smoke-body -w '%{http_code}' \
+                -X "$method" \
+                "$url")
+            fi
+            if [ "$actual" != "$expected" ]; then
+              echo "::error title=smoke regression::$method $url  expected=$expected  got=$actual"
+              echo "--- response body (truncated to 800 bytes) ---"
+              head -c 800 /tmp/smoke-body || true
+              echo
+              echo "--- end body ---"
+              return 1
+            fi
+            echo "PASS  $method $url  -> $actual (expected $expected)"
+          }
+
+          # check_not_500 <url> <method> [body]
+          # Used for POST /api/contact where any non-500 status proves the route
+          # handler compiled + ran (Mailjet-fetch rejection/validation 400/etc all
+          # are acceptable).  500 = route-handler-runtime crash = regression.
+          check_not_500() {
+            local url="$1"
+            local method="$2"
+            local body="${3:-}"
+            local actual
+            if [ -n "$body" ]; then
+              actual=$(curl -sS -o /tmp/smoke-body -w '%{http_code}' \
+                -X "$method" \
+                -H 'Content-Type: application/json' \
+                -d "$body" \
+                "$url")
+            else
+              actual=$(curl -sS -o /tmp/smoke-body -w '%{http_code}' \
+                -X "$method" \
+                "$url")
+            fi
+            if [ "$actual" = "500" ]; then
+              echo "::error title=route handler crashed::$method $url  got=500 (body: $(head -c 200 /tmp/smoke-body || true))"
+              return 1
+            fi
+            echo "PASS  $method $url  -> $actual (not 500)"
+          }
+
+          echo "=== Smoke-testing production URL: ${PROD} ==="
+          echo
+
+          check_status "${PROD}/" "GET" "200"
+          check_status "${PROD}/sitemap.xml" "GET" "200"
+          check_status "${PROD}/robots.txt" "GET" "200"
+          check_status "${PROD}/api/contact" "GET" "405"
+          check_status "${PROD}/non-existent-test-path-xyz123" "GET" "404"
+          # POST /api/contact with intentionally-omitted `full_name` and
+          # `textarea` triggers the route's validation 400 branch (\u2192
+          # {"error":"Missing required fields"}).  The regression signal is
+          # HTTP 500 only (route-handler-runtime crash), per the user's spec:
+          # "200-or-4xx \u2192 500".
+          check_not_500 "${PROD}/api/contact" "POST" \
+            '{"name":"cron","email":"cron@test.local","message":"nightly cron prod smoke","subject":"smoke","access_key":"placeholder-not-real"}'
+
+          echo
+          echo "=== All 6 routes passed ==="
