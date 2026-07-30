@@ -18,6 +18,14 @@
 #     crash signal is HTTP 500.  HTTP 200/4xx is acceptable because the route
 #     is documented to return 400 for missing fields and the smoke payload
 #     deliberately omits `full_name` and `textarea`.  HTTP 500 = fail.
+#
+# Hardening (post-PR-#85 code-review):
+#   - explicit `permissions: {}`  \u2192 zero GITHUB_TOKEN grants, future-proof
+#     against accidental over-broad permission inheritance if a step is added.
+#   - per-route `mktemp` body file  \u2192 on failure the ::error annotation shows
+#     the *failing* route's body, not the previous route's response.
+#   - `curl --max-time 30` per call  \u2192 Vercel CDN hang is bounded to 30s,
+#     not unbounded (would otherwise consume the 5-min job timeout).
 
 name: prod-smoke
 
@@ -31,6 +39,12 @@ on:
         required: false
         default: 'https://yuniorbatista.com'
         type: string
+
+# Required for cron workflows that don't touch GITHUB_TOKEN: explicit
+# zero-permissions block.  Default would over-grant (contents: read,
+# pull-requests: read/write, etc.) and silently activate if any future
+# step adds a `uses:` action.
+permissions: {}
 
 jobs:
   smoke-test:
@@ -46,58 +60,76 @@ jobs:
           PROD="${PROD_URL%/}"
 
           # check_status <url> <method> <expected> [body]
+          # Per-curl --max-time 30 prevents Vercel CDN hang from blocking
+          # until job timeout.  Body captured via per-route mktemp file
+          # (cleaned-up on every exit path) so on failure the ::error
+          # annotation shows the failing route's body, not the previous
+          # route's response.
           check_status() {
             local url="$1"
             local method="$2"
             local expected="$3"
-            local body="${4:-}"
+            local body_arg="${4:-}"
+            local body_file
+            body_file=$(mktemp)
             local actual
-            if [ -n "$body" ]; then
-              actual=$(curl -sS -o /tmp/smoke-body -w '%{http_code}' \
+            if [ -n "$body_arg" ]; then
+              actual=$(curl -sS --max-time 30 -o "$body_file" \
+                -w '%{http_code}' \
                 -X "$method" \
                 -H 'Content-Type: application/json' \
-                -d "$body" \
+                -d "$body_arg" \
                 "$url")
             else
-              actual=$(curl -sS -o /tmp/smoke-body -w '%{http_code}' \
+              actual=$(curl -sS --max-time 30 -o "$body_file" \
+                -w '%{http_code}' \
                 -X "$method" \
                 "$url")
             fi
             if [ "$actual" != "$expected" ]; then
               echo "::error title=smoke regression::$method $url  expected=$expected  got=$actual"
               echo "--- response body (truncated to 800 bytes) ---"
-              head -c 800 /tmp/smoke-body || true
+              head -c 800 "$body_file" 2>/dev/null || echo '(body file unreadable)'
               echo
               echo "--- end body ---"
+              rm -f "$body_file"
               return 1
             fi
+            rm -f "$body_file"
             echo "PASS  $method $url  -> $actual (expected $expected)"
           }
 
           # check_not_500 <url> <method> [body]
-          # Used for POST /api/contact where any non-500 status proves the route
-          # handler compiled + ran (Mailjet-fetch rejection/validation 400/etc all
-          # are acceptable).  500 = route-handler-runtime crash = regression.
+          # The smoke POST deliberately omits `full_name` + `textarea` to
+          # trigger the route's validation 400 branch deterministically.
+          # The regression signal is HTTP 500 only (route-handler-runtime
+          # crash); 200/4xx are both acceptable.
           check_not_500() {
             local url="$1"
             local method="$2"
-            local body="${3:-}"
+            local body_arg="${3:-}"
+            local body_file
+            body_file=$(mktemp)
             local actual
-            if [ -n "$body" ]; then
-              actual=$(curl -sS -o /tmp/smoke-body -w '%{http_code}' \
+            if [ -n "$body_arg" ]; then
+              actual=$(curl -sS --max-time 30 -o "$body_file" \
+                -w '%{http_code}' \
                 -X "$method" \
                 -H 'Content-Type: application/json' \
-                -d "$body" \
+                -d "$body_arg" \
                 "$url")
             else
-              actual=$(curl -sS -o /tmp/smoke-body -w '%{http_code}' \
+              actual=$(curl -sS --max-time 30 -o "$body_file" \
+                -w '%{http_code}' \
                 -X "$method" \
                 "$url")
             fi
             if [ "$actual" = "500" ]; then
-              echo "::error title=route handler crashed::$method $url  got=500 (body: $(head -c 200 /tmp/smoke-body || true))"
+              echo "::error title=route handler crashed::$method $url  got=500 (body: $(head -c 200 "$body_file" 2>/dev/null || echo 'unreadable'))"
+              rm -f "$body_file"
               return 1
             fi
+            rm -f "$body_file"
             echo "PASS  $method $url  -> $actual (not 500)"
           }
 
@@ -109,11 +141,6 @@ jobs:
           check_status "${PROD}/robots.txt" "GET" "200"
           check_status "${PROD}/api/contact" "GET" "405"
           check_status "${PROD}/non-existent-test-path-xyz123" "GET" "404"
-          # POST /api/contact with intentionally-omitted `full_name` and
-          # `textarea` triggers the route's validation 400 branch (\u2192
-          # {"error":"Missing required fields"}).  The regression signal is
-          # HTTP 500 only (route-handler-runtime crash), per the user's spec:
-          # "200-or-4xx \u2192 500".
           check_not_500 "${PROD}/api/contact" "POST" \
             '{"name":"cron","email":"cron@test.local","message":"nightly cron prod smoke","subject":"smoke","access_key":"placeholder-not-real"}'
 
