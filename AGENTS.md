@@ -134,6 +134,30 @@ returns 0, not `gh`'s actual exit). Cost this week: **2 retry turns per episode*
 
   Otherwise `$?` reflects `tail` (always 0), masking any `gh` failure.
 
+- **`gh pr create --body-file <path>` Windows path-resolution gap.**
+  Three occurrences this session: passing a relative path (`./file.md`)
+  or `$(pwd)/file.md` to `gh pr create --body-file <path>` returns
+  `open <path>: The system cannot find the file specified` even when
+  an immediate-prior `ls -la <path>` confirms the file is present.
+  Symptom: gh CLI arg-parser resolves paths against a different
+  effective CWD than the calling shell. Workarounds, in order of
+  preference:
+
+  - Write body to `/tmp/gh-body/pr_body.md` via heredoc INSIDE the
+    basher command (`cat > /tmp/gh-body/pr_body.md << 'EOF' ... EOF`)
+    and pass the absolute `/tmp/` path:
+    `gh pr create --body-file /tmp/gh-body/pr_body.md`. Empirical
+    validation: end-to-end in PR #104 (heredoc write + content
+    delivery). PR #103 used the same `--body-file /tmp/gh-body/pr_body.md`
+    open-path but shipped with empty body content due to a separate
+    write_file→basher race (recovered separately via
+    `gh pr edit --body 'inline'`).
+
+  - For short bodies without `(`, `=>`, or backticks, pass via
+    `--body 'inline'` with single-quote wrap. Trim problematic
+    characters first (this falls back to the basher-quote landmines
+    documented above).
+
 ### Self-test before any large basher spawn
 
 - Command body close to 6 KB? → split into chained spawns.
