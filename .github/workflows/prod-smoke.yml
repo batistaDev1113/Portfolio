@@ -26,6 +26,13 @@
 #     the *failing* route's body, not the previous route's response.
 #   - `curl --max-time 30` per call  \u2192 Vercel CDN hang is bounded to 30s,
 #     not unbounded (would otherwise consume the 5-min job timeout).
+#   - `curl -L` per call → follows Vercel's apex→www 308 canonicalization
+#     transparently. Without `-L`, the http_code captured by `-w '%{http_code}'`
+#     is the pre-redirect status (308), causing the exact-match `check_status`
+#     assertion to fail. With `-L`, the captured code is the post-redirect
+#     final status (200/405/404 etc.), matching the expected pattern. Required
+#     because Vercel canonicalizes `yuniorbatista.com` (apex) →
+#     `www.yuniorbatista.com` with HTTP 308.
 
 name: prod-smoke
 
@@ -74,14 +81,14 @@ jobs:
             body_file=$(mktemp)
             local actual
             if [ -n "$body_arg" ]; then
-              actual=$(curl -sS --max-time 30 -o "$body_file" \
+              actual=$(curl -sSL --max-redirs 3 --max-time 30 -o "$body_file" \
                 -w '%{http_code}' \
                 -X "$method" \
                 -H 'Content-Type: application/json' \
                 -d "$body_arg" \
                 "$url")
             else
-              actual=$(curl -sS --max-time 30 -o "$body_file" \
+              actual=$(curl -sSL --max-redirs 3 --max-time 30 -o "$body_file" \
                 -w '%{http_code}' \
                 -X "$method" \
                 "$url")
@@ -112,14 +119,14 @@ jobs:
             body_file=$(mktemp)
             local actual
             if [ -n "$body_arg" ]; then
-              actual=$(curl -sS --max-time 30 -o "$body_file" \
+              actual=$(curl -sSL --max-redirs 3 --max-time 30 -o "$body_file" \
                 -w '%{http_code}' \
                 -X "$method" \
                 -H 'Content-Type: application/json' \
                 -d "$body_arg" \
                 "$url")
             else
-              actual=$(curl -sS --max-time 30 -o "$body_file" \
+              actual=$(curl -sSL --max-redirs 3 --max-time 30 -o "$body_file" \
                 -w '%{http_code}' \
                 -X "$method" \
                 "$url")
