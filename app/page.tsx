@@ -11,7 +11,7 @@ export default function Home() {
     <main
       id='main-content'
       tabIndex={-1}
-      className='flex min-h-screen flex-col items-center w-full scroll-smooth'
+      className='flex min-h-screen flex-col items-center w-full scroll-smooth dark:bg-white/5'
     >
       <Navigation />
       <Hero />

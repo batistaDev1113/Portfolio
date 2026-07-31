@@ -34,9 +34,13 @@
   "editor.formatOnPaste": true,
   "editor.formatOnType": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit",
     "source.organizeImports": "explicit"
   },
+  // Point ESLint directly to config to skip slow file-system search on Windows
+  "eslint.options": {
+    "overrideConfigFile": "eslint.config.js"
+  },
+  "eslint.format.enable": false,
   
   // Prettier configuration
   "prettier.singleQuote": true,
@@ -81,7 +85,7 @@
   // File explorer settings
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
-  "files.autoSave": "afterDelay",
+  "files.autoSave": "onFocusChange",
   "files.autoSaveDelay": 1000,
   "files.eol": "\n",
   
@@ -98,6 +102,11 @@
   // Bracket pair colorization
   "editor.bracketPairColorization.enabled": true,
   "editor.guides.bracketPairs": "active",
+
+  // ESLint: only lint on save (not on every keystroke) to avoid Windows cold-start latency
+  "eslint.run": "onSave",
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
+  "eslint.probe": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   
   // Language-specific overrides
   "[typescript]": {
