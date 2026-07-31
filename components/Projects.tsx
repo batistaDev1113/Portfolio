@@ -14,6 +14,8 @@ type ProjectProps = {
 const Projects = async () => {
   const projects: ProjectProps[] = (await fetchData()) || [];
 
+  const [featured, ...rest] = projects;
+
   return (
     <div
       className='w-full max-w-7xl mx-auto my-20 px-4 z-50 scroll-mt-20'
@@ -22,11 +24,22 @@ const Projects = async () => {
       <h3 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center mb-16 tracking-widest'>
         Some Projects I&apos;ve Built
       </h3>
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center items-stretch'>
-        {projects.map((project) => (
-          <Project key={project.id} project={project} />
-        ))}
-      </div>
+
+      {/* Featured project — full-width landscape card */}
+      {featured && (
+        <div className='mb-8'>
+          <Project project={featured} featured />
+        </div>
+      )}
+
+      {/* Remaining projects — 2-col on md, 3-col on lg */}
+      {rest.length > 0 && (
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center items-stretch'>
+          {rest.map((project) => (
+            <Project key={project.id} project={project} />
+          ))}
+        </div>
+      )}
     </div>
   );
 };
