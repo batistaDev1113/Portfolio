@@ -1,8 +1,10 @@
 /** @type {import('next').NextConfig} */
 
 const nextConfig = {
-  // Source maps for production debugging and Lighthouse insights
-  productionBrowserSourceMaps: true,
+  // Source maps are uploaded to Sentry via withSentryConfig below; keep them
+  // out of the browser bundle to reduce TBT and per-chunk transfer on both
+  // mobile and desktop.
+  productionBrowserSourceMaps: false,
 
   // Performance optimizations
   reactCompiler: true,
