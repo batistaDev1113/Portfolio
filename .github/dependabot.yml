@@ -11,3 +11,9 @@ updates:
         update-types:
           - "minor"
           - "patch"
+    ignore:
+      - dependency-name: "typescript"
+        versions:
+          - ">=7.0.0"
+        update-types:
+          - "version-update:semver-major"
