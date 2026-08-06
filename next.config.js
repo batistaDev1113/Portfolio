@@ -9,7 +9,7 @@ const nextConfig = {
   // Performance optimizations
   reactCompiler: true,
   experimental: {
-    optimizePackageImports: ['framer-motion', 'react-icons'],
+    optimizePackageImports: ['react-icons'],
     turbopackFileSystemCacheForDev: true,
     optimizeCss: true,
   },

@@ -1,7 +1,6 @@
 'use client';
 
-import { m } from 'framer-motion';
-import { FormEvent, memo, useCallback, useEffect, useState } from 'react';
+import { FormEvent, memo, useCallback, useState } from 'react';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
 const ContactForm = memo(() => {
@@ -17,15 +16,6 @@ const ContactForm = memo(() => {
     email: '',
     message: '',
   });
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
-    const update = () => setShouldReduceMotion(mq.matches);
-    update();
-    mq.addEventListener('change', update);
-    return () => mq.removeEventListener('change', update);
-  }, []);
 
   const fullNameErrorId = 'full-name-error';
   const emailErrorId = 'email-error';
@@ -131,17 +121,7 @@ const ContactForm = memo(() => {
         Let&apos;s Connect
       </h1>
 
-      <m.div
-        initial={shouldReduceMotion ? false : { opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={
-          shouldReduceMotion
-            ? { duration: 0 }
-            : { duration: 0.8, ease: 'easeOut' }
-        }
-        className='relative bg-white dark:bg-[#0c0f1e] rounded-2xl shadow-2xl overflow-hidden'
-      >
+      <div className='relative bg-white dark:bg-[#0c0f1e] rounded-2xl shadow-2xl overflow-hidden section-reveal'>
         {/* Desktop Split Layout */}
         <div className='lg:grid lg:grid-cols-2 lg:min-h-150'>
           {/* 3D Envelope Section */}
@@ -233,14 +213,7 @@ const ContactForm = memo(() => {
             <div className='absolute -top-8 left-8 right-8 lg:hidden bg-white/10 dark:bg-gray-900/10 backdrop-blur-sm rounded-t-2xl h-8' />
 
             {sending ? (
-              <m.div
-                initial={
-                  shouldReduceMotion ? false : { scale: 0.8, opacity: 0 }
-                }
-                animate={{ scale: 1, opacity: 1 }}
-                transition={shouldReduceMotion ? { duration: 0 } : undefined}
-                className='flex flex-col items-center justify-center w-full text-center'
-              >
+              <div className='flex flex-col items-center justify-center w-full text-center pop-in'>
                 <div className='w-20 h-20 bg-linear-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mb-6'>
                   <FaRegPaperPlane className='text-2xl text-white animate-bounce' />
                 </div>
@@ -250,7 +223,7 @@ const ContactForm = memo(() => {
                 <p className='text-gray-600 dark:text-gray-400'>
                   Thank you for reaching out. I&apos;ll get back to you soon.
                 </p>
-              </m.div>
+              </div>
             ) : (
               <div className='w-full max-w-lg'>
                 <form
@@ -392,33 +365,26 @@ const ContactForm = memo(() => {
 
                   {/* Status Message */}
                   {message && (
-                    <m.div
-                      initial={
-                        shouldReduceMotion ? false : { opacity: 0, y: 10 }
-                      }
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={
-                        shouldReduceMotion ? { duration: 0 } : undefined
-                      }
+                    <div
                       role={message.includes('Error') ? 'alert' : 'status'}
                       aria-live={
                         message.includes('Error') ? 'assertive' : 'polite'
                       }
-                      className={`p-4 rounded-xl text-sm font-medium ${
+                      className={`p-4 rounded-xl text-sm font-medium slide-in ${
                         message.includes('Error')
                           ? 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800'
                           : 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800'
                       }`}
                     >
                       {message}
-                    </m.div>
+                    </div>
                   )}
                 </form>
               </div>
             )}
           </main>
         </div>
-      </m.div>
+      </div>
     </section>
   );
 });
