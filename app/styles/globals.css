@@ -81,6 +81,42 @@ html {
     background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
   }
 
+  /* Hero entrance: pure-CSS staggered fade-up. Runs on the compositor via
+     @keyframes (no JS / framer-motion on the initial critical path), so the
+     LCP hero-bio text paints immediately instead of waiting on hydration.
+     Stagger delays are short so content is visible almost instantly. */
+  .hero-anim {
+    opacity: 1;
+    animation: heroEntrance 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .hero-anim-1 {
+    animation-delay: 0.05s;
+  }
+
+  .hero-anim-2 {
+    animation-delay: 0.1s;
+  }
+
+  .hero-anim-3 {
+    animation-delay: 0.15s;
+  }
+
+  .hero-anim-4 {
+    animation-delay: 0.2s;
+  }
+
+  @keyframes heroEntrance {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   /* Glassmorphism Hero Card */
   .hero-card {
     background: rgba(255, 255, 255, 0.08);
@@ -144,6 +180,16 @@ html {
     .animated-background {
       animation: none;
       background-position: 50% 50%;
+    }
+
+    .hero-anim,
+    .hero-anim-1,
+    .hero-anim-2,
+    .hero-anim-3,
+    .hero-anim-4 {
+      animation: none;
+      opacity: 1;
+      transform: none;
     }
 
     .profile-image,

@@ -1,15 +1,14 @@
 'use client';
 
-// Using custom glassmorphism card instead of Flowbite
-import { m } from 'framer-motion';
+// Using custom glassmorphism card instead of Flowbite.
+// Hero entrance animations are pure-CSS (@keyframes, see globals.css) so the
+// LCP bio text renders without requiring framer-motion to hydrate.
 import Image from 'next/image';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
 import profile from '../public/picofme.webp';
 
 const Hero = memo(() => {
-  const [shouldReduceMotion, setShouldReduceMotion] = useState(false);
-
   const HERO_ABOUT_TEXT = `Hi, I'm Yunior—a product-minded Senior Frontend Engineer who turns complex ideas into intuitive, scalable digital experiences. I build modern web applications with React, Next.js, and TypeScript, bringing together strong UI/UX design, frontend architecture, and reliable product delivery.
 
 I care about creating accessible, high-performance interfaces that are not only polished visually, but also maintainable and built to evolve. From reusable component systems to enterprise applications, I enjoy solving real product problems through thoughtful engineering and user-centered design.`;
@@ -28,21 +27,6 @@ I care about creating accessible, high-performance interfaces that are not only 
     };
   }, []);
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-
-    const updateMotionPreference = () => {
-      setShouldReduceMotion(mediaQuery.matches);
-    };
-
-    updateMotionPreference();
-    mediaQuery.addEventListener('change', updateMotionPreference);
-
-    return () => {
-      mediaQuery.removeEventListener('change', updateMotionPreference);
-    };
-  }, []);
-
   const handleDownloadResume = () => {
     const link = document.createElement('a');
     link.href = '/Yunior-Batista-Resume.pdf';
@@ -57,29 +41,10 @@ I care about creating accessible, high-performance interfaces that are not only 
       className='z-50 relative w-full min-h-screen md:h-screen flex justify-center md:items-center items-start py-6 md:py-0 animated-background'
       data-testid='hero-section'
     >
-      <m.div
-        initial={shouldReduceMotion ? false : { opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        transition={
-          shouldReduceMotion
-            ? { duration: 0 }
-            : { delay: 0.05, duration: 0.35, ease: 'easeInOut' }
-        }
-        viewport={{ once: true }}
-        className='w-full flex justify-center md:items-center items-start py-2 md:py-0'
-      >
+      <div className='w-full flex justify-center md:items-center items-start py-2 md:py-0 hero-anim hero-anim-1'>
         <div className='hero-card w-11/12 lg:w-10/12 xl:w-2/3 2xl:w-3/5 p-5 sm:p-6 md:p-10 lg:p-12 overflow-visible max-h-none'>
           <div className='flex flex-col items-center'>
-            <m.div
-              initial={shouldReduceMotion ? false : { opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={
-                shouldReduceMotion
-                  ? { duration: 0 }
-                  : { delay: 0.1, duration: 0.35, ease: 'easeInOut' }
-              }
-            >
+            <div className='hero-anim hero-anim-2'>
               <div className='profile-image mb-6'>
                 <Image
                   alt='Yunior Batista - Senior Frontend Engineer'
@@ -93,46 +58,26 @@ I care about creating accessible, high-performance interfaces that are not only 
                   placeholder='blur'
                 />
               </div>
-            </m.div>
+            </div>
             <h5 className='mb-2 text-3xl font-bold text-white drop-shadow-lg'>
               Yunior Batista
             </h5>
-            <m.div
-              initial={shouldReduceMotion ? false : { opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={
-                shouldReduceMotion
-                  ? { duration: 0 }
-                  : { delay: 0.15, duration: 0.35, ease: 'easeInOut' }
-              }
-              className='my-4 md:my-5 text-center w-full'
-            >
+            <div className='my-4 md:my-5 text-center w-full hero-anim hero-anim-3'>
               <span
                 data-testid='hero-title'
                 className='text-transparent bg-linear-to-r from-blue-200 via-purple-200 to-indigo-200 bg-clip-text text-xl sm:text-2xl md:text-3xl font-semibold drop-shadow-lg'
               >
                 Senior Frontend Engineer
               </span>
-            </m.div>
-            <m.div
-              initial={shouldReduceMotion ? false : { opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              transition={
-                shouldReduceMotion
-                  ? { duration: 0 }
-                  : { delay: 0.2, duration: 0.3, ease: 'easeInOut' }
-              }
-              className='w-full flex justify-center items-center'
-            >
+            </div>
+            <div className='w-full flex justify-center items-center hero-anim hero-anim-4'>
               <p
                 data-testid='hero-bio'
                 className='w-full max-w-2xl mx-auto text-sm sm:text-base text-white/90 text-center leading-6 drop-shadow-sm backdrop-blur-md bg-black/20 rounded-lg p-3 sm:p-4 border border-white/20 whitespace-pre-line'
               >
                 {HERO_ABOUT_TEXT}
               </p>
-            </m.div>
+            </div>
             <section className='grid w-full max-w-2xl grid-cols-1 md:grid-cols-2 gap-3 mt-3'>
               <a
                 href='/resume'
@@ -162,7 +107,7 @@ I care about creating accessible, high-performance interfaces that are not only 
             </p>
           </div>
         </div>
-      </m.div>
+      </div>
     </section>
   );
 });
