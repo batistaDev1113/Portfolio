@@ -63,7 +63,7 @@ I care about creating accessible, high-performance interfaces that are not only 
         transition={
           shouldReduceMotion
             ? { duration: 0 }
-            : { delay: 0.05, duration: 0.35, ease: 'easeInOut' }
+            : { delay: 0.5, ease: 'easeInOut' }
         }
         viewport={{ once: true }}
         className='w-full flex justify-center md:items-center items-start py-2 md:py-0'
@@ -77,7 +77,7 @@ I care about creating accessible, high-performance interfaces that are not only 
               transition={
                 shouldReduceMotion
                   ? { duration: 0 }
-                  : { delay: 0.1, duration: 0.35, ease: 'easeInOut' }
+                  : { delay: 1, ease: 'easeInOut' }
               }
             >
               <div className='profile-image mb-6'>
@@ -104,7 +104,7 @@ I care about creating accessible, high-performance interfaces that are not only 
               transition={
                 shouldReduceMotion
                   ? { duration: 0 }
-                  : { delay: 0.15, duration: 0.35, ease: 'easeInOut' }
+                  : { delay: 1.5, ease: 'easeInOut' }
               }
               className='my-4 md:my-5 text-center w-full'
             >
@@ -122,7 +122,7 @@ I care about creating accessible, high-performance interfaces that are not only 
               transition={
                 shouldReduceMotion
                   ? { duration: 0 }
-                  : { delay: 0.2, duration: 0.3, ease: 'easeInOut' }
+                  : { delay: 2, ease: 'easeInOut' }
               }
               className='w-full flex justify-center items-center'
             >
