@@ -1,6 +1,5 @@
 'use client';
 // Using custom glassmorphism cards and buttons
-import { m } from 'framer-motion';
 import Image from 'next/image';
 import { lazy, memo, useState } from 'react';
 
@@ -30,13 +29,7 @@ const Project = memo(({ project, featured = false }: ProjectProps) => {
   } = project;
 
   return (
-    <m.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      transition={{ delay: 0.2, ease: 'easeInOut', duration: 0.8 }}
-      viewport={{ once: true }}
-      className={featured ? 'w-full' : undefined}
-    >
+    <div className={featured ? 'w-full project-reveal' : 'project-reveal'}>
       {featured ? (
         /* Featured: landscape on md+, stacked on mobile */
         <div
@@ -61,7 +54,9 @@ const Project = memo(({ project, featured = false }: ProjectProps) => {
             />
           </div>
           <div className='p-8 flex flex-col justify-center gap-4'>
-            <span className='text-xs font-semibold uppercase tracking-widest text-indigo-400'>Featured Project</span>
+            <span className='text-xs font-semibold uppercase tracking-widest text-indigo-400'>
+              Featured Project
+            </span>
             <h4 className='text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-white'>
               {name}
             </h4>
@@ -76,7 +71,10 @@ const Project = memo(({ project, featured = false }: ProjectProps) => {
               ))}
             </div>
             <button
-              onClick={(e) => { e.stopPropagation(); setOpenModal(true); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                setOpenModal(true);
+              }}
               className='modern-button w-fit mt-2 hover:cursor-pointer px-8'
             >
               View Details
@@ -135,7 +133,7 @@ const Project = memo(({ project, featured = false }: ProjectProps) => {
           liveDemoLink={liveDemoLink}
         />
       )}
-    </m.div>
+    </div>
   );
 });
 

@@ -117,6 +117,60 @@ html {
     }
   }
 
+  /* Generic fade-up reveal for below-the-fold sections/cards. Replaces
+     framer-motion whileInView; plays on load (off the critical path). */
+  .section-reveal {
+    opacity: 1;
+    animation: sectionReveal 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  .project-reveal {
+    opacity: 1;
+    animation: sectionReveal 0.8s ease-in-out 0.15s both;
+  }
+
+  @keyframes sectionReveal {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Form success/status entrance. */
+  .pop-in {
+    animation: popIn 0.35s ease-out both;
+  }
+
+  @keyframes popIn {
+    from {
+      opacity: 0;
+      transform: scale(0.9);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  .slide-in {
+    animation: slideIn 0.3s ease-out both;
+  }
+
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
   /* Glassmorphism Hero Card */
   .hero-card {
     background: rgba(255, 255, 255, 0.08);
@@ -186,7 +240,11 @@ html {
     .hero-anim-1,
     .hero-anim-2,
     .hero-anim-3,
-    .hero-anim-4 {
+    .hero-anim-4,
+    .section-reveal,
+    .project-reveal,
+    .pop-in,
+    .slide-in {
       animation: none;
       opacity: 1;
       transform: none;
