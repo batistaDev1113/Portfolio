@@ -2,39 +2,72 @@
   {
     "id": 1,
     "name": "Portfolio",
-    "description": "This is my Portfolio site to showcase some of the projects I have worked on my free time.",
+    "slug": "portfolio",
+    "description": "A single-page portfolio engineered like a product: design-token system, CSS-first motion, and a Core Web Vitals budget enforced in CI.",
+    "impact": "Lighthouse (mobile) — Performance 87 · TBT 90ms · CLS 0.001",
     "technologies": [
       "React",
       "Next.js",
       "TypeScript",
-      "Framer Motion",
       "Tailwind CSS",
-      "Flowbite-react",
-      "Mailjet"
+      "Playwright",
+      "Jest",
+      "Mailjet",
+      "Vercel"
     ],
     "imageUrl": "/projects/portfolio-v2.png",
     "githubLink": "https://github.com/batistaDev1113/Portfolio",
     "liveDemoLink": "https://www.yuniorbatista.com/",
+    "problem": "Most developer portfolios are template snapshots: heavy JS bundles, motion libraries pulling 30–80KB of gzip into the critical path, and no evidence behind a performance claim.",
+    "approach": "Treat the site as a small production app — a shared @theme design system (one indigo→violet anchor, layered dark surfaces), SSG-only routes, and measured budgets. Every change must keep the mobile Lighthouse Performance in the mid-80s-or-better band and CLS at or near 0 before it merges.",
+    "keyDecisions": [
+      "Removed framer-motion entirely and rebuilt all entrance/scroll motion as pure-CSS @keyframes — cut ~60KB of gzip and dropped TBT, with reveals that paint without waiting on hydration.",
+      "One Tailwind v4 @theme token scale instead of scattered hex values, so spacing, type scale, and color stay consistent across every section.",
+      "next/image with breakpoint-accurate sizes + AVIF/WebP, so mobile never downloads the full-resolution master files.",
+      "CI gate (lint, tsc, jest, Playwright hero regression, npm audit) that reviews every PR before merge."
+    ],
+    "outcome": "Mobile Lighthouse: Performance 87, TBT 90ms, LCP 4.0s, CLS 0.001, Accessibility 100, Best Practices 96, SEO 100 (local Windows audit; scores fluctuate ±5 across CPU-throttled runs). Accessibility kept AA-clean while the hero renders lazily-rendered text that doesn't wait on JS hydration.",
+    "improvements": [
+      "Add 3–5 more case-study routes to cover different tech stacks and outcomes.",
+      "Add a Lighthouse CI badge auto-published from the main branch so the score is verifiable, not just claimed.",
+      "Extract the design tokens into a shared package so a second product site reuses the same system."
+    ],
     "features": [
-      "Responsive Design",
-      "Project Showcase",
-      "Contact Form with Email Integration"
+      "Design-token system",
+      "CSS-first performance motion",
+      "Case-study project pages"
     ]
   },
   {
     "id": 2,
     "name": "Kanban Board",
-    "description": "A web app similar to a kanban board where users can add, drag and drop and eliminate tasks as they get them completed.",
+    "slug": "kanban-board",
+    "description": "Kanban Board is a drag-and-drop task manager where teams can create boards, add and reorder tasks by status, and authenticate to keep every change persisted.",
+    "impact": "Full-stack board — auth, persisted state, and drag-and-drop",
     "technologies": [
       "React",
       "TypeScript",
       "Tailwind CSS",
       "React DND",
-      "Javascript"
+      "Node.js",
+      "Vercel"
     ],
     "imageUrl": "/projects/kanban-cropped.png",
     "githubLink": "https://github.com/batistaDev1113/kanban-board",
     "liveDemoLink": "https://kanbanboardclone.vercel.app/",
+    "problem": "Kanban lists are the classic \"I'll write it on a sticky note\" workflow — but most clone tutorials ship a static board where tasks vanish on refresh and anything beyond the happy path is unauthenticated demo data.",
+    "approach": "Build the board as a real full-stack app: React + TypeScript on the front, a backend API with a database behind it, and authentication so each user's tasks survive reloads and logins. Drag-and-drop stays native through React DND so reordering feels immediate rather than simulated.",
+    "keyDecisions": [
+      "React DND powers the drag interactions — chosen over a CSS-only hack because task movement needs a real drag preview and accessible drop targets.",
+      "A backend API + database (rather than localStorage) so boards persist across sessions and devices, gated behind auth.",
+      "Tailwind for consistent component styling so the UI stays a design-system rather than one-off classes."
+    ],
+    "outcome": "A working product, not a demo: users authenticate, then add, drag, reorder, and delete tasks across board columns with state that persists server-side on every refresh.",
+    "improvements": [
+      "Replace the full-page reloads implied by task actions with optimistic updates so saves feel instant.",
+      "Add keyboard-first reordering (arrow keys + screen-reader announcements) so the board meets WCAG 2.1 AA, matching the through-UI experience.",
+      "Add jest/Playwright coverage for board state transitions before shipping to more users."
+    ],
     "features": ["Backend API", "Database integration", "Authentication"]
   }
 ]

@@ -69,12 +69,12 @@ const Navigation = () => {
             <li>
               <a
                 href='#skills'
-                aria-label='Skills and how I work'
+                aria-label='How I build and the tools I use'
                 onClick={handleNavLinkClick}
                 className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
               >
                 <span className='pb-1 hover:text-primary-600 dark:hover:text-primary-300 hover:border-b-2 hover:border-primary-500 hover:border-spacing-4'>
-                  Skills
+                  How I Build
                 </span>
               </a>
             </li>
@@ -93,12 +93,12 @@ const Navigation = () => {
             <li>
               <a
                 href='#contact'
-                aria-label='Contact me'
+                aria-label="Let's connect"
                 onClick={handleNavLinkClick}
                 className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
               >
                 <span className='pb-1 hover:text-primary-600 dark:hover:text-primary-300 hover:border-b-2 hover:border-primary-500 hover:border-spacing-4'>
-                  Contact Me
+                  Let&apos;s Connect
                 </span>
               </a>
             </li>

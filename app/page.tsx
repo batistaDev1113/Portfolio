@@ -2,6 +2,8 @@ import dynamic from 'next/dynamic';
 import Hero from '../components/Hero';
 import Navigation from '../components/Navigation';
 import Projects from '../components/Projects';
+import ScrollReveal from '../components/ScrollReveal';
+import ScrollToHash from '../components/ScrollToHash';
 import Toolbox from '../components/Toolbox';
 
 const ContactForm = dynamic(() => import('../components/ContactForm'));
@@ -15,6 +17,8 @@ export default function Home() {
       className='flex min-h-screen flex-col items-center w-full scroll-smooth dark:bg-night'
     >
       <Navigation />
+      <ScrollToHash />
+      <ScrollReveal />
       <div className='relative w-full'>
         <Hero />
         {/* Curved seam: the light content below "dips" up into the dark hero */}
