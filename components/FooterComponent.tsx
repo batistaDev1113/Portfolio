@@ -1,4 +1,5 @@
 import { BsGithub, BsLinkedin } from 'react-icons/bs';
+import BackToTop from './BackToTop';
 
 const LINKEDIN_URL = 'https://www.linkedin.com/in/yunior-profile/';
 const GITHUB_URL = 'https://github.com/batistaDev1113';
@@ -11,6 +12,9 @@ const FooterComponent = () => {
     <footer className='relative mt-auto pt-12 pb-8 p-6 w-full'>
       <div className='w-full max-w-7xl mx-auto'>
         <hr className='mb-8 border-gray-200 dark:border-border sm:mx-auto' />
+        <div className='flex justify-center mb-8'>
+          <BackToTop />
+        </div>
         <div className='w-full flex flex-col items-center gap-6 sm:flex-row sm:justify-between'>
           <span className='text-sm text-gray-500 dark:text-gray-400 font-mono'>
             &copy; {YEAR} Yunior Batista
