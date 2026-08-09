@@ -85,7 +85,7 @@ const Project = memo(
             aria-label={`View case study for ${name}`}
             data-project-card
           >
-            <div className='project-image-overlay absolute inset-0'>
+            <div className='project-image-overlay w-full h-full'>
               <Image
                 src={src || '/No-Image-Placeholder.svg'}
                 width={400}

@@ -53,7 +53,7 @@
       "Node.js",
       "Vercel"
     ],
-    "imageUrl": "/projects/kanban-cropped.png",
+    "imageUrl": "/projects/kanban-board-project.jpg",
     "githubLink": "https://github.com/batistaDev1113/kanban-board",
     "liveDemoLink": "https://kanbanboardclone.vercel.app/",
     "problem": "Kanban lists are the classic \"I'll write it on a sticky note\" workflow — but most clone tutorials ship a static board where tasks vanish on refresh and anything beyond the happy path is unauthenticated demo data.",
