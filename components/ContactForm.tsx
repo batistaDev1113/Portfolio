@@ -1,7 +1,11 @@
 'use client';
 
 import { FormEvent, memo, useCallback, useState } from 'react';
+import { BsGithub, BsLinkedin } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
+
+const LINKEDIN_URL = 'https://www.linkedin.com/in/yunior-profile/';
+const GITHUB_URL = 'https://github.com/batistaDev1113';
 
 const ContactForm = memo(() => {
   const [sending, setSending] = useState<boolean>(false);
@@ -117,91 +121,63 @@ const ContactForm = memo(() => {
       className='relative z-50 w-full max-w-7xl mx-auto my-16 px-4 scroll-mt-20'
       id='contact'
     >
-      <h1 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center my-20 tracking-widest'>
-        Let&apos;s Connect
-      </h1>
+      <div className='flex flex-col items-center mb-16'>
+        <p className='eyebrow'>// 03 · Contact</p>
+        <h2 className='fluid-title text-gray-900 dark:text-white mt-4 text-center'>
+          Let&apos;s Connect
+        </h2>
+        <p className='mt-4 max-w-2xl text-center text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-6'>
+          Have a project in mind, a role to discuss, or just want to say hi?
+          The form goes straight to my inbox.
+        </p>
+      </div>
 
-      <div className='relative bg-white dark:bg-[#0c0f1e] rounded-2xl shadow-2xl overflow-hidden section-reveal'>
+      <div className='relative bg-white dark:bg-surface rounded-2xl shadow-2xl overflow-hidden section-reveal'>
         {/* Desktop Split Layout */}
         <div className='lg:grid lg:grid-cols-2 lg:min-h-150'>
-          {/* 3D Envelope Section */}
-          <section className='relative h-64 lg:h-full bg-linear-to-br from-[#1a0a4e] via-[#0d1a4e] to-[#0a0f2e] overflow-hidden flex items-center justify-center'>
-            {/* Animated Background Elements */}
-            <div className='absolute inset-0 opacity-20'>
-              <div
-                className='absolute top-12 left-12 w-4 h-4 bg-white/40 rounded-full animate-bounce'
-                style={{ animationDelay: '0s' }}
-              />
-              <div
-                className='absolute top-20 right-16 w-2 h-2 bg-white/60 rounded-full animate-bounce'
-                style={{ animationDelay: '1s' }}
-              />
-              <div
-                className='absolute bottom-16 left-20 w-3 h-3 bg-white/30 rounded-full animate-bounce'
-                style={{ animationDelay: '2s' }}
-              />
-              <div
-                className='absolute bottom-24 right-12 w-2 h-2 bg-white/50 rounded-full animate-bounce'
-                style={{ animationDelay: '1.5s' }}
-              />
-            </div>
+          {/* Contact Info Panel */}
+          <section className='relative p-8 lg:p-12 bg-linear-to-br from-primary-800 via-primary-700 to-violet-a dark:from-[#0b0e16] dark:via-[#111623] dark:to-[#0b0e16] overflow-hidden flex flex-col justify-center gap-6 natural'>
+            {/* Ambient glow */}
+            <div className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-violet-a/25 blur-3xl pointer-events-none' />
+            <div className='absolute -bottom-20 -left-16 w-64 h-64 rounded-full bg-primary-500/20 blur-3xl pointer-events-none' />
 
-            {/* 3D Envelope Container */}
-            <div className='relative transform-gpu perspective-1000'>
-              <div className='envelope-3d group cursor-pointer'>
-                {/* Envelope Back */}
-                <div className='envelope-back absolute w-32 h-24 lg:w-40 lg:h-32 bg-linear-to-br from-white via-gray-50 to-gray-100 dark:from-gray-100 dark:via-gray-200 dark:to-gray-300 rounded-lg shadow-2xl transform rotate-x-12 translate-y-2'></div>
+            <div className='relative'>
+              <p className='text-xs font-mono uppercase tracking-[0.18em] text-primary-200 dark:text-violet-a'>
+                Get in touch
+              </p>
+              <h3 className='fluid-subtitle text-2xl font-semibold mt-3 text-white leading-snug'>
+                Let&apos;s build something
+                <br />
+                worth talking about.
+              </h3>
+              <p className='mt-4 text-sm text-white/70 leading-6 max-w-sm'>
+                I&apos;m always open to discussing new projects, creative
+                ideas, or opportunities to be part of your vision.
+              </p>
 
-                {/* Envelope Main Body */}
-                <div className='envelope-body relative w-32 h-24 lg:w-40 lg:h-32 bg-linear-to-br from-white via-blue-50 to-purple-50 dark:from-gray-50 dark:via-blue-100 dark:to-purple-100 rounded-lg shadow-xl transform transition-all duration-500 group-hover:rotate-y-12 group-hover:translate-y-1'>
-                  {/* Envelope Flap */}
-                  <div className='envelope-flap absolute -top-2 left-0 right-0 h-12 lg:h-16 bg-linear-to-b from-blue-500 to-purple-600 transform rotate-x-45 origin-bottom rounded-t-lg shadow-lg group-hover:rotate-x-35 transition-all duration-500'>
-                    {/* Flap Highlight */}
-                    <div className='absolute inset-0 bg-linear-to-r from-white/20 via-transparent to-white/10 rounded-t-lg'></div>
-                  </div>
-
-                  {/* Email Icon Inside */}
-                  <div className='absolute inset-0 flex items-center justify-center'>
-                    <div className='w-8 h-8 lg:w-10 lg:h-10 bg-linear-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-all duration-300'>
-                      <FaRegPaperPlane className='text-white text-sm lg:text-base transform group-hover:translate-x-1 transition-transform duration-300' />
-                    </div>
-                  </div>
-
-                  {/* Envelope Lines */}
-                  <div className='absolute bottom-4 left-4 right-4 space-y-1'>
-                    <div className='h-0.5 bg-linear-to-r from-gray-300 to-transparent rounded'></div>
-                    <div className='h-0.5 bg-linear-to-r from-gray-300 via-gray-200 to-transparent rounded w-3/4'></div>
-                    <div className='h-0.5 bg-linear-to-r from-gray-300 to-transparent rounded w-1/2'></div>
-                  </div>
-
-                  {/* Border Highlights */}
-                  <div className='absolute inset-0 rounded-lg bg-linear-to-br from-white/30 via-transparent to-transparent pointer-events-none'></div>
-                </div>
-
-                {/* Floating Message Dots */}
-                <div className='absolute -top-6 -right-6 lg:-top-8 lg:-right-8'>
-                  <div className='relative'>
-                    <div className='w-3 h-3 bg-linear-to-r from-green-400 to-blue-500 rounded-full animate-ping'></div>
-                    <div className='absolute inset-0 w-3 h-3 bg-linear-to-r from-green-400 to-blue-500 rounded-full animate-pulse'></div>
-                  </div>
-                </div>
-                <div className='absolute -top-3 -right-10 lg:-top-4 lg:-right-12'>
-                  <div
-                    className='w-2 h-2 bg-linear-to-r from-yellow-400 to-orange-500 rounded-full animate-pulse'
-                    style={{ animationDelay: '0.5s' }}
-                  ></div>
-                </div>
-                <div className='absolute -top-8 -right-2 lg:-top-10 lg:-right-3'>
-                  <div
-                    className='w-1.5 h-1.5 bg-linear-to-r from-pink-400 to-purple-500 rounded-full animate-pulse'
-                    style={{ animationDelay: '1s' }}
-                  ></div>
-                </div>
+              <div className='mt-8 flex flex-wrap gap-3'>
+                <a
+                  href={GITHUB_URL}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label='GitHub profile'
+                  className='inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20'
+                >
+                  <BsGithub className='w-4 h-4' />
+                  GitHub
+                </a>
+                <a
+                  href={LINKEDIN_URL}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  aria-label='LinkedIn profile'
+                  className='inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-sm font-medium text-white backdrop-blur-md transition-colors hover:bg-white/20'
+                >
+                  <BsLinkedin className='w-4 h-4' />
+                  LinkedIn
+                </a>
               </div>
             </div>
-
-            {/* Gradient Overlay */}
-            <div className='absolute inset-0 bg-linear-to-t from-black/10 via-transparent to-transparent pointer-events-none' />
           </section>
 
           {/* Form Section */}
@@ -254,9 +230,9 @@ const ContactForm = memo(() => {
                       }
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.fullName
-                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
-                          : 'border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-blue-500/20'
-                      } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-gray-600`}
+? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
+                      : 'border-gray-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
+                  } bg-white dark:bg-surface text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-border`}
                       placeholder='Enter your full name'
                     />
                     {errors.fullName && (
@@ -290,9 +266,9 @@ const ContactForm = memo(() => {
                       aria-describedby={errors.email ? emailErrorId : undefined}
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.email
-                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
-                          : 'border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-blue-500/20'
-                      } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-gray-600`}
+? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
+                      : 'border-gray-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
+                  } bg-white dark:bg-surface text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-border`}
                       placeholder='your.email@example.com'
                     />
                     {errors.email && (
@@ -329,9 +305,9 @@ const ContactForm = memo(() => {
                       placeholder='Tell me about your project or just say hello...'
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.message
-                          ? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
-                          : 'border-gray-200 dark:border-gray-700 focus:border-blue-500 focus:ring-blue-500/20'
-                      } bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-gray-600 resize-none`}
+? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
+                      : 'border-gray-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
+                  } bg-white dark:bg-surface text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-border resize-none`}
                     />
                     {errors.message && (
                       <p
@@ -348,7 +324,7 @@ const ContactForm = memo(() => {
                   <button
                     type='submit'
                     disabled={sending}
-                    className='w-full bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 hover:cursor-pointer text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3'
+                    className='w-full bg-linear-to-r from-primary-600 to-violet-a hover:from-primary-500 hover:to-violet-b hover:cursor-pointer text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary-400/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3'
                   >
                     {sending ? (
                       <>

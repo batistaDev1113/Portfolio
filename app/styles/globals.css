@@ -9,10 +9,40 @@
 @source "../../components/**/*.{js,jsx,ts,tsx}";
 @source "../../app/**/*.{js,jsx,ts,tsx}";
 
-/* Empty @theme block: this project does NOT define custom colors, fonts,
-   or spacing scales relative to Tailwind defaults. v4 treats an empty
-   @theme block as "inherit all defaults from the engine". Safe. */
-@theme {}
+/* Design tokens. Single indigo -> violet anchor (primary), layered dark
+   surfaces, and font families wired to the next/font variables loaded in
+   app/layout.tsx. Tailwind v4 emits utilities from the theme variables
+   (e.g. --color-primary -> bg-primary/text-primary, --font-display ->
+   font-display). */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
+
+  --color-violet-a: #8b5cf6;
+  --color-violet-b: #a78bfa;
+
+  /* Layered surfaces for dark mode: base -> raised -> elevated. */
+  --color-night: #07090f;
+  --color-surface: #0b0e16;
+  --color-raised: #111623;
+  --color-border: #1d2434;
+  --color-border-strong: #2a3347;
+
+  /* Light mode surfaces: near-white base + soft borders. */
+  --color-light-surface: #ffffff;
+}
 
 * {
   box-sizing: border-box;
@@ -33,7 +63,7 @@
 }
 
 body {
-    @apply bg-white dark:bg-[#07090f];
+    @apply bg-light-surface dark:bg-night text-slate-900 dark:text-slate-100 transition-colors duration-300;
 }
 
 html {
@@ -51,7 +81,7 @@ html {
   }
 
   ::-webkit-scrollbar-thumb {
-    background-image: linear-gradient(to bottom, #86efac, #3b82f6, #9333ea);
+    background-image: linear-gradient(to bottom, var(--color-primary-500), var(--color-violet-a));
     border-radius: 20px;
     width: 10px;
   }
@@ -63,22 +93,82 @@ html {
     height: unset !important;
   }
 
-  .flowbite-card div:first-child {
-    padding: 0 !important;
+  /* Minimal, globally-consistent focus treatment. */
+  :focus-visible {
+    outline: 2px solid var(--color-primary-500);
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
+  /* Mono eyebrow label: `// 01 · PROJECTS` used above section titles. */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-primary-500);
+  }
+
+  .dark .eyebrow {
+    color: var(--color-violet-b);
+  }
+
+  /* Fluid display headings: clamp() scale, tight tracking, display font. */
+  .fluid-title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    font-size: clamp(1.75rem, 3.5vw + 1rem, 3rem);
+  }
+
+  .fluid-subtitle {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+    line-height: 1.25;
+  }
+
+  /* Soft elevation for raised cards (project + skill cards, light mode). */
+  .card-elevated {
+    background: var(--color-light-surface);
+    border: 1px solid var(--color-primary-100);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
+      0 8px 24px rgba(15, 23, 42, 0.06);
+  }
+
+  .dark .card-elevated {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  /* Subtle top accent bar for branded cards. */
+  .accent-top::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--color-primary-500),
+      var(--color-violet-a)
+    );
   }
 
   .button-about {
-    @apply my-4 inline-flex items-center justify-center px-8 py-3 text-base text-center text-white border-none rounded-lg focus:ring-4 focus:ring-purple-300 dark:focus:ring-purple-800 transition-all duration-300 ease-out;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    @apply my-4 inline-flex items-center justify-center px-8 py-3 text-base text-center text-white border-none rounded-lg transition-all duration-300 ease-out;
+    background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-violet-a) 100%);
     backdrop-filter: blur(10px);
-    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
     transform: translateY(0);
   }
 
   .button-about:hover {
     transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
-    background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 100%);
+    box-shadow: 0 15px 35px rgba(79, 70, 229, 0.4);
+    background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-violet-b) 100%);
   }
 
   /* Hero entrance: pure-CSS staggered fade-up. Runs on the compositor via
@@ -186,9 +276,19 @@ html {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
   }
 
-  /* Animated Gradient Background */
+  /* Animated Gradient Background.
+     Uses the indigo/violet anchor in both light and dark modes (the hero is
+     intentionally dark in both themes — the card + text are white-on-dark). */
   .animated-background {
-    background: linear-gradient(-45deg, #020617, #0f0c29, #0a0f1e, #140d2e);
+    background: linear-gradient(
+      -45deg,
+      #020617,
+      #0f0c29,
+      rgba(79, 70, 229, 0.18),
+      #0a0f1e,
+      rgba(139, 92, 246, 0.16),
+      #140d2e
+    );
     background-size: 300% 300%;
     background-position: 0% 50%;
     animation: gradientShift 16s ease-in-out infinite;
@@ -225,7 +325,7 @@ html {
     left: -3px;
     right: -3px;
     bottom: -3px;
-    background: linear-gradient(45deg, #4f46e5, #7c3aed, #2563eb);
+    background: linear-gradient(45deg, var(--color-primary-500), var(--color-violet-a), var(--color-primary-600));
     border-radius: 50%;
     z-index: -1;
   }
@@ -266,30 +366,44 @@ html {
 
   /* Modern Project Cards */
   .project-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(16px);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: var(--color-light-surface);
+    border: 1px solid var(--color-primary-100);
     border-radius: 20px;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
+      0 8px 24px rgba(15, 23, 42, 0.06);
   }
 
   .dark .project-card {
-    background: rgba(13, 17, 42, 0.65);
-    border: 1px solid rgba(99, 102, 241, 0.18);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
   }
 
   .project-card:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    transform: translateY(-6px);
+    box-shadow: 0 20px 45px rgba(79, 70, 229, 0.12);
+    border-color: var(--color-primary-300);
+  }
+
+  .dark .project-card:hover {
+    border-color: var(--color-border-strong);
+    box-shadow: 0 25px 55px rgba(0, 0, 0, 0.5);
   }
 
   .project-image-overlay {
     position: relative;
     overflow: hidden;
+  }
+
+  .project-image-overlay img {
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .project-card:hover .project-image-overlay img {
+    transform: scale(1.05);
   }
 
   .project-image-overlay::after {
@@ -301,8 +415,8 @@ html {
     bottom: 0;
     background: linear-gradient(
       135deg,
-      rgba(79, 70, 229, 0.1) 0%,
-      rgba(124, 58, 237, 0.1) 100%
+      rgba(79, 70, 229, 0.12) 0%,
+      rgba(139, 92, 246, 0.12) 100%
     );
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -313,7 +427,7 @@ html {
   }
 
   .modern-button {
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-violet-a) 100%);
     border: none;
     color: white;
     padding: 0.75rem 1.5rem;
@@ -326,24 +440,25 @@ html {
   .modern-button:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
-    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-violet-b) 100%);
   }
 
   .tech-tag {
-    background: rgba(79, 70, 229, 0.08);
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    background: rgba(79, 70, 229, 0.06);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(79, 70, 229, 0.2);
-    border-radius: 20px;
-    padding: 0.25rem 0.75rem;
-    font-size: 0.75rem;
-    font-weight: 500;
-    color: #4f46e5;
+    border: 1px solid rgba(79, 70, 229, 0.16);
+    border-radius: 6px;
+    padding: 0.3rem 0.6rem;
+    color: var(--color-primary-700);
   }
 
   .dark .tech-tag {
-    background: rgba(99, 102, 241, 0.12);
-    border: 1px solid rgba(139, 92, 246, 0.28);
-    color: #c4b5fd;
+    background: rgba(129, 140, 248, 0.08);
+    border: 1px solid rgba(167, 139, 250, 0.22);
+    color: var(--color-primary-300);
   }
 
 /* On touch devices, keep scrolling but hide visual scrollbars to avoid
@@ -424,4 +539,54 @@ html {
 
 .envelope-3d:hover .envelope-flap {
   transform: rotateX(-35deg) translateZ(5px);
+}
+
+/* Toolbox rail: natively scrollable (overflow-x: auto) so every tool is
+   reachable without relying on an animation. Styled thin scrollbar + edge
+   fade mask. Respects prefers-reduced-motion by construction (no motion). */
+.toolbox-rail {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding: 0.25rem 0 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-primary-500) transparent;
+}
+
+.toolbox-rail::-webkit-scrollbar {
+  height: 6px;
+}
+
+.toolbox-rail::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.toolbox-rail::-webkit-scrollbar-thumb {
+  background: var(--color-primary-500);
+  border-radius: 9999px;
+}
+
+.toolbox-item {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  color: var(--color-primary-700);
+  background: rgba(79, 70, 229, 0.05);
+  border: 1px solid rgba(79, 70, 229, 0.14);
+  border-radius: 9999px;
+  padding: 0.45rem 1rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.dark .toolbox-item {
+  color: var(--color-primary-200);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.toolbox-item:hover {
+  border-color: var(--color-primary-400);
+  background: rgba(79, 70, 229, 0.1);
 }

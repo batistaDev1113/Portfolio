@@ -84,7 +84,14 @@ const Project = memo(({ project, featured = false }: ProjectProps) => {
       ) : (
         /* Standard card */
         <div className='w-full max-w-sm hover:cursor-pointer h-full flex flex-col'>
-          <div className='project-card w-full h-full flex flex-col'>
+          <div
+            className='project-card w-full h-full flex flex-col'
+            onClick={() => setOpenModal(true)}
+            role='button'
+            tabIndex={0}
+            onKeyDown={(e) => e.key === 'Enter' && setOpenModal(true)}
+            aria-label={`View details for ${name}`}
+          >
             <div className='project-image-overlay shrink-0'>
               <Image
                 src={imageUrl || '/No-Image-Placeholder.svg'}
@@ -114,7 +121,10 @@ const Project = memo(({ project, featured = false }: ProjectProps) => {
                 </div>
               </div>
               <button
-                onClick={() => setOpenModal(!openModal)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setOpenModal(true);
+                }}
                 className='modern-button w-full shrink-0 mt-4 hover:cursor-pointer'
               >
                 View Details

@@ -21,9 +21,16 @@ const Projects = async () => {
       className='w-full max-w-7xl mx-auto my-20 px-4 z-50 scroll-mt-20'
       id='projects'
     >
-      <h3 className='w-full text-lg md:text-4xl font-semibold md:font-normal uppercase text-gray-900 dark:text-white opacity-70 text-center mb-16 tracking-widest'>
-        Some Projects I&apos;ve Built
-      </h3>
+      <div className='flex flex-col items-center mb-16'>
+        <p className='eyebrow'>// 02 · Work</p>
+        <h2 className='fluid-title text-gray-900 dark:text-white mt-4 text-center'>
+          Selected Projects
+        </h2>
+        <p className='mt-4 max-w-2xl text-center text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-6'>
+          A few things I&apos;ve designed and built. Click any card to see the
+          tech stack and live links.
+        </p>
+      </div>
 
       {/* Featured project — full-width landscape card */}
       {featured && (

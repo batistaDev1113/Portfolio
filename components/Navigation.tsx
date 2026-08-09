@@ -12,11 +12,11 @@ const Navigation = () => {
   };
 
   return (
-    <nav className='sticky top-0 z-100 w-full bg-white/90 dark:bg-[#07090f]/90 backdrop-blur-md border-b border-gray-200/40 dark:border-indigo-950/60 px-6 py-3 transition-all duration-300'>
+    <nav className='sticky top-0 z-100 w-full bg-white/90 dark:bg-night/90 backdrop-blur-md border-b border-gray-200/40 dark:border-border px-6 py-3 transition-all duration-300'>
       <div className='flex flex-wrap items-center justify-between'>
         <Link
           href='/'
-          className='self-center text-2xl font-semibold text-transparent bg-linear-to-r from-green-300 via-blue-500 to-purple-600 bg-clip-text md:text-4xl lg:text-3xl'
+          className='self-center text-2xl font-semibold text-transparent bg-linear-to-r from-primary-500 via-violet-a to-primary-400 bg-clip-text md:text-4xl lg:text-3xl font-display'
         >
           Yunior B.
         </Link>
@@ -68,12 +68,24 @@ const Navigation = () => {
           <ul className='mt-4 flex flex-col md:mt-0 md:flex-row md:space-x-8 md:text-sm md:font-medium'>
             <li>
               <a
+                href='#skills'
+                aria-label='Skills and how I work'
+                onClick={handleNavLinkClick}
+                className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
+              >
+                <span className='pb-1 hover:text-primary-600 dark:hover:text-primary-300 hover:border-b-2 hover:border-primary-500 hover:border-spacing-4'>
+                  Skills
+                </span>
+              </a>
+            </li>
+            <li>
+              <a
                 href='#projects'
                 aria-label='Some projects I have built'
                 onClick={handleNavLinkClick}
                 className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
               >
-                <span className='pb-1 hover:text-teal-600 dark:hover:text-teal-300 hover:border-b-2 hover:border-indigo-500 hover:border-spacing-4'>
+                <span className='pb-1 hover:text-primary-600 dark:hover:text-primary-300 hover:border-b-2 hover:border-primary-500 hover:border-spacing-4'>
                   Some Projects I&apos;ve Built
                 </span>
               </a>
@@ -85,7 +97,7 @@ const Navigation = () => {
                 onClick={handleNavLinkClick}
                 className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
               >
-                <span className='pb-1 hover:text-teal-600 dark:hover:text-teal-300 hover:border-b-2 hover:border-indigo-500 hover:border-spacing-4'>
+                <span className='pb-1 hover:text-primary-600 dark:hover:text-primary-300 hover:border-b-2 hover:border-primary-500 hover:border-spacing-4'>
                   Contact Me
                 </span>
               </a>
