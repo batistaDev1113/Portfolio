@@ -1,11 +1,7 @@
 // Static skills strip + toolbox marquee. Pure CSS motion (no JS), so it
 // renders server-side with zero client JS on the critical path.
-import {
-  FaAccessibleIcon,
-  FaCode,
-  FaReact,
-  FaMobileAlt,
-} from 'react-icons/fa';
+import { FaAccessibleIcon, FaCode, FaReact, FaMobileAlt } from 'react-icons/fa';
+import LighthouseBadge from './LighthouseBadge';
 
 const TOOLBOX = [
   'React',
@@ -71,6 +67,14 @@ const Toolbox = () => {
           A practical toolkit for shipping reliable, human-first web products —
           from architecture and accessibility through performance and delivery.
         </p>
+        <div className='mt-6'>
+          <LighthouseBadge
+            performance={87}
+            accessibility={100}
+            bestPractices={96}
+            seo={100}
+          />
+        </div>
       </div>
 
       {/* Skill cards */}

@@ -1,18 +1,9 @@
 import { fetchData } from '../db/fetchData';
 import Project from './Project';
-
-type ProjectProps = {
-  id: number;
-  name: string;
-  description: string;
-  imageUrl: string;
-  technologies: string[];
-  githubLink: string;
-  liveDemoLink: string;
-};
+import type { Project as ProjectData } from '../types/project';
 
 const Projects = async () => {
-  const projects: ProjectProps[] = (await fetchData()) || [];
+  const projects: ProjectData[] = (await fetchData()) || [];
 
   const [featured, ...rest] = projects;
 
@@ -27,8 +18,8 @@ const Projects = async () => {
           Selected Projects
         </h2>
         <p className='mt-4 max-w-2xl text-center text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-6'>
-          A few things I&apos;ve designed and built. Click any card to see the
-          tech stack and live links.
+          A few things I&apos;ve designed and built. Each card links to a full
+          case study of the problem, decisions, and outcome.
         </p>
       </div>
 
@@ -42,8 +33,8 @@ const Projects = async () => {
       {/* Remaining projects — responsive 1/2/3-col, generic for any N */}
       {rest.length > 0 && (
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center items-stretch'>
-          {rest.map((project) => (
-            <Project key={project.id} project={project} />
+          {rest.map((project, index) => (
+            <Project key={project.id} project={project} order={index + 1} />
           ))}
         </div>
       )}

@@ -194,29 +194,29 @@ html {
      Stagger delays are short so content is visible almost instantly. */
   .hero-anim {
     opacity: 1;
-    animation: heroEntrance 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: heroEntrance 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
   }
 
   .hero-anim-1 {
-    animation-delay: 0.05s;
+    animation-delay: 0.03s;
   }
 
   .hero-anim-2 {
-    animation-delay: 0.1s;
+    animation-delay: 0.06s;
   }
 
   .hero-anim-3 {
-    animation-delay: 0.15s;
+    animation-delay: 0.09s;
   }
 
   .hero-anim-4 {
-    animation-delay: 0.2s;
+    animation-delay: 0.12s;
   }
 
   @keyframes heroEntrance {
     from {
-      opacity: 0;
-      transform: translateY(8px);
+      opacity: 0.001;
+      transform: translateY(6px);
     }
     to {
       opacity: 1;
@@ -224,27 +224,25 @@ html {
     }
   }
 
-  /* Generic fade-up reveal for below-the-fold sections/cards. Replaces
-     framer-motion whileInView; plays on load (off the critical path). */
-  .section-reveal {
-    opacity: 1;
-    animation: sectionReveal 0.7s cubic-bezier(0.4, 0, 0.2, 1) both;
+  /* Scroll-triggered reveal for below-the-fold sections/cards. Hidden only
+     when JS is active (.js set by ScrollReveal); .in-view added once the
+     element enters the viewport (IntersectionObserver). Without JS — or
+     under prefers-reduced-motion — content stays fully visible. Stagger
+     via --reveal-delay set per element. */
+  .js .section-reveal,
+  .js .project-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1) var(--reveal-delay, 0ms),
+      transform 0.7s cubic-bezier(0.4, 0, 0.2, 1) var(--reveal-delay, 0ms);
+    will-change: opacity, transform;
   }
 
-  .project-reveal {
+  .js .section-reveal.in-view,
+  .js .project-reveal.in-view {
     opacity: 1;
-    animation: sectionReveal 0.8s ease-in-out 0.15s both;
-  }
-
-  @keyframes sectionReveal {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+    transform: translateY(0);
   }
 
   /* Form success/status entrance. */
@@ -395,6 +393,14 @@ html {
       animation: none;
       opacity: 1;
       transform: none;
+    }
+
+    .js .section-reveal,
+    .js .project-reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      will-change: auto;
     }
 
     .profile-image,
@@ -548,6 +554,14 @@ html {
     background: rgba(255, 255, 255, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.22);
     backdrop-filter: blur(6px);
+  }
+
+  /* Small-impact line over image media (standard cards). */
+  .trivia-tag {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.06em;
+    opacity: 0.85;
   }
 
 /* On touch devices, keep scrolling but hide visual scrollbars to avoid
