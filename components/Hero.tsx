@@ -6,10 +6,17 @@
 import Image from 'next/image';
 import { memo, useEffect } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
-import profile from '../public/picofme.webp';
+import { useTheme } from 'next-themes';
+import portraitDark from '../public/images/portrait-dark.jpg';
+import portraitLight from '../public/images/portrait-light.jpg';
 import SocialLinks from '../components/SocialLinks';
 
 const Hero = memo(() => {
+  const { resolvedTheme } = useTheme();
+  // Light mode uses the black-background cartoon (it reads as a clean photo
+  // against the light page); dark mode uses the light-gray-background cartoon.
+  const portraitSrc = resolvedTheme === 'light' ? portraitLight : portraitDark;
+
   const HERO_ABOUT_TEXT = `Hi, I'm Yunior—a product-minded Senior Frontend Engineer. I turn complex ideas into intuitive, scalable web experiences with React, Next.js, and TypeScript, shipping accessible, high-performance interfaces that are as maintainable as they are polished.
 
 I care about creating accessible, maintainable component systems that solve real product problems through thoughtful engineering and user-centered design.`;
@@ -119,12 +126,12 @@ I care about creating accessible, maintainable component systems that solve real
               <Image
                 alt='Yunior Batista - Senior Frontend Engineer'
                 height={120}
-                src={profile}
+                src={portraitSrc}
                 width={120}
-                sizes='(max-width: 1024px) 120px, 220px'
+                sizes='(max-width: 1023px) 120px, (max-width: 1279px) 160px, (max-width: 1535px) 200px, 240px'
                 className='rounded-full shadow-2xl object-cover'
                 priority
-                quality={90}
+                quality={80}
                 placeholder='blur'
               />
             </div>
