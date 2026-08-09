@@ -5,6 +5,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { memo } from 'react';
+import { useTheme } from 'next-themes';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import type { Project as ProjectData } from '../types/project';
 
@@ -17,6 +18,11 @@ type ProjectProps = {
 const Project = memo(
   ({ project, featured = false, order = 0 }: ProjectProps) => {
     const { name, description, impact, imageUrl, technologies, slug } = project;
+    const { resolvedTheme } = useTheme();
+    // Projects may ship theme-aware thumbnails (e.g. the Portfolio case has
+    // dark/light screenshot variants); default to the canonical imageUrl.
+    const src =
+      resolvedTheme === 'light' ? project.imageUrlLight || imageUrl : imageUrl;
     const href = `/projects/${slug}`;
     const revealDelay = {
       '--reveal-delay': `${order * 90}ms`,
@@ -33,7 +39,7 @@ const Project = memo(
           >
             <div className='project-image-overlay md:col-span-7 h-56 md:h-full'>
               <Image
-                src={imageUrl || '/No-Image-Placeholder.svg'}
+                src={src || '/No-Image-Placeholder.svg'}
                 width={800}
                 height={450}
                 alt={`${name} project screenshot`}
@@ -46,9 +52,9 @@ const Project = memo(
             </div>
             <div className='md:col-span-5 p-8 flex flex-col justify-center gap-4 relative'>
               <span className='eyebrow'>// Featured</span>
-<h3 className='fluid-subtitle text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-white'>
-              {name}
-            </h3>
+              <h3 className='fluid-subtitle text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-white'>
+                {name}
+              </h3>
               <p className='text-gray-700 dark:text-gray-300 text-sm leading-relaxed line-clamp-4'>
                 {description}
               </p>
@@ -81,7 +87,7 @@ const Project = memo(
           >
             <div className='project-image-overlay absolute inset-0'>
               <Image
-                src={imageUrl || '/No-Image-Placeholder.svg'}
+                src={src || '/No-Image-Placeholder.svg'}
                 width={400}
                 height={300}
                 alt={`${name} project screenshot`}

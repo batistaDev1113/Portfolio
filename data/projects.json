@@ -16,6 +16,7 @@
       "Vercel"
     ],
     "imageUrl": "/projects/portfolio-project-dark.jpg",
+    "imageUrlLight": "/projects/portfolio-project-light.jpg",
     "githubLink": "https://github.com/batistaDev1113/Portfolio",
     "liveDemoLink": "https://www.yuniorbatista.com/",
     "problem": "Most developer portfolios are template snapshots: heavy JS bundles, motion libraries pulling 30–80KB of gzip into the critical path, and no evidence behind a performance claim.",
