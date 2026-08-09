@@ -15,7 +15,7 @@
       "Mailjet",
       "Vercel"
     ],
-    "imageUrl": "/projects/portfolio-v2.png",
+    "imageUrl": "/projects/portfolio-project-dark.jpg",
     "githubLink": "https://github.com/batistaDev1113/Portfolio",
     "liveDemoLink": "https://www.yuniorbatista.com/",
     "problem": "Most developer portfolios are template snapshots: heavy JS bundles, motion libraries pulling 30–80KB of gzip into the critical path, and no evidence behind a performance claim.",
