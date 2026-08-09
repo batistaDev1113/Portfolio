@@ -32,16 +32,16 @@ const Projects = async () => {
         </p>
       </div>
 
-      {/* Featured project — full-width landscape card */}
+      {/* Featured project — full-width cinematic card */}
       {featured && (
-        <div className='mb-8'>
+        <div className='mb-10'>
           <Project project={featured} featured />
         </div>
       )}
 
-      {/* Remaining projects — 2-col on md, 3-col on lg */}
+      {/* Remaining projects — responsive 1/2/3-col, generic for any N */}
       {rest.length > 0 && (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center items-stretch'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center items-stretch'>
           {rest.map((project) => (
             <Project key={project.id} project={project} />
           ))}

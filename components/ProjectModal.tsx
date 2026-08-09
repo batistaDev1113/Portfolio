@@ -6,6 +6,8 @@ import { FaExternalLinkAlt, FaGithub, FaTimes } from 'react-icons/fa';
 
 type ProjectModalProps = {
   openModal: boolean;
+  name: string;
+  description: string;
   technologies: string[];
   githubLink: string;
   liveDemoLink: string;
@@ -16,6 +18,8 @@ const ProjectModal = memo(
   ({
     openModal,
     setOpenModal,
+    name,
+    description,
     technologies,
     githubLink,
     liveDemoLink,
@@ -71,8 +75,8 @@ const ProjectModal = memo(
         <div className='relative bg-white dark:bg-surface border border-gray-100 dark:border-border rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden'>
           {/* Header */}
           <div className='flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700'>
-            <h2 className='text-2xl font-bold text-gray-900 dark:text-white'>
-              Project Technologies
+            <h2 className='fluid-subtitle text-2xl font-bold text-gray-900 dark:text-white'>
+              {name}
             </h2>
             <button
               onClick={() => setOpenModal(false)}
@@ -85,6 +89,13 @@ const ProjectModal = memo(
 
           {/* Body */}
           <div className='p-6 space-y-6 overflow-y-auto max-h-[calc(90vh-140px)]'>
+            {/* Description Section */}
+            <div>
+              <p className='text-gray-600 dark:text-gray-300 text-sm leading-relaxed'>
+                {description}
+              </p>
+            </div>
+
             {/* Technologies Section */}
             <div>
               <h3 className='text-lg font-semibold text-gray-900 dark:text-white mb-4'>

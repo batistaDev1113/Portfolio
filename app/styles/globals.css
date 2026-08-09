@@ -171,6 +171,23 @@ html {
     background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-violet-b) 100%);
   }
 
+  /* Quiet secondary CTA: underline on hover, no gradient fill. Sits
+     alongside .button-about as the "less important" action. */
+  .button-quiet {
+    @apply inline-flex items-center justify-center px-5 py-3 text-base text-center rounded-lg transition-all duration-300 ease-out;
+    color: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(8px);
+  }
+
+  .button-quiet:hover {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.45);
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+  }
+
   /* Hero entrance: pure-CSS staggered fade-up. Runs on the compositor via
      @keyframes (no JS / framer-motion on the initial critical path), so the
      LCP hero-bio text paints immediately instead of waiting on hydration.
@@ -330,6 +347,36 @@ html {
     z-index: -1;
   }
 
+  /* Editorial hero portrait: the <Image> keeps width/height=120 attributes
+     (jest/PW invariant) but is displayed larger on wide screens. Sizing is
+     done via CSS width/height on the img so layout space is reserved on the
+     page — transform-scale here would overflow into the social rail below. */
+  .hero-portrait img {
+    width: 120px;
+    height: 120px;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-portrait img {
+      width: 160px;
+      height: 160px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .hero-portrait img {
+      width: 200px;
+      height: 200px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .hero-portrait img {
+      width: 240px;
+      height: 240px;
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .animated-background {
       animation: none;
@@ -426,21 +473,50 @@ html {
     opacity: 1;
   }
 
-  .modern-button {
-    background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-violet-a) 100%);
+  /* Quiet text-link CTA: underline sweep on hover, no fill. Keeps the
+     gradient fingerprint for ONE action per section. */
+  .project-cta {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    color: var(--color-primary-600);
+    background: transparent;
     border: none;
-    color: white;
-    padding: 0.75rem 1.5rem;
-    border-radius: 12px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    padding: 0;
+    text-align: left;
+    position: relative;
+    transition: color 0.2s ease;
   }
 
-  .modern-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 25px rgba(79, 70, 229, 0.4);
-    background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-violet-b) 100%);
+  .dark .project-cta {
+    color: var(--color-primary-300);
+  }
+
+  .project-cta::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -3px;
+    height: 1.5px;
+    width: 100%;
+    background: linear-gradient(
+      90deg,
+      var(--color-primary-500),
+      var(--color-violet-a)
+    );
+    transform: scaleX(0.5);
+    transform-origin: left;
+    opacity: 0.6;
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .project-cta:hover::after {
+    transform: scaleX(1);
+    opacity: 1;
+  }
+
+  .project-cta:hover {
+    color: var(--color-primary-500);
   }
 
   .tech-tag {
@@ -459,6 +535,19 @@ html {
     background: rgba(129, 140, 248, 0.08);
     border: 1px solid rgba(167, 139, 250, 0.22);
     color: var(--color-primary-300);
+  }
+
+  /* Tech tag variant for dark image overlays (on standard cards). */
+  .tag-overlay {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(6px);
   }
 
 /* On touch devices, keep scrolling but hide visual scrollbars to avoid
