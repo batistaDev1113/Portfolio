@@ -6,7 +6,7 @@ import { BsMoonFill, BsSunFill } from 'react-icons/bs';
 
 const emptySubscribe = () => () => {};
 
-export function ModeToggle() {
+export function ModeToggle({ onHero = false }: { onHero?: boolean }) {
   const mounted = useSyncExternalStore(
     emptySubscribe,
     () => true,
@@ -33,7 +33,10 @@ export function ModeToggle() {
       {isDarkMode ? (
         <BsSunFill size={15} className='text-white' />
       ) : (
-        <BsMoonFill className='text-black' size={15} />
+        <BsMoonFill
+          className={onHero ? 'text-white' : 'text-black'}
+          size={15}
+        />
       )}
     </button>
   );
