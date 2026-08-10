@@ -7,9 +7,9 @@ type LighthouseBadgeProps = {
   seo: number;
 };
 
-// Proof-of-work Lighthouse badge. Scores reflect the last real audit of the
-// production build; update them after any significant change or a failing
-// Core Web Vitals gate (see AGENTS.md).
+// Proof-of-work Lighthouse badge. Scores reflect the last mobile audit of the
+// live site (via PageSpeed Insights); update them after any significant
+// change or a failing Core Web Vitals gate (see AGENTS.md).
 const LighthouseBadge = ({
   performance,
   accessibility,
