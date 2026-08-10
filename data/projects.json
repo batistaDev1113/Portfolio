@@ -27,7 +27,7 @@
       "next/image with breakpoint-accurate sizes + AVIF/WebP, so mobile never downloads the full-resolution master files.",
       "CI gate (lint, tsc, jest, Playwright hero regression, npm audit) that reviews every PR before merge."
     ],
-    "outcome": "Mobile Lighthouse: Performance 91, TBT 20ms, LCP 3.5s, CLS 0.001, Accessibility 97, Best Practices 96, SEO 100 (local Windows audit; scores fluctuate ±5 across CPU-throttled runs). Accessibility kept AA-clean while the hero renders lazily-rendered text that doesn't wait on JS hydration.",
+    "outcome": "Mobile Lighthouse: Performance 91, TBT 20ms, LCP 3.5s, CLS 0.001, Accessibility 100, Best Practices 96, SEO 100 (local Windows audit; scores fluctuate ±5 across CPU-throttled runs). Accessibility kept AA-clean while the hero renders lazily-rendered text that doesn't wait on JS hydration.",
     "improvements": [
       "Add 3–5 more case-study routes to cover different tech stacks and outcomes.",
       "Add a Lighthouse CI badge auto-published from the main branch so the score is verifiable, not just claimed.",
