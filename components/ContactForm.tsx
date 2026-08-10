@@ -185,9 +185,6 @@ const ContactForm = memo(() => {
             aria-label='Contact Form'
             className='relative flex items-center justify-center p-8 lg:p-12'
           >
-            {/* Mobile Card Overlay Effect */}
-            <div className='absolute -top-8 left-8 right-8 lg:hidden bg-white/10 dark:bg-gray-900/10 backdrop-blur-sm rounded-t-2xl h-8' />
-
             {sending ? (
               <div className='flex flex-col items-center justify-center w-full text-center pop-in'>
                 <div className='w-20 h-20 bg-linear-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mb-6'>
