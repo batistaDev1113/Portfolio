@@ -120,6 +120,21 @@ I care about creating accessible, maintainable component systems that solve real
                 quality={80}
                 placeholder='blur'
               />
+              <div className='orbit-spin' aria-hidden='true'>
+                <span className='orbit-chip orbit-chip-1 rounded-full border border-white/15 bg-slate-900/75 px-2.5 py-1 font-mono text-[10px] text-white/90 shadow-lg sm:text-xs'>
+                  React
+                </span>
+                <span className='orbit-chip orbit-chip-2 rounded-full border border-white/15 bg-slate-900/75 px-2.5 py-1 font-mono text-[10px] text-white/90 shadow-lg sm:text-xs'>
+                  Next.js
+                </span>
+                <span className='orbit-chip orbit-chip-3 rounded-full border border-white/15 bg-slate-900/75 px-2.5 py-1 font-mono text-[10px] text-white/90 shadow-lg sm:text-xs'>
+                  TypeScript
+                </span>
+              </div>
+              <span className='orbit-ping-dot' aria-hidden='true'>
+                <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75'></span>
+                <span className='relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400'></span>
+              </span>
             </div>
             <div className='flex lg:flex-col items-center gap-6 w-full'>
               <SocialLinks

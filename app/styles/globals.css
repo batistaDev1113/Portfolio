@@ -330,9 +330,85 @@ html {
     left: -3px;
     right: -3px;
     bottom: -3px;
-    background: linear-gradient(45deg, var(--color-primary-500), var(--color-violet-a), var(--color-primary-600));
+    /* Concept A command-ring: static conic gradient (brand indigo→violet).
+       Static by design — animating background/background-position on the
+       ring would re-trigger the paint stall that PR #139 eliminated. */
+    background: conic-gradient(
+      from 210deg,
+      var(--color-primary-500),
+      var(--color-violet-a),
+      var(--color-violet-b),
+      var(--color-primary-600),
+      var(--color-primary-500)
+    );
     border-radius: 50%;
     z-index: -1;
+  }
+
+  /* Orbit / command-ring chips. The container rotates on the compositor
+     (transform-only, per the PR #139 paint-stall constraint) and each chip
+     counter-rotates so its label stays upright. Chips are anchored to the
+     edge midpoints of the square container, so their anchor traces the same
+     radius as the avatar's circumference — i.e. they orbit on the ring. */
+  .orbit-spin {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    will-change: transform;
+    animation: orbitSpin 24s linear infinite;
+  }
+
+  .orbit-chip {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+    animation: orbitCounterSpin 24s linear infinite;
+  }
+
+  .orbit-chip-1 {
+    top: 0;
+    left: 50%;
+  }
+
+  .orbit-chip-2 {
+    top: 50%;
+    right: 0;
+  }
+
+  .orbit-chip-3 {
+    bottom: 0;
+    left: 50%;
+  }
+
+  @keyframes orbitSpin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes orbitCounterSpin {
+    from {
+      transform: translate(-50%, -50%) rotate(360deg);
+    }
+    to {
+      transform: translate(-50%, -50%) rotate(0deg);
+    }
+  }
+
+  /* Status ping dot anchored on the command ring (45 deg). */
+  .orbit-ping-dot {
+    position: absolute;
+    top: 14%;
+    right: 14%;
+    width: 10px;
+    height: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
   }
 
   /* Editorial hero portrait: the <Image> keeps width/height=120 attributes
@@ -399,6 +475,11 @@ html {
       animation: none;
       transition: none;
       transform: none;
+    }
+
+    .orbit-spin,
+    .orbit-chip {
+      animation: none;
     }
   }
 
