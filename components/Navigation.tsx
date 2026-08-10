@@ -1,18 +1,41 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ModeToggle } from './ModeToggle';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const handleNavLinkClick = () => {
     setIsOpen(false);
   };
 
+  // At the top of the page the nav sits over the (dark, in both themes) hero,
+  // so it goes transparent with light ink to blend with the hero surface. Once
+  // scrolled it switches to the frosted, theme-aware look.
+  const navSurface = scrolled
+    ? 'bg-white/90 dark:bg-night/90 backdrop-blur-md border-b border-gray-200/40 dark:border-border'
+    : 'bg-transparent border-b border-transparent';
+  const linkColor = scrolled
+    ? 'text-gray-700 dark:text-gray-400'
+    : 'text-white/90';
+  const linkHover = scrolled
+    ? 'hover:text-primary-600 dark:hover:text-primary-300 hover:border-primary-500'
+    : 'hover:text-white hover:border-violet-a';
+
   return (
-    <nav className='sticky top-0 z-100 w-full bg-white/90 dark:bg-night/90 backdrop-blur-md border-b border-gray-200/40 dark:border-border px-6 py-3 transition-all duration-300'>
+    <nav
+      className={`sticky top-0 z-100 w-full px-6 py-3 transition-all duration-300 ${navSurface}`}
+    >
       <div className='flex flex-wrap items-center justify-between'>
         <Link
           href='/'
@@ -21,11 +44,15 @@ const Navigation = () => {
           Yunior B.
         </Link>
         <div className='flex items-center space-x-8'>
-          <ModeToggle />
+          <ModeToggle onHero={!scrolled} />
           <button
             onClick={() => setIsOpen(!isOpen)}
             type='button'
-            className='inline-flex items-center rounded-lg p-2 text-sm text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600 md:hidden'
+            className={`inline-flex items-center rounded-lg p-2 text-sm focus:outline-none focus:ring-2 md:hidden ${
+              scrolled
+                ? 'text-gray-500 hover:bg-gray-100 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
+                : 'text-white/80 hover:bg-white/10 focus:ring-white/40'
+            }`}
             aria-controls='navbar-collapse'
             aria-expanded={isOpen}
           >
@@ -71,9 +98,9 @@ const Navigation = () => {
                 href='#skills'
                 aria-label='How I build and the tools I use'
                 onClick={handleNavLinkClick}
-                className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
+                className={`block py-2 pr-4 pl-3 md:p-0 ${linkColor}`}
               >
-                <span className='pb-1 hover:text-primary-600 dark:hover:text-primary-300 hover:border-b-2 hover:border-primary-500 hover:border-spacing-4'>
+                <span className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}>
                   How I Build
                 </span>
               </a>
@@ -83,9 +110,9 @@ const Navigation = () => {
                 href='#projects'
                 aria-label='Some projects I have built'
                 onClick={handleNavLinkClick}
-                className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
+                className={`block py-2 pr-4 pl-3 md:p-0 ${linkColor}`}
               >
-                <span className='pb-1 hover:text-primary-600 dark:hover:text-primary-300 hover:border-b-2 hover:border-primary-500 hover:border-spacing-4'>
+                <span className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}>
                   Some Projects I&apos;ve Built
                 </span>
               </a>
@@ -95,9 +122,9 @@ const Navigation = () => {
                 href='#contact'
                 aria-label="Let's connect"
                 onClick={handleNavLinkClick}
-                className='block py-2 pr-4 pl-3 text-gray-700 dark:text-gray-400 md:p-0'
+                className={`block py-2 pr-4 pl-3 md:p-0 ${linkColor}`}
               >
-                <span className='pb-1 hover:text-primary-600 dark:hover:text-primary-300 hover:border-b-2 hover:border-primary-500 hover:border-spacing-4'>
+                <span className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}>
                   Let&apos;s Connect
                 </span>
               </a>

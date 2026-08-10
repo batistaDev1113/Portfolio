@@ -318,6 +318,16 @@ html {
     background-position: 50% 50%;
   }
 
+  /* Light mode: the 300% crop exposes two adjacent translucent rgba stops whose
+     bright wash bands composite over the white page surface, painting a hard
+     diagonal "flash" line toward the bottom-right corner. A 500% crop shows a
+     single smooth sweep between the same stops — the flash collapses while the
+     gradient framing is retained. Dark mode renders those stops over near-black
+     already, so it keeps the 300% framing. */
+  .light .animated-background {
+    background-size: 500% 500%;
+  }
+
   /* Profile Image Enhancements */
   .profile-image {
     position: relative;
