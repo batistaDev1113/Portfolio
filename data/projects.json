@@ -4,7 +4,7 @@
     "name": "Portfolio",
     "slug": "portfolio",
     "description": "A single-page portfolio engineered like a product: design-token system, CSS-first motion, and a Core Web Vitals budget enforced in CI.",
-    "impact": "Lighthouse (mobile) — Performance 87 · TBT 90ms · CLS 0.001",
+    "impact": "Lighthouse (mobile) — Performance 91 · TBT 20ms · CLS 0.001",
     "technologies": [
       "React",
       "Next.js",
@@ -20,14 +20,14 @@
     "githubLink": "https://github.com/batistaDev1113/Portfolio",
     "liveDemoLink": "https://www.yuniorbatista.com/",
     "problem": "Most developer portfolios are template snapshots: heavy JS bundles, motion libraries pulling 30–80KB of gzip into the critical path, and no evidence behind a performance claim.",
-    "approach": "Treat the site as a small production app — a shared @theme design system (one indigo→violet anchor, layered dark surfaces), SSG-only routes, and measured budgets. Every change must keep the mobile Lighthouse Performance in the mid-80s-or-better band and CLS at or near 0 before it merges.",
+    "approach": "Treat the site as a small production app — a shared @theme design system (one indigo→violet anchor, layered dark surfaces), SSG-only routes, and measured budgets. Every change must keep the mobile Lighthouse Performance in the 90-or-better band and CLS at or near 0 before it merges.",
     "keyDecisions": [
       "Removed framer-motion entirely and rebuilt all entrance/scroll motion as pure-CSS @keyframes — cut ~60KB of gzip and dropped TBT, with reveals that paint without waiting on hydration.",
       "One Tailwind v4 @theme token scale instead of scattered hex values, so spacing, type scale, and color stay consistent across every section.",
       "next/image with breakpoint-accurate sizes + AVIF/WebP, so mobile never downloads the full-resolution master files.",
       "CI gate (lint, tsc, jest, Playwright hero regression, npm audit) that reviews every PR before merge."
     ],
-    "outcome": "Mobile Lighthouse: Performance 87, TBT 90ms, LCP 4.0s, CLS 0.001, Accessibility 100, Best Practices 96, SEO 100 (local Windows audit; scores fluctuate ±5 across CPU-throttled runs). Accessibility kept AA-clean while the hero renders lazily-rendered text that doesn't wait on JS hydration.",
+    "outcome": "Mobile Lighthouse: Performance 91, TBT 20ms, LCP 3.5s, CLS 0.001, Accessibility 100, Best Practices 96, SEO 100 (local Windows audit; scores fluctuate ±5 across CPU-throttled runs). Accessibility kept AA-clean while the hero renders lazily-rendered text that doesn't wait on JS hydration.",
     "improvements": [
       "Add 3–5 more case-study routes to cover different tech stacks and outcomes.",
       "Add a Lighthouse CI badge auto-published from the main branch so the score is verifiable, not just claimed.",

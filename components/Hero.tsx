@@ -4,7 +4,7 @@
 // Hero entrance animations are pure-CSS (@keyframes, see globals.css) so the
 // LCP hero-bio text renders without requiring framer-motion to hydrate.
 import Image from 'next/image';
-import { memo, useEffect } from 'react';
+import { memo } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
 import { useTheme } from 'next-themes';
 import portraitDark from '../public/images/portrait-dark.jpg';
@@ -20,20 +20,6 @@ const Hero = memo(() => {
   const HERO_ABOUT_TEXT = `Hi, I'm Yunior—a product-minded Senior Frontend Engineer. I turn complex ideas into intuitive, scalable web experiences with React, Next.js, and TypeScript, shipping accessible, high-performance interfaces that are as maintainable as they are polished.
 
 I care about creating accessible, maintainable component systems that solve real product problems through thoughtful engineering and user-centered design.`;
-
-  useEffect(() => {
-    // Preload resume PDF for faster access
-    const link = document.createElement('link');
-    link.rel = 'prefetch';
-    link.href = '/Yunior-Batista-Resume.pdf';
-    document.head.appendChild(link);
-
-    return () => {
-      if (document.head.contains(link)) {
-        document.head.removeChild(link);
-      }
-    };
-  }, []);
 
   const handleDownloadResume = () => {
     const link = document.createElement('a');

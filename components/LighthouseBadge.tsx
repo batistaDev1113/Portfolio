@@ -43,7 +43,7 @@ const LighthouseBadge = ({
             className='flex items-center gap-1'
             title={`${label}: ${value}/100`}
           >
-            <span className='text-gray-400 dark:text-gray-500'>{label}</span>
+            <span className='text-gray-600 dark:text-gray-400'>{label}</span>
             <span className='font-semibold text-gray-800 dark:text-gray-100'>
               {value}
             </span>
