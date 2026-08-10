@@ -106,7 +106,14 @@ html {
     font-size: 0.75rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
-    color: var(--color-primary-500);
+    color: var(--color-primary-600);
+  }
+
+  /* Hero eyebrow: the hero section is dark in BOTH themes, so it needs the
+     light violet ink regardless of theme — primary-600 would sit at ~3.2:1
+     on the near-black gradient. */
+  .animated-background .eyebrow {
+    color: var(--color-violet-b);
   }
 
   .dark .eyebrow {
