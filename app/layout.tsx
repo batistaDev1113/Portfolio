@@ -11,13 +11,13 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   variable: '--font-space-grotesk',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '600'],
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-jetbrains-mono',
-  weight: ['400', '500'],
+  weight: ['400'],
 });
 
 type MetadataProps = Metadata;

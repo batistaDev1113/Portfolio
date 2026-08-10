@@ -69,8 +69,8 @@ const Toolbox = () => {
         </p>
         <div className='mt-6'>
           <LighthouseBadge
-            performance={87}
-            accessibility={100}
+            performance={91}
+            accessibility={97}
             bestPractices={96}
             seo={100}
           />

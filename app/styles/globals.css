@@ -215,11 +215,9 @@ html {
 
   @keyframes heroEntrance {
     from {
-      opacity: 0.001;
       transform: translateY(6px);
     }
     to {
-      opacity: 1;
       transform: translateY(0);
     }
   }
@@ -293,7 +291,12 @@ html {
 
   /* Animated Gradient Background.
      Uses the indigo/violet anchor in both light and dark modes (the hero is
-     intentionally dark in both themes — the card + text are white-on-dark). */
+     intentionally dark in both themes — the card + text are white-on-dark).
+     Static by design: the full-viewport 300%x300% gradient with animated
+     background-position forced an ever-repainting compositing surface that
+     stalled first paint on mobile (render-delay ~1.5s before the LCP hero
+     text could paint). A single painted frame is visually indistinguishable
+     from the slow drift. */
   .animated-background {
     background: linear-gradient(
       -45deg,
@@ -305,27 +308,7 @@ html {
       #140d2e
     );
     background-size: 300% 300%;
-    background-position: 0% 50%;
-    animation: gradientShift 16s ease-in-out infinite;
-    will-change: background-position;
-  }
-
-  @keyframes gradientShift {
-    0% {
-      background-position: 0% 50%;
-    }
-    25% {
-      background-position: 50% 100%;
-    }
-    50% {
-      background-position: 100% 50%;
-    }
-    75% {
-      background-position: 50% 0%;
-    }
-    100% {
-      background-position: 0% 50%;
-    }
+    background-position: 50% 50%;
   }
 
   /* Profile Image Enhancements */
