@@ -62,6 +62,6 @@ describe('Hero', () => {
     expect(heroImage).toBeInTheDocument();
     expect(heroImage).toHaveAttribute('width', '120');
     expect(heroImage).toHaveAttribute('height', '120');
-    expect(heroImage).toHaveClass('rounded-full');
+    expect(heroImage).toHaveClass('hero-photo');
   });
 });

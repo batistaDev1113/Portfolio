@@ -109,13 +109,15 @@ I care about creating accessible, maintainable component systems that solve real
         <div className='lg:col-span-5 flex lg:justify-end justify-center hero-anim hero-anim-2'>
           <div className='flex flex-col items-center lg:items-end gap-10'>
             <div className='hero-portrait profile-image'>
+              <span className='hero-glow' aria-hidden='true' />
+              <span className='hero-ring' aria-hidden='true' />
               <Image
                 alt='Yunior Batista - Senior Frontend Engineer'
                 height={120}
                 src={portraitSrc}
                 width={120}
                 sizes='(max-width: 1023px) 120px, (max-width: 1279px) 160px, (max-width: 1535px) 200px, 240px'
-                className='rounded-full shadow-2xl object-cover'
+                className='hero-photo shadow-2xl object-cover'
                 priority
                 quality={80}
                 placeholder='blur'
