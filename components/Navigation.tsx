@@ -23,10 +23,10 @@ const Navigation = () => {
   // so it goes transparent with light ink to blend with the hero surface. Once
   // scrolled it switches to the frosted, theme-aware look.
   const navSurface = scrolled
-    ? 'bg-white/90 dark:bg-night/90 backdrop-blur-md border-b border-gray-200/40 dark:border-border'
+    ? 'bg-white/90 dark:bg-night/90 backdrop-blur-md border-b border-ink-200/40 dark:border-border'
     : 'bg-transparent border-b border-transparent';
   const linkColor = scrolled
-    ? 'text-gray-700 dark:text-gray-400'
+    ? 'text-ink-700 dark:text-ink-400'
     : 'text-white/90';
   const linkHover = scrolled
     ? 'hover:text-primary-600 dark:hover:text-primary-300 hover:border-primary-500'
@@ -50,7 +50,7 @@ const Navigation = () => {
             type='button'
             className={`inline-flex items-center rounded-lg p-2 text-sm focus:outline-none focus:ring-2 md:hidden ${
               scrolled
-                ? 'text-gray-500 hover:bg-gray-100 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600'
+                ? 'text-ink-500 hover:bg-ink-100 focus:ring-ink-200 dark:text-ink-400 dark:hover:bg-ink-700 dark:focus:ring-ink-600'
                 : 'text-white/80 hover:bg-white/10 focus:ring-white/40'
             }`}
             aria-controls='navbar-collapse'
@@ -100,7 +100,9 @@ const Navigation = () => {
                 onClick={handleNavLinkClick}
                 className={`block py-2 pr-4 pl-3 md:p-0 ${linkColor}`}
               >
-                <span className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}>
+                <span
+                  className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}
+                >
                   How I Build
                 </span>
               </a>
@@ -112,7 +114,9 @@ const Navigation = () => {
                 onClick={handleNavLinkClick}
                 className={`block py-2 pr-4 pl-3 md:p-0 ${linkColor}`}
               >
-                <span className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}>
+                <span
+                  className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}
+                >
                   Some Projects I&apos;ve Built
                 </span>
               </a>
@@ -124,7 +128,9 @@ const Navigation = () => {
                 onClick={handleNavLinkClick}
                 className={`block py-2 pr-4 pl-3 md:p-0 ${linkColor}`}
               >
-                <span className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}>
+                <span
+                  className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}
+                >
                   Let&apos;s Connect
                 </span>
               </a>

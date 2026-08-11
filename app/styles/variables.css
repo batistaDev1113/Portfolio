@@ -1,0 +1,140 @@
+/* Design tokens — single source of truth for every color on the site.
+   Imported by app/styles/globals.css (after the tailwindcss import) so
+   Tailwind v4 emits utilities from these theme variables. Kept in a
+   separate file so the token surface is reviewable independently of the
+   component styles that consume it.
+
+   Conventions:
+   - primary*: the single indigo -> violet anchor.
+   - ink*:      Tailwind gray scale (unchanged values) for neutral text/borders.
+   - info*:     blue family (links, focus rings).
+   - danger*:   red family (form errors).
+   - success*:  green family (form success states).
+   - live:      emerald accent (hero availability dot).
+   - hero-*:    hero-only colors (dark gradient text + animated backdrop).
+   - glass-*:   white-alpha fills/borders for frosted surfaces.
+   - brand-*:   primary/violet-alpha tints for chips and image overlays.
+   - shadow-*:  elevation presets (usable as `shadow-card`, etc.). */
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --color-primary-50: #eef2ff;
+  --color-primary-100: #e0e7ff;
+  --color-primary-200: #c7d2fe;
+  --color-primary-300: #a5b4fc;
+  --color-primary-400: #818cf8;
+  --color-primary-500: #6366f1;
+  --color-primary-600: #4f46e5;
+  --color-primary-700: #4338ca;
+  --color-primary-800: #3730a3;
+  --color-primary-900: #312e81;
+
+  --color-violet-a: #8b5cf6;
+  --color-violet-b: #a78bfa;
+
+  /* Layered surfaces for dark mode: base -> raised -> elevated. */
+  --color-night: #07090f;
+  --color-surface: #0b0e16;
+  --color-raised: #111623;
+  --color-border: #1d2434;
+  --color-border-strong: #2a3347;
+
+  /* Light mode surfaces: near-white base + soft borders. */
+  --color-light-surface: #ffffff;
+
+  /* Neutral ink scale (identical values to Tailwind gray). */
+  --color-ink-50: #f9fafb;
+  --color-ink-100: #f3f4f6;
+  --color-ink-200: #e5e7eb;
+  --color-ink-300: #d1d5db;
+  --color-ink-400: #9ca3af;
+  --color-ink-500: #6b7280;
+  --color-ink-600: #4b5563;
+  --color-ink-700: #374151;
+  --color-ink-800: #1f2937;
+  --color-ink-900: #111827;
+
+  /* Body text (former slate-900 / slate-100; kept distinct from ink because
+     the values differ). */
+  --color-body-text: #0f172a;
+  --color-body-text-dark: #f1f5f9;
+
+  /* Info (blue family). */
+  --color-info-200: #bfdbfe;
+  --color-info-400: #60a5fa;
+  --color-info-500: #3b82f6;
+  --color-info-600: #2563eb;
+
+  /* Danger (red family). */
+  --color-danger-50: #fef2f2;
+  --color-danger-200: #fecaca;
+  --color-danger-400: #f87171;
+  --color-danger-500: #ef4444;
+  --color-danger-600: #dc2626;
+  --color-danger-700: #b91c1c;
+  --color-danger-800: #991b1b;
+  --color-danger-900: #7f1d1d;
+
+  /* Success (green family). */
+  --color-success-50: #f0fdf4;
+  --color-success-200: #bbf7d0;
+  --color-success-400: #4ade80;
+  --color-success-500: #22c55e;
+  --color-success-700: #15803d;
+  --color-success-800: #166534;
+  --color-success-900: #14532d;
+
+  /* Live accent (emerald-400). */
+  --color-live: #34d399;
+
+  /* Hero gradient text (blue-200 -> violet-200 -> indigo-200). */
+  --color-hero-gradient-start: #bfdbfe;
+  --color-hero-gradient-mid: #ddd6fe;
+  --color-hero-gradient-end: #c7d2fe;
+
+  /* Animated hero backdrop stops + glow washes. */
+  --color-hero-bg-start: #020617;
+  --color-hero-bg-mid: #0f0c29;
+  --color-hero-bg-deep: #0a0f1e;
+  --color-hero-bg-end: #140d2e;
+  --color-hero-glow-primary: rgba(79, 70, 229, 0.18);
+  --color-hero-glow-violet: rgba(139, 92, 246, 0.16);
+
+  /* White-alpha glass surfaces. */
+  --color-glass-text: rgba(255, 255, 255, 0.85);
+  --color-glass-text-strong: rgba(255, 255, 255, 0.9);
+  --color-glass-fill: rgba(255, 255, 255, 0.08);
+  --color-glass-fill-dark: rgba(255, 255, 255, 0.05);
+  --color-glass-fill-tag: rgba(255, 255, 255, 0.12);
+  --color-glass-fill-faint: rgba(255, 255, 255, 0.04);
+  --color-glass-fill-hover: rgba(255, 255, 255, 0.1);
+  --color-glass-border: rgba(255, 255, 255, 0.22);
+  --color-glass-border-soft: rgba(255, 255, 255, 0.15);
+  --color-glass-border-dark: rgba(255, 255, 255, 0.12);
+  --color-glass-border-hover: rgba(255, 255, 255, 0.45);
+
+  /* Brand (primary/violet) alpha tints. */
+  --color-brand-tint-soft: rgba(79, 70, 229, 0.06);
+  --color-brand-tint-border: rgba(79, 70, 229, 0.16);
+  --color-brand-tint-hover: rgba(79, 70, 229, 0.1);
+  --color-brand-tint-faint: rgba(79, 70, 229, 0.05);
+  --color-brand-tint-border-faint: rgba(79, 70, 229, 0.14);
+  --color-brand-tint-overlay: rgba(79, 70, 229, 0.12);
+  --color-violet-tint-overlay: rgba(139, 92, 246, 0.12);
+  --color-brand-tint-dark: rgba(129, 140, 248, 0.08);
+  --color-violet-border-dark: rgba(167, 139, 250, 0.22);
+
+  /* Elevation presets. */
+  --shadow-card:
+    0 1px 2px rgba(15, 23, 42, 0.04), 0 8px 24px rgba(15, 23, 42, 0.06);
+  --shadow-card-dark: 0 8px 30px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0 20px 45px rgba(79, 70, 229, 0.12);
+  --shadow-card-hover-dark: 0 25px 55px rgba(0, 0, 0, 0.5);
+  --shadow-btn-primary: 0 10px 25px rgba(79, 70, 229, 0.3);
+  --shadow-btn-primary-hover: 0 15px 35px rgba(79, 70, 229, 0.4);
+  --shadow-hero-card: 0 25px 60px rgba(0, 0, 0, 0.5);
+  --shadow-hero-card-dark: 0 25px 60px rgba(0, 0, 0, 0.6);
+}

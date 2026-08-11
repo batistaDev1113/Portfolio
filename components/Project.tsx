@@ -52,10 +52,10 @@ const Project = memo(
             </div>
             <div className='md:col-span-5 p-8 flex flex-col justify-center gap-4 relative'>
               <span className='eyebrow'>// Featured</span>
-              <h3 className='fluid-subtitle text-2xl md:text-3xl font-bold tracking-tight text-gray-900 dark:text-white'>
+              <h3 className='fluid-subtitle text-2xl md:text-3xl font-bold tracking-tight text-ink-900 dark:text-white'>
                 {name}
               </h3>
-              <p className='text-gray-700 dark:text-gray-300 text-sm leading-relaxed line-clamp-4'>
+              <p className='text-ink-700 dark:text-ink-300 text-sm leading-relaxed line-clamp-4'>
                 {description}
               </p>
               {impact && (

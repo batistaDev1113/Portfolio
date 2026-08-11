@@ -32,10 +32,10 @@ const LighthouseBadge = ({
         className='h-4 w-4 shrink-0 text-primary-600 dark:text-primary-300'
         aria-hidden='true'
       />
-      <span className='font-mono text-xs uppercase tracking-[0.08em] text-gray-500 dark:text-gray-400'>
+      <span className='font-mono text-xs uppercase tracking-[0.08em] text-ink-500 dark:text-ink-400'>
         Lighthouse
       </span>
-      <span className='hidden h-4 w-px bg-gray-300 dark:bg-gray-600 sm:block' />
+      <span className='hidden h-4 w-px bg-ink-300 dark:bg-ink-600 sm:block' />
       <ul className='flex items-center gap-2 font-mono text-xs'>
         {scores.map(({ label, value }) => (
           <li
@@ -43,8 +43,8 @@ const LighthouseBadge = ({
             className='flex items-center gap-1'
             title={`${label}: ${value}/100`}
           >
-            <span className='text-gray-600 dark:text-gray-400'>{label}</span>
-            <span className='font-semibold text-gray-800 dark:text-gray-100'>
+            <span className='text-ink-600 dark:text-ink-400'>{label}</span>
+            <span className='font-semibold text-ink-800 dark:text-ink-100'>
               {value}
             </span>
           </li>

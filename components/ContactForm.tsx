@@ -123,12 +123,12 @@ const ContactForm = memo(() => {
     >
       <div className='flex flex-col items-center mb-16'>
         <p className='eyebrow'>// 03 · Contact</p>
-        <h2 className='fluid-title text-gray-900 dark:text-white mt-4 text-center'>
+        <h2 className='fluid-title text-ink-900 dark:text-white mt-4 text-center'>
           Let&apos;s Connect
         </h2>
-        <p className='mt-4 max-w-2xl text-center text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-6'>
-          Have a project in mind, a role to discuss, or just want to say hi?
-          The form goes straight to my inbox.
+        <p className='mt-4 max-w-2xl text-center text-ink-600 dark:text-ink-400 text-sm sm:text-base leading-6'>
+          Have a project in mind, a role to discuss, or just want to say hi? The
+          form goes straight to my inbox.
         </p>
       </div>
 
@@ -136,7 +136,7 @@ const ContactForm = memo(() => {
         {/* Desktop Split Layout */}
         <div className='lg:grid lg:grid-cols-2 lg:min-h-150'>
           {/* Contact Info Panel */}
-          <section className='relative p-8 lg:p-12 bg-linear-to-br from-primary-800 via-primary-700 to-violet-a dark:from-[#0b0e16] dark:via-[#111623] dark:to-[#0b0e16] overflow-hidden flex flex-col justify-center gap-6 natural'>
+          <section className='relative p-8 lg:p-12 bg-linear-to-br from-primary-800 via-primary-700 to-violet-a dark:from-surface dark:via-raised dark:to-surface overflow-hidden flex flex-col justify-center gap-6 natural'>
             {/* Ambient glow */}
             <div className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-violet-a/25 blur-3xl pointer-events-none' />
             <div className='absolute -bottom-20 -left-16 w-64 h-64 rounded-full bg-primary-500/20 blur-3xl pointer-events-none' />
@@ -151,8 +151,8 @@ const ContactForm = memo(() => {
                 worth talking about.
               </h3>
               <p className='mt-4 text-sm text-white/70 leading-6 max-w-sm'>
-                I&apos;m always open to discussing new projects, creative
-                ideas, or opportunities to be part of your vision.
+                I&apos;m always open to discussing new projects, creative ideas,
+                or opportunities to be part of your vision.
               </p>
 
               <div className='mt-8 flex flex-wrap gap-3'>
@@ -187,13 +187,13 @@ const ContactForm = memo(() => {
           >
             {sending ? (
               <div className='flex flex-col items-center justify-center w-full text-center pop-in'>
-                <div className='w-20 h-20 bg-linear-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center mb-6'>
+                <div className='w-20 h-20 bg-linear-to-r from-success-400 to-info-500 rounded-full flex items-center justify-center mb-6'>
                   <FaRegPaperPlane className='text-2xl text-white animate-bounce' />
                 </div>
-                <h2 className='text-2xl font-semibold text-gray-900 dark:text-white mb-2'>
+                <h2 className='text-2xl font-semibold text-ink-900 dark:text-white mb-2'>
                   Message Sent!
                 </h2>
-                <p className='text-gray-600 dark:text-gray-400'>
+                <p className='text-ink-600 dark:text-ink-400'>
                   Thank you for reaching out. I&apos;ll get back to you soon.
                 </p>
               </div>
@@ -209,7 +209,7 @@ const ContactForm = memo(() => {
                   <div className='group'>
                     <label
                       htmlFor='FullName'
-                      className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'
+                      className='block text-sm font-medium text-ink-700 dark:text-ink-300 mb-2'
                     >
                       Full Name
                     </label>
@@ -227,16 +227,16 @@ const ContactForm = memo(() => {
                       }
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.fullName
-? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
-                      : 'border-gray-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
-                  } bg-white dark:bg-surface text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-border`}
+                          ? 'border-danger-500 focus:border-danger-500 focus:ring-danger-500/20'
+                          : 'border-ink-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
+                      } bg-white dark:bg-surface text-ink-900 dark:text-ink-100 placeholder-ink-500 dark:placeholder-ink-400 focus:ring-2 transition-all duration-200 outline-none hover:border-ink-300 dark:hover:border-border`}
                       placeholder='Enter your full name'
                     />
                     {errors.fullName && (
                       <p
                         id={fullNameErrorId}
                         role='alert'
-                        className='mt-1 text-sm text-red-600 dark:text-red-400'
+                        className='mt-1 text-sm text-danger-600 dark:text-danger-400'
                       >
                         {errors.fullName}
                       </p>
@@ -247,7 +247,7 @@ const ContactForm = memo(() => {
                   <div className='group'>
                     <label
                       htmlFor='Email'
-                      className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'
+                      className='block text-sm font-medium text-ink-700 dark:text-ink-300 mb-2'
                     >
                       Email Address
                     </label>
@@ -263,16 +263,16 @@ const ContactForm = memo(() => {
                       aria-describedby={errors.email ? emailErrorId : undefined}
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.email
-? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
-                      : 'border-gray-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
-                  } bg-white dark:bg-surface text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-border`}
+                          ? 'border-danger-500 focus:border-danger-500 focus:ring-danger-500/20'
+                          : 'border-ink-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
+                      } bg-white dark:bg-surface text-ink-900 dark:text-ink-100 placeholder-ink-500 dark:placeholder-ink-400 focus:ring-2 transition-all duration-200 outline-none hover:border-ink-300 dark:hover:border-border`}
                       placeholder='your.email@example.com'
                     />
                     {errors.email && (
                       <p
                         id={emailErrorId}
                         role='alert'
-                        className='mt-1 text-sm text-red-600 dark:text-red-400'
+                        className='mt-1 text-sm text-danger-600 dark:text-danger-400'
                       >
                         {errors.email}
                       </p>
@@ -283,7 +283,7 @@ const ContactForm = memo(() => {
                   <div className='group'>
                     <label
                       htmlFor='Message'
-                      className='block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2'
+                      className='block text-sm font-medium text-ink-700 dark:text-ink-300 mb-2'
                     >
                       Message
                     </label>
@@ -302,15 +302,15 @@ const ContactForm = memo(() => {
                       placeholder='Tell me about your project or just say hello...'
                       className={`w-full px-4 py-3 rounded-xl border ${
                         errors.message
-? 'border-red-500 focus:border-red-500 focus:ring-red-500/20'
-                      : 'border-gray-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
-                  } bg-white dark:bg-surface text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 transition-all duration-200 outline-none hover:border-gray-300 dark:hover:border-border resize-none`}
+                          ? 'border-danger-500 focus:border-danger-500 focus:ring-danger-500/20'
+                          : 'border-ink-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
+                      } bg-white dark:bg-surface text-ink-900 dark:text-ink-100 placeholder-ink-500 dark:placeholder-ink-400 focus:ring-2 transition-all duration-200 outline-none hover:border-ink-300 dark:hover:border-border resize-none`}
                     />
                     {errors.message && (
                       <p
                         id={messageErrorId}
                         role='alert'
-                        className='mt-1 text-sm text-red-600 dark:text-red-400'
+                        className='mt-1 text-sm text-danger-600 dark:text-danger-400'
                       >
                         {errors.message}
                       </p>
@@ -345,8 +345,8 @@ const ContactForm = memo(() => {
                       }
                       className={`p-4 rounded-xl text-sm font-medium slide-in ${
                         message.includes('Error')
-                          ? 'bg-red-50 text-red-700 border border-red-200 dark:bg-red-900/20 dark:text-red-400 dark:border-red-800'
-                          : 'bg-green-50 text-green-700 border border-green-200 dark:bg-green-900/20 dark:text-green-400 dark:border-green-800'
+                          ? 'bg-danger-50 text-danger-700 border border-danger-200 dark:bg-danger-900/20 dark:text-danger-400 dark:border-danger-800'
+                          : 'bg-success-50 text-success-700 border border-success-200 dark:bg-success-900/20 dark:text-success-400 dark:border-success-800'
                       }`}
                     >
                       {message}

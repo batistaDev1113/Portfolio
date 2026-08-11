@@ -28,7 +28,7 @@ export function ModeToggle({ onHero = false }: { onHero?: boolean }) {
       aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
       aria-pressed={isDarkMode}
       onClick={toggleTheme}
-      className='w-6 h-6 flex items-center justify-center cursor-pointer transition:ease-in-out hover:scale-110 duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 rounded'
+      className='w-6 h-6 flex items-center justify-center cursor-pointer transition:ease-in-out hover:scale-110 duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-info-500/60 rounded'
     >
       {isDarkMode ? (
         <BsSunFill size={15} className='text-white' />
