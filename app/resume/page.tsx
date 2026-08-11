@@ -3,39 +3,39 @@ export default function ResumePage() {
     <main className='min-h-screen px-6 py-12 md:px-10 lg:px-16'>
       <article className='mx-auto max-w-4xl space-y-10'>
         <header className='space-y-4'>
-          <p className='text-sm uppercase tracking-wide text-gray-500'>
+          <p className='text-sm uppercase tracking-wide text-ink-500'>
             Accessible Resume
           </p>
-          <h1 className='text-4xl font-bold tracking-tight text-gray-900 dark:text-gray-100'>
+          <h1 className='text-4xl font-bold tracking-tight text-ink-900 dark:text-ink-100'>
             Yunior Batista
           </h1>
-          <p className='text-lg text-gray-700 dark:text-gray-300'>
+          <p className='text-lg text-ink-700 dark:text-ink-300'>
             Senior Frontend Engineer
           </p>
-          <p className='text-sm text-gray-700 dark:text-gray-300'>
+          <p className='text-sm text-ink-700 dark:text-ink-300'>
             Kissimmee, FL | 407-785-5587 | yuniorbatista1113@gmail.com
           </p>
-          <p className='text-sm text-gray-700 dark:text-gray-300'>
+          <p className='text-sm text-ink-700 dark:text-ink-300'>
             linkedin.com/in/yuniorbatista | yuniorbatista.com
           </p>
-          <p className='text-base text-gray-700 dark:text-gray-300'>
+          <p className='text-base text-ink-700 dark:text-ink-300'>
             Product-minded Software Engineer with 8+ years of experience
             building scalable, accessible, user-centered web applications and
             digital products. Expertise in frontend architecture, React,
             Next.js, TypeScript, Angular, Vue, and component-based application
             development.
           </p>
-          <p className='text-sm text-gray-600 dark:text-gray-400'>
+          <p className='text-sm text-ink-600 dark:text-ink-400'>
             Prefer a printable document? Return to the home page and use
             Download Resume to get the PDF.
           </p>
         </header>
 
         <section className='space-y-3'>
-          <h2 className='text-2xl font-semibold text-gray-900 dark:text-gray-100'>
+          <h2 className='text-2xl font-semibold text-ink-900 dark:text-ink-100'>
             Summary
           </h2>
-          <p className='text-base leading-7 text-gray-700 dark:text-gray-300'>
+          <p className='text-base leading-7 text-ink-700 dark:text-ink-300'>
             Combines strong UX/UI judgment with technical leadership across
             system design, reusable component systems, API integration, testing
             strategy, performance, and reliable production delivery.
@@ -43,10 +43,10 @@ export default function ResumePage() {
         </section>
 
         <section className='space-y-3'>
-          <h2 className='text-2xl font-semibold text-gray-900 dark:text-gray-100'>
+          <h2 className='text-2xl font-semibold text-ink-900 dark:text-ink-100'>
             Technical Skills
           </h2>
-          <div className='space-y-4 text-base text-gray-700 dark:text-gray-300'>
+          <div className='space-y-4 text-base text-ink-700 dark:text-ink-300'>
             <p>
               <span className='font-semibold'>Frontend:</span> React, Next.js,
               Angular, Vue.js, Vuetify, TypeScript, JavaScript, HTML5, CSS/SCSS,
@@ -76,18 +76,18 @@ export default function ResumePage() {
         </section>
 
         <section className='space-y-4'>
-          <h2 className='text-2xl font-semibold text-gray-900 dark:text-gray-100'>
+          <h2 className='text-2xl font-semibold text-ink-900 dark:text-ink-100'>
             Professional Experience
           </h2>
 
           <section className='space-y-2'>
-            <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
+            <h3 className='text-xl font-semibold text-ink-900 dark:text-ink-100'>
               Design Interactive - Software Engineer
             </h3>
-            <p className='text-sm text-gray-600 dark:text-gray-400'>
+            <p className='text-sm text-ink-600 dark:text-ink-400'>
               Remote | February 2024 - Present
             </p>
-            <ul className='list-disc space-y-2 pl-6 text-base text-gray-700 dark:text-gray-300'>
+            <ul className='list-disc space-y-2 pl-6 text-base text-ink-700 dark:text-ink-300'>
               <li>
                 Build and maintain secure, scalable enterprise web applications
                 supporting mission-critical government workflows and strict
@@ -125,13 +125,13 @@ export default function ResumePage() {
           </section>
 
           <section className='space-y-2'>
-            <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
+            <h3 className='text-xl font-semibold text-ink-900 dark:text-ink-100'>
               Airship - Software Engineer
             </h3>
-            <p className='text-sm text-gray-600 dark:text-gray-400'>
+            <p className='text-sm text-ink-600 dark:text-ink-400'>
               Remote | January 2022 - November 2022
             </p>
-            <ul className='list-disc space-y-2 pl-6 text-base text-gray-700 dark:text-gray-300'>
+            <ul className='list-disc space-y-2 pl-6 text-base text-ink-700 dark:text-ink-300'>
               <li>
                 Developed and maintained 5+ responsive web applications using
                 React, Next.js, TypeScript, JavaScript, HTML, CSS, and Tailwind
@@ -156,13 +156,13 @@ export default function ResumePage() {
           </section>
 
           <section className='space-y-2'>
-            <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
+            <h3 className='text-xl font-semibold text-ink-900 dark:text-ink-100'>
               Power Home Remodeling - UI Engineer
             </h3>
-            <p className='text-sm text-gray-600 dark:text-gray-400'>
+            <p className='text-sm text-ink-600 dark:text-ink-400'>
               Remote | May 2020 - January 2022
             </p>
-            <ul className='list-disc space-y-2 pl-6 text-base text-gray-700 dark:text-gray-300'>
+            <ul className='list-disc space-y-2 pl-6 text-base text-ink-700 dark:text-ink-300'>
               <li>
                 Developed and maintained reusable React components for an
                 internal design system using JavaScript, TypeScript, Redux, and
@@ -188,13 +188,13 @@ export default function ResumePage() {
           </section>
 
           <section className='space-y-2'>
-            <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
+            <h3 className='text-xl font-semibold text-ink-900 dark:text-ink-100'>
               Darden Restaurants - Frontend Developer
             </h3>
-            <p className='text-sm text-gray-600 dark:text-gray-400'>
+            <p className='text-sm text-ink-600 dark:text-ink-400'>
               Orlando, FL | June 2019 - April 2020
             </p>
-            <ul className='list-disc space-y-2 pl-6 text-base text-gray-700 dark:text-gray-300'>
+            <ul className='list-disc space-y-2 pl-6 text-base text-ink-700 dark:text-ink-300'>
               <li>
                 Developed and executed A/B tests using JavaScript, jQuery, and
                 Adobe Target, contributing to a 20% increase in revenue through
@@ -214,13 +214,13 @@ export default function ResumePage() {
           </section>
 
           <section className='space-y-2'>
-            <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
+            <h3 className='text-xl font-semibold text-ink-900 dark:text-ink-100'>
               Visit Orlando - Frontend Developer
             </h3>
-            <p className='text-sm text-gray-600 dark:text-gray-400'>
+            <p className='text-sm text-ink-600 dark:text-ink-400'>
               Orlando, FL | January 2018 - April 2020
             </p>
-            <ul className='list-disc space-y-2 pl-6 text-base text-gray-700 dark:text-gray-300'>
+            <ul className='list-disc space-y-2 pl-6 text-base text-ink-700 dark:text-ink-300'>
               <li>
                 Refactored and optimized web-development workflows using HTML,
                 JavaScript, and Agility CMS, improving development efficiency
@@ -241,16 +241,16 @@ export default function ResumePage() {
         </section>
 
         <section className='space-y-3'>
-          <h2 className='text-2xl font-semibold text-gray-900 dark:text-gray-100'>
+          <h2 className='text-2xl font-semibold text-ink-900 dark:text-ink-100'>
             Project
           </h2>
-          <h3 className='text-xl font-semibold text-gray-900 dark:text-gray-100'>
+          <h3 className='text-xl font-semibold text-ink-900 dark:text-ink-100'>
             Portfolio Website
           </h3>
-          <p className='text-sm text-gray-600 dark:text-gray-400'>
+          <p className='text-sm text-ink-600 dark:text-ink-400'>
             Next.js, React, TypeScript, Tailwind CSS, Framer Motion, SendGrid
           </p>
-          <ul className='list-disc space-y-2 pl-6 text-base text-gray-700 dark:text-gray-300'>
+          <ul className='list-disc space-y-2 pl-6 text-base text-ink-700 dark:text-ink-300'>
             <li>
               Designed and developed a responsive portfolio platform to showcase
               frontend engineering, UI/UX, and product-development work.
@@ -268,13 +268,13 @@ export default function ResumePage() {
         </section>
 
         <section className='space-y-3'>
-          <h2 className='text-2xl font-semibold text-gray-900 dark:text-gray-100'>
+          <h2 className='text-2xl font-semibold text-ink-900 dark:text-ink-100'>
             Education
           </h2>
-          <p className='text-base text-gray-700 dark:text-gray-300'>
+          <p className='text-base text-ink-700 dark:text-ink-300'>
             Bachelor of Science in Computer Science
           </p>
-          <p className='text-sm text-gray-600 dark:text-gray-400'>
+          <p className='text-sm text-ink-600 dark:text-ink-400'>
             Florida State University | Tallahassee, FL
           </p>
         </section>

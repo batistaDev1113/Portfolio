@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import "./variables.css";
 @custom-variant dark (&:where(.dark, .dark *));
 @plugin "@tailwindcss/forms";
 
@@ -9,61 +10,12 @@
 @source "../../components/**/*.{js,jsx,ts,tsx}";
 @source "../../app/**/*.{js,jsx,ts,tsx}";
 
-/* Design tokens. Single indigo -> violet anchor (primary), layered dark
-   surfaces, and font families wired to the next/font variables loaded in
-   app/layout.tsx. Tailwind v4 emits utilities from the theme variables
-   (e.g. --color-primary -> bg-primary/text-primary, --font-display ->
-   font-display). */
-@theme {
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space-grotesk), var(--font-inter), sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
-
-  --color-primary-50: #eef2ff;
-  --color-primary-100: #e0e7ff;
-  --color-primary-200: #c7d2fe;
-  --color-primary-300: #a5b4fc;
-  --color-primary-400: #818cf8;
-  --color-primary-500: #6366f1;
-  --color-primary-600: #4f46e5;
-  --color-primary-700: #4338ca;
-  --color-primary-800: #3730a3;
-  --color-primary-900: #312e81;
-
-  --color-violet-a: #8b5cf6;
-  --color-violet-b: #a78bfa;
-
-  /* Layered surfaces for dark mode: base -> raised -> elevated. */
-  --color-night: #07090f;
-  --color-surface: #0b0e16;
-  --color-raised: #111623;
-  --color-border: #1d2434;
-  --color-border-strong: #2a3347;
-
-  /* Light mode surfaces: near-white base + soft borders. */
-  --color-light-surface: #ffffff;
-}
-
 * {
   box-sizing: border-box;
 }
 
-:root {
-  --foreground-rgb: 255, 255, 255;
-  --background-start-rgb: #0e182a;
-  --background-end-rgb: #0e182a;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: #0e182a;
-    --background-end-rgb: #0e182a;
-  }
-}
-
 body {
-    @apply bg-light-surface dark:bg-night text-slate-900 dark:text-slate-100 transition-colors duration-300;
+    @apply bg-light-surface dark:bg-night text-body-text dark:text-body-text-dark transition-colors duration-300;
 }
 
 html {
@@ -139,14 +91,13 @@ html {
   .card-elevated {
     background: var(--color-light-surface);
     border: 1px solid var(--color-primary-100);
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
-      0 8px 24px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow-card);
   }
 
   .dark .card-elevated {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--shadow-card-dark);
   }
 
   /* Subtle top accent bar for branded cards. */
@@ -168,13 +119,13 @@ html {
     @apply my-4 inline-flex items-center justify-center px-8 py-3 text-base text-center text-white border-none rounded-lg transition-all duration-300 ease-out;
     background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-violet-a) 100%);
     backdrop-filter: blur(10px);
-    box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+    box-shadow: var(--shadow-btn-primary);
     transform: translateY(0);
   }
 
   .button-about:hover {
     transform: translateY(-2px) scale(1.02);
-    box-shadow: 0 15px 35px rgba(79, 70, 229, 0.4);
+    box-shadow: var(--shadow-btn-primary-hover);
     background: linear-gradient(135deg, var(--color-primary-500) 0%, var(--color-violet-b) 100%);
   }
 
@@ -182,16 +133,16 @@ html {
      alongside .button-about as the "less important" action. */
   .button-quiet {
     @apply inline-flex items-center justify-center px-5 py-3 text-base text-center rounded-lg transition-all duration-300 ease-out;
-    color: rgba(255, 255, 255, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    background: rgba(255, 255, 255, 0.04);
+    color: var(--color-glass-text);
+    border: 1px solid var(--color-glass-border);
+    background: var(--color-glass-fill-faint);
     backdrop-filter: blur(8px);
   }
 
   .button-quiet:hover {
     color: #fff;
-    border-color: rgba(255, 255, 255, 0.45);
-    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-glass-border-hover);
+    background: var(--color-glass-fill-hover);
     transform: translateY(-2px);
   }
 
@@ -283,17 +234,17 @@ html {
 
   /* Glassmorphism Hero Card */
   .hero-card {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-glass-fill);
     backdrop-filter: blur(24px);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--color-glass-border-soft);
+    box-shadow: var(--shadow-hero-card);
     border-radius: 20px;
   }
 
   .dark .hero-card {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+    background: var(--color-glass-fill-dark);
+    border: 1px solid var(--color-glass-border-dark);
+    box-shadow: var(--shadow-hero-card-dark);
   }
 
   /* Animated Gradient Background.
@@ -307,12 +258,12 @@ html {
   .animated-background {
     background: linear-gradient(
       -45deg,
-      #020617,
-      #0f0c29,
-      rgba(79, 70, 229, 0.18),
-      #0a0f1e,
-      rgba(139, 92, 246, 0.16),
-      #140d2e
+      var(--color-hero-bg-start),
+      var(--color-hero-bg-mid),
+      var(--color-hero-glow-primary),
+      var(--color-hero-bg-deep),
+      var(--color-hero-glow-violet),
+      var(--color-hero-bg-end)
     );
     background-size: 300% 300%;
     background-position: 50% 50%;
@@ -425,25 +376,24 @@ html {
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04),
-      0 8px 24px rgba(15, 23, 42, 0.06);
+    box-shadow: var(--shadow-card);
   }
 
   .dark .project-card {
     background: var(--color-surface);
     border: 1px solid var(--color-border);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    box-shadow: var(--shadow-card-dark);
   }
 
   .project-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 45px rgba(79, 70, 229, 0.12);
+    box-shadow: var(--shadow-card-hover);
     border-color: var(--color-primary-300);
   }
 
   .dark .project-card:hover {
     border-color: var(--color-border-strong);
-    box-shadow: 0 25px 55px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--shadow-card-hover-dark);
   }
 
   .project-image-overlay {
@@ -468,8 +418,8 @@ html {
     bottom: 0;
     background: linear-gradient(
       135deg,
-      rgba(79, 70, 229, 0.12) 0%,
-      rgba(139, 92, 246, 0.12) 100%
+      var(--color-brand-tint-overlay) 0%,
+      var(--color-violet-tint-overlay) 100%
     );
     opacity: 0;
     transition: opacity 0.3s ease;
@@ -529,17 +479,17 @@ html {
     font-family: var(--font-mono);
     font-size: 0.7rem;
     letter-spacing: 0.06em;
-    background: rgba(79, 70, 229, 0.06);
+    background: var(--color-brand-tint-soft);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(79, 70, 229, 0.16);
+    border: 1px solid var(--color-brand-tint-border);
     border-radius: 6px;
     padding: 0.3rem 0.6rem;
     color: var(--color-primary-700);
   }
 
   .dark .tech-tag {
-    background: rgba(129, 140, 248, 0.08);
-    border: 1px solid rgba(167, 139, 250, 0.22);
+    background: var(--color-brand-tint-dark);
+    border: 1px solid var(--color-violet-border-dark);
     color: var(--color-primary-300);
   }
 
@@ -550,9 +500,9 @@ html {
     letter-spacing: 0.06em;
     padding: 0.3rem 0.6rem;
     border-radius: 6px;
-    color: rgba(255, 255, 255, 0.9);
-    background: rgba(255, 255, 255, 0.12);
-    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--color-glass-text-strong);
+    background: var(--color-glass-fill-tag);
+    border: 1px solid var(--color-glass-border);
     backdrop-filter: blur(6px);
   }
 
@@ -676,8 +626,8 @@ html {
   font-size: 0.85rem;
   letter-spacing: 0.02em;
   color: var(--color-primary-700);
-  background: rgba(79, 70, 229, 0.05);
-  border: 1px solid rgba(79, 70, 229, 0.14);
+  background: var(--color-brand-tint-faint);
+  border: 1px solid var(--color-brand-tint-border-faint);
   border-radius: 9999px;
   padding: 0.45rem 1rem;
   transition: border-color 0.2s ease, background 0.2s ease;
@@ -691,5 +641,5 @@ html {
 
 .toolbox-item:hover {
   border-color: var(--color-primary-400);
-  background: rgba(79, 70, 229, 0.1);
+  background: var(--color-brand-tint-hover);
 }

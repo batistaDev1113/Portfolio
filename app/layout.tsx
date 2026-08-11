@@ -90,7 +90,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
       >
         <a
           href='#main-content'
-          className='sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:px-4 focus:py-2 focus:rounded focus:bg-white focus:text-black dark:focus:bg-gray-900 dark:focus:text-white'
+          className='sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:px-4 focus:py-2 focus:rounded focus:bg-white focus:text-black dark:focus:bg-ink-900 dark:focus:text-white'
         >
           Skip to main content
         </a>

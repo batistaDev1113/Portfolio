@@ -58,7 +58,7 @@ export default async function ProjectPage({ params }: Props) {
           <FaArrowLeft className='h-3.5 w-3.5' />
           Back to work
         </Link>
-        <span className='font-mono text-xs uppercase tracking-[0.16em] text-gray-400 dark:text-gray-500'>
+        <span className='font-mono text-xs uppercase tracking-[0.16em] text-ink-400 dark:text-ink-500'>
           Case Study
         </span>
       </div>
@@ -67,10 +67,10 @@ export default async function ProjectPage({ params }: Props) {
         <div className='grid grid-cols-1 items-center gap-10 lg:grid-cols-2'>
           <div>
             <SectionLabel>// Project</SectionLabel>
-            <h1 className='fluid-title mt-4 text-gray-900 dark:text-white'>
+            <h1 className='fluid-title mt-4 text-ink-900 dark:text-white'>
               {name}
             </h1>
-            <p className='mt-4 text-base leading-7 text-gray-700 dark:text-gray-300'>
+            <p className='mt-4 text-base leading-7 text-ink-700 dark:text-ink-300'>
               {description}
             </p>
             <p className='mt-5 inline-flex items-center gap-2 rounded-lg bg-primary-50 px-4 py-2.5 text-sm font-semibold text-primary-700 dark:bg-primary-500/10 dark:text-primary-300'>
@@ -99,7 +99,7 @@ export default async function ProjectPage({ params }: Props) {
                   href={githubLink}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='inline-flex items-center gap-2 rounded-lg border border-gray-300 px-5 py-3 text-sm font-semibold text-gray-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-500 hover:text-primary-600 dark:border-gray-700 dark:text-gray-300 dark:hover:text-primary-300'
+                  className='inline-flex items-center gap-2 rounded-lg border border-ink-300 px-5 py-3 text-sm font-semibold text-ink-700 transition-all duration-200 hover:-translate-y-0.5 hover:border-primary-500 hover:text-primary-600 dark:border-ink-700 dark:text-ink-300 dark:hover:text-primary-300'
                 >
                   <FaGithub className='h-4 w-4' />
                   Source
@@ -125,14 +125,14 @@ export default async function ProjectPage({ params }: Props) {
         <div className='space-y-12'>
           <div>
             <SectionLabel>// Problem</SectionLabel>
-            <p className='mt-4 max-w-3xl text-lg leading-8 text-gray-700 dark:text-gray-300'>
+            <p className='mt-4 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-300'>
               {problem}
             </p>
           </div>
 
           <div>
             <SectionLabel>// Approach</SectionLabel>
-            <p className='mt-4 max-w-3xl text-lg leading-8 text-gray-700 dark:text-gray-300'>
+            <p className='mt-4 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-300'>
               {approach}
             </p>
           </div>
@@ -146,7 +146,7 @@ export default async function ProjectPage({ params }: Props) {
                     className='mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500'
                     aria-hidden='true'
                   />
-                  <span className='max-w-3xl text-base leading-7 text-gray-700 dark:text-gray-300'>
+                  <span className='max-w-3xl text-base leading-7 text-ink-700 dark:text-ink-300'>
                     {decision}
                   </span>
                 </li>
@@ -156,7 +156,7 @@ export default async function ProjectPage({ params }: Props) {
 
           <div>
             <SectionLabel>// Outcome</SectionLabel>
-            <p className='mt-4 max-w-3xl text-lg leading-8 text-gray-700 dark:text-gray-300'>
+            <p className='mt-4 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-300'>
               {outcome}
             </p>
           </div>
@@ -171,7 +171,7 @@ export default async function ProjectPage({ params }: Props) {
                       className='mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-violet-a'
                       aria-hidden='true'
                     />
-                    <span className='max-w-3xl text-base leading-7 text-gray-700 dark:text-gray-300'>
+                    <span className='max-w-3xl text-base leading-7 text-ink-700 dark:text-ink-300'>
                       {improvement}
                     </span>
                   </li>

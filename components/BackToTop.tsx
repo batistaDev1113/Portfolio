@@ -22,7 +22,7 @@ const BackToTop = () => {
       type='button'
       onClick={scrollToTop}
       aria-label='Back to top'
-      className='inline-flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600 hover:cursor-pointer dark:text-gray-400 dark:hover:text-primary-300 transition-colors font-mono focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/60 rounded px-2 py-1'
+      className='inline-flex items-center gap-2 text-sm text-ink-500 hover:text-primary-600 hover:cursor-pointer dark:text-ink-400 dark:hover:text-primary-300 transition-colors font-mono focus:outline-none focus-visible:ring-2 focus-visible:ring-info-500/60 rounded px-2 py-1'
     >
       <FaArrowUp className='h-3.5 w-3.5' aria-hidden='true' />
       Back to top

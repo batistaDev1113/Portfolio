@@ -6,11 +6,11 @@ const Skeleton = () => {
     >
       <div
         role='status'
-        className='w-11/12 lg:w-10/12 xl:w-1/2 items-center p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700 flex flex-col'
+        className='w-11/12 lg:w-10/12 xl:w-1/2 items-center p-4 border border-ink-200 rounded shadow animate-pulse md:p-6 dark:border-ink-700 flex flex-col'
       >
         <div className='flex items-center mt-4 justify-center mb-3 rounded-full'>
           <svg
-            className='w-20 h-20 me-3 text-gray-200 dark:text-gray-700'
+            className='w-20 h-20 me-3 text-ink-200 dark:text-ink-700'
             aria-hidden='true'
             xmlns='http://www.w3.org/2000/svg'
             fill='currentColor'
@@ -20,16 +20,16 @@ const Skeleton = () => {
           </svg>
         </div>
 
-        <div className='h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-32 mb-4 text-center'></div>
-        <div className='h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-56 mb-4 text-center'></div>
-        <div className='h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-72 text-center'></div>
-        <div className='h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-68 text-center'></div>
-        <div className='h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-60 text-center mb-2'></div>
-        <div className='h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-56 text-center mb-2'></div>
+        <div className='h-2.5 bg-ink-200 rounded-full dark:bg-ink-700 w-32 mb-4 text-center'></div>
+        <div className='h-2.5 bg-ink-200 rounded-full dark:bg-ink-700 w-56 mb-4 text-center'></div>
+        <div className='h-2.5 bg-ink-200 rounded-full dark:bg-ink-700 w-72 text-center'></div>
+        <div className='h-2.5 bg-ink-200 rounded-full dark:bg-ink-700 w-68 text-center'></div>
+        <div className='h-2.5 bg-ink-200 rounded-full dark:bg-ink-700 w-60 text-center mb-2'></div>
+        <div className='h-2.5 bg-ink-200 rounded-full dark:bg-ink-700 w-56 text-center mb-2'></div>
         <span className='sr-only'>Loading...</span>
         <div className='grid grid-cols-1 md:grid-cols-2 grid-rows-2 md:grid-rows-1 gap-3 grid-flow-col max-w-xl mt-5'>
-          <button className='h-10 w-32 bg-gray-200 rounded-full dark:bg-gray-700' />
-          <button className='h-10 w-32 bg-gray-200 rounded-full dark:bg-gray-700' />
+          <button className='h-10 w-32 bg-ink-200 rounded-full dark:bg-ink-700' />
+          <button className='h-10 w-32 bg-ink-200 rounded-full dark:bg-ink-700' />
         </div>
       </div>
     </section>

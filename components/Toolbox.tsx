@@ -60,10 +60,10 @@ const Toolbox = () => {
     >
       <div className='flex flex-col items-center mb-16'>
         <p className='eyebrow'>// 01 · Skills</p>
-        <h2 className='fluid-title text-gray-900 dark:text-white mt-4 text-center'>
+        <h2 className='fluid-title text-ink-900 dark:text-white mt-4 text-center'>
           How I build
         </h2>
-        <p className='mt-4 max-w-2xl text-center text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-6'>
+        <p className='mt-4 max-w-2xl text-center text-ink-600 dark:text-ink-400 text-sm sm:text-base leading-6'>
           A practical toolkit for shipping reliable, human-first web products —
           from architecture and accessibility through performance and delivery.
         </p>
@@ -87,10 +87,10 @@ const Toolbox = () => {
             <div className='w-11 h-11 rounded-xl bg-linear-to-br from-primary-600 to-violet-a flex items-center justify-center mb-5 text-white shadow-lg shadow-primary-500/20'>
               <skill.icon className='w-5 h-5' />
             </div>
-            <h3 className='fluid-subtitle text-base font-semibold text-gray-900 dark:text-white'>
+            <h3 className='fluid-subtitle text-base font-semibold text-ink-900 dark:text-white'>
               {skill.title}
             </h3>
-            <p className='mt-2 text-sm text-gray-600 dark:text-gray-400 leading-6'>
+            <p className='mt-2 text-sm text-ink-600 dark:text-ink-400 leading-6'>
               {skill.description}
             </p>
           </div>

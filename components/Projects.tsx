@@ -14,10 +14,10 @@ const Projects = async () => {
     >
       <div className='flex flex-col items-center mb-16'>
         <p className='eyebrow'>// 02 · Work</p>
-        <h2 className='fluid-title text-gray-900 dark:text-white mt-4 text-center'>
+        <h2 className='fluid-title text-ink-900 dark:text-white mt-4 text-center'>
           Selected Projects
         </h2>
-        <p className='mt-4 max-w-2xl text-center text-gray-600 dark:text-gray-400 text-sm sm:text-base leading-6'>
+        <p className='mt-4 max-w-2xl text-center text-ink-600 dark:text-ink-400 text-sm sm:text-base leading-6'>
           A few things I&apos;ve designed and built. Each card links to a full
           case study of the problem, decisions, and outcome.
         </p>

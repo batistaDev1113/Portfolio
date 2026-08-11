@@ -50,7 +50,7 @@ I care about creating accessible, maintainable component systems that solve real
           <div className='my-6 hero-anim hero-anim-3'>
             <span
               data-testid='hero-title'
-              className='text-transparent bg-linear-to-r from-blue-200 via-violet-200 to-indigo-200 bg-clip-text text-xl sm:text-2xl md:text-3xl font-semibold drop-shadow-lg'
+              className='text-transparent bg-linear-to-r from-hero-gradient-start via-hero-gradient-mid to-hero-gradient-end bg-clip-text text-xl sm:text-2xl md:text-3xl font-semibold drop-shadow-lg'
             >
               Senior Frontend Engineer
             </span>
@@ -65,8 +65,8 @@ I care about creating accessible, maintainable component systems that solve real
 
           <div className='mt-6 flex items-center gap-2 hero-anim hero-anim-4'>
             <span className='relative flex h-2.5 w-2.5'>
-              <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75'></span>
-              <span className='relative inline-flex h-2.5 w-2.5 rounded-full bg-emerald-400'></span>
+              <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-live opacity-75'></span>
+              <span className='relative inline-flex h-2.5 w-2.5 rounded-full bg-live'></span>
             </span>
             <span className='text-sm text-white/70 font-mono'>
               Available for new opportunities
