@@ -1,0 +1,107 @@
+name: auto-merge-gate
+
+# Squash-merge a PR when the `automerge` label is added, after:
+#   1. `npm audit --omit=dev --audit-level=critical` passes
+#   2. PR title follows conventional commits (feat|fix|chore|docs|...)
+#
+# Uses `gh pr merge --squash --auto` so GitHub queues the merge and
+# waits for ALL other required status checks before merging. No admin
+# bypass needed (enforce_admins=false on main per AGENTS.md).
+#
+# Manual trigger: workflow_dispatch with pr_number input.
+
+on:
+  pull_request:
+    types: [labeled]
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number to auto-merge'
+        required: true
+        type: number
+
+concurrency:
+  group: auto-merge-${{ github.event.pull_request.number || inputs.pr_number }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  gate:
+    name: audit + conventional-commit gate
+    runs-on: ubuntu-latest
+    if: >-
+      (github.event_name == 'pull_request' && github.event.label.name == 'automerge') ||
+      github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      pr_number: ${{ steps.meta.outputs.number }}
+      title_valid: ${{ steps.title-check.outputs.valid }}
+      pr_title: ${{ steps.meta.outputs.title }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+
+      - run: npm ci
+
+      - name: Audit production dependencies (critical gate)
+        run: npm audit --omit=dev --audit-level=critical
+
+      - name: Fetch PR metadata
+        id: meta
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          PR_NUMBER="${{ github.event.pull_request.number || inputs.pr_number }}"
+          echo "number=${PR_NUMBER}" >> "${GITHUB_OUTPUT}"
+          PR_TITLE=$(gh pr view "${PR_NUMBER}" --json title --jq .title)
+          {
+            echo "title<<TITLE_END"
+            echo "${PR_TITLE}"
+            echo "TITLE_END"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Validate conventional-commit title
+        id: title-check
+        env:
+          PR_TITLE: ${{ steps.meta.outputs.title }}
+        run: |
+          set -euo pipefail
+          {
+            echo "title<<TITLE_END"
+            echo "${PR_TITLE}"
+            echo "TITLE_END"
+          } >> "${GITHUB_OUTPUT}"
+          if echo "${PR_TITLE}" | grep -qE '^(feat|fix|chore|docs|style|refactor|test|ci|build|perf)(\(.+\))?!?: '; then
+            echo "valid=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "valid=false" >> "${GITHUB_OUTPUT}"
+            echo "::error::Title must follow conventional commits (feat|fix|chore|docs|style|refactor|test|ci|build|perf). Got: '${PR_TITLE}'"
+          fi
+
+  merge:
+    name: squash-merge on gate pass
+    needs: gate
+    if: needs.gate.outputs.title_valid == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      PR_NUMBER: ${{ needs.gate.outputs.pr_number }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      COMMIT_TITLE: ${{ needs.gate.outputs.pr_title }}
+    steps:
+      - name: Enable squash auto-merge
+        run: |
+          gh pr merge "${PR_NUMBER}" \
+            --squash \
+            --auto \
+            --subject "${COMMIT_TITLE}" \
+            --body "Auto-merged by auto-merge-gate. Audit gate: passed. Title validated."

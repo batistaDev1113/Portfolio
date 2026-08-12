@@ -1,0 +1,168 @@
+name: audit-tracker
+
+# Weekly production audit snapshot.
+#
+# Runs `npm audit --json` → feeds through the repo's audit-tally.mjs
+# and audit-leaf.mjs scripts (Issue #114 audit-tracker turn) →
+# creates or updates a living "Weekly Audit Snapshot" issue
+# (labeled `audit-report`) with the reconciled meta-vs-leaf numbers.
+#
+# Only posts when HIGH or CRITICAL leaf-counts are > 0 (no-op
+# otherwise — avoids issue noise when the audit is clean).
+#
+# Complements the security-audit.yml gate (which only fails on
+# critical): this workflow produces a structured, reconciled
+# audit-report body that distinguishes propagation-path counts
+# (meta.high) from distinct leaf-cert GHSAs (the real fix count).
+#
+# Triggers:
+#   - cron: Mondays 01:30 UTC (staggered after weekly-next-vendor-watch
+#     at 01:00, before weekly-deps-watch at 02:00)
+#   - workflow_dispatch: manual ad-hoc run
+#
+# Style: zero-grant workflow-level permissions, per-job minimal
+# overrides, evidence-chain comment format.
+
+on:
+  schedule:
+    - cron: '30 1 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: audit-tracker
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  audit-snapshot:
+    name: audit + tally + leaf reconciliation
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+
+      - run: npm ci
+
+      - name: Run npm audit and scripts
+        id: audit
+        run: |
+          set -euo pipefail
+          npm audit --json --omit=dev > /tmp/audit.json || true
+          node scripts/audit-tally.mjs /tmp/audit.json 8 > /tmp/tally.txt 2>&1
+          node scripts/audit-leaf.mjs /tmp/audit.json > /tmp/leaf.txt 2>&1
+          # Extract key numbers via node (no jq dependency)
+          read -r CRITICAL HIGH MODERATE LOW < <(node -e "
+            const a=JSON.parse(require('fs').readFileSync('/tmp/audit.json','utf8'));
+            const m=a.metadata?.vulnerabilities??{};
+            console.log((m.critical||0), (m.high||0), (m.moderate||0), (m.low||0));
+          ")
+          echo "critical=${CRITICAL}" >> "${GITHUB_OUTPUT}"
+          echo "high=${HIGH}" >> "${GITHUB_OUTPUT}"
+          echo "moderate=${MODERATE}" >> "${GITHUB_OUTPUT}"
+          echo "low=${LOW}" >> "${GITHUB_OUTPUT}"
+          TALLY=$(cat /tmp/tally.txt)
+          {
+            echo "tally<<TALLY_EOF"
+            echo "${TALLY}"
+            echo "TALLY_EOF"
+          } >> "${GITHUB_OUTPUT}"
+          LEAF=$(cat /tmp/leaf.txt)
+          {
+            echo "leaf<<LEAF_EOF"
+            echo "${LEAF}"
+            echo "LEAF_EOF"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Post audit snapshot (if high/critical > 0)
+        if: steps.audit.outputs.high != '0' || steps.audit.outputs.critical != '0'
+        uses: actions/github-script@v7
+        env:
+          CRITICAL: ${{ steps.audit.outputs.critical }}
+          HIGH: ${{ steps.audit.outputs.high }}
+          MODERATE: ${{ steps.audit.outputs.moderate }}
+          LOW: ${{ steps.audit.outputs.low }}
+          TALLY: ${{ steps.audit.outputs.tally }}
+          LEAF: ${{ steps.audit.outputs.leaf }}
+        with:
+          script: |
+            const isoDate = new Date().toISOString().slice(0, 10);
+            const sha = context.sha;
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const critical = process.env.CRITICAL;
+            const high = process.env.HIGH;
+            const moderate = process.env.MODERATE;
+            const low = process.env.LOW;
+            const tally = process.env.TALLY;
+            const leaf = process.env.LEAF;
+
+            const lines = [];
+            lines.push(`### :robot: \`audit-tracker\` — weekly audit snapshot — ${isoDate}`);
+            lines.push('');
+            lines.push('**Observation evidence (audit trail):**');
+            lines.push('');
+            lines.push(`- **ISO date**: \`${isoDate}\``);
+            lines.push(`- **Commit SHA**: \`${sha}\``);
+            lines.push(`- **Run URL**: <${runUrl}>`);
+            lines.push('');
+            lines.push('**meta-vs-leaf summary:**');
+            lines.push('');
+            lines.push(`| Severity | Propagation paths (meta) | Distinct leaf-certs |`);
+            lines.push(`|----------|--------------------------|---------------------|`);
+            lines.push(`| critical | ${critical} | (see leaf) |`);
+            lines.push(`| high     | ${high} | (see leaf) |`);
+            lines.push(`| moderate | ${moderate} | (see leaf) |`);
+            lines.push(`| low      | ${low} | (see leaf) |`);
+            lines.push('');
+            lines.push('<details><summary>audit-tally.mjs output (top packages)</summary>');
+            lines.push('');
+            lines.push('```');
+            lines.push(tally);
+            lines.push('```');
+            lines.push('</details>');
+            lines.push('');
+            lines.push('<details><summary>audit-leaf.mjs output (distinct leaf-cert GHSAs)</summary>');
+            lines.push('');
+            lines.push('```');
+            lines.push(leaf);
+            lines.push('```');
+            lines.push('</details>');
+            lines.push('');
+            lines.push('> _Updated automatically by `.github/workflows/audit-tracker.yml`. Run `node scripts/audit-tally.mjs` and `node scripts/audit-leaf.mjs` locally to reproduce._');
+
+            const body = lines.join('\n');
+            const marker = 'Weekly Audit Snapshot';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'audit-report',
+              state: 'open',
+              per_page: 5,
+            });
+            const existing = issues.find(i => i.title === marker);
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: marker,
+                body,
+                labels: ['audit-report'],
+              });
+            }
+
+      - name: Summary — clean audit
+        if: steps.audit.outputs.high == '0' && steps.audit.outputs.critical == '0'
+        run: echo "No HIGH/CRITICAL advisories. Audit snapshot not posted."

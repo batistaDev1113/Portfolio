@@ -1,0 +1,156 @@
+name: pr-hygiene
+
+# PR hygiene: conventional-commit enforcement + auto-labeling
+# + stale dependabot PR cleanup.
+#
+# Job 1 (validate-and-label):
+#   Triggered on every PR open/sync/edit. Validates the PR title
+#   follows conventional commits; adds a type label (feat→enhancement,
+#   fix→bug, docs→documentation). Skips dependabot PRs (they use
+#   their own title format). Adds a comment explaining the expected
+#   format if the title is invalid.
+#
+# Job 2 (close-stale-dependabot):
+#   Weekly cron (Mondays 03:00 UTC). Finds open dependabot PRs
+#   older than 14 days and closes them with a comment.
+
+on:
+  pull_request:
+    types: [opened, synchronize, edited]
+  schedule:
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: pr-hygiene-${{ github.event.pull_request.number || 'schedule' }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  validate-and-label:
+    name: conventional-commit check + auto-label
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Fetch PR metadata
+        id: meta
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          PR_NUMBER="${{ github.event.pull_request.number }}"
+          ACTOR="${{ github.event.pull_request.user.login }}"
+          TITLE="${{ github.event.pull_request.title }}"
+          echo "number=${PR_NUMBER}" >> "${GITHUB_OUTPUT}"
+          echo "actor=${ACTOR}" >> "${GITHUB_OUTPUT}"
+          {
+            echo "title<<TITLE_END"
+            echo "${TITLE}"
+            echo "TITLE_END"
+          } >> "${GITHUB_OUTPUT}"
+
+      - name: Skip for dependabot
+        id: skip
+        env:
+          ACTOR: ${{ steps.meta.outputs.actor }}
+        run: |
+          if [ "${ACTOR}" = "dependabot[bot]" ]; then
+            echo "skip=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "skip=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Validate conventional-commit title
+        id: title-check
+        if: steps.skip.outputs.skip == 'false'
+        env:
+          PR_TITLE: ${{ steps.meta.outputs.title }}
+        run: |
+          set -euo pipefail
+          {
+            echo "title<<TITLE_END"
+            echo "${PR_TITLE}"
+            echo "TITLE_END"
+          } >> "${GITHUB_OUTPUT}"
+          if echo "${PR_TITLE}" | grep -qE '^(feat|fix|chore|docs|style|refactor|test|ci|build|perf)(\(.+\))?!?: '; then
+            echo "valid=true" >> "${GITHUB_OUTPUT}"
+          else
+            echo "valid=false" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Comment if title is invalid
+        if: steps.skip.outputs.skip == 'false' && steps.title-check.outputs.valid == 'false'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ steps.meta.outputs.number }}
+        run: |
+          gh pr comment "${PR_NUMBER}" --body \
+            "**Conventional-commit title required.** PR title must match:\n\n\`<type>(<scope>): <description>\`\n\nValid types: \`feat\`, \`fix\`, \`chore\`, \`docs\`, \`style\`, \`refactor\`, \`test\`, \`ci\`, \`build\`, \`perf\`\n\nExamples:\n- \`feat: add dark mode toggle\`\n- \`fix(auth): resolve token expiry\`\n- \`chore(deps): bump next to 16.3.0\`"
+
+      - name: Add type label
+        if: steps.skip.outputs.skip == 'false' && steps.title-check.outputs.valid == 'true'
+        env:
+          PR_TITLE: ${{ steps.title-check.outputs.title }}
+          PR_NUMBER: ${{ steps.meta.outputs.number }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          set -euo pipefail
+          LABEL=""
+          if echo "${PR_TITLE}" | grep -qE '^feat(\(.+\))?!?: '; then
+            LABEL="enhancement"
+          elif echo "${PR_TITLE}" | grep -qE '^fix(\(.+\))?!?: '; then
+            LABEL="bug"
+          elif echo "${PR_TITLE}" | grep -qE '^docs(\(.+\))?!?: '; then
+            LABEL="documentation"
+          elif echo "${PR_TITLE}" | grep -qE '^chore\(deps'; then
+            LABEL="dependencies"
+          fi
+          if [ -n "${LABEL}" ]; then
+            gh pr edit "${PR_NUMBER}" --add-label "${LABEL}"
+          fi
+
+  close-stale-dependabot:
+    name: close stale dependabot PRs
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    permissions:
+      contents: read
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Find and close stale dependabot PRs
+        run: |
+          set -euo pipefail
+          THRESHOLD_DAYS=14
+          NOW_EPOCH=$(date +%s)
+          CLOSED=0
+
+          # List open dependabot PRs (paginated)
+          PAGE=1
+          while true; do
+            PRS=$(gh pr list --state open --author "dependabot[bot]" --json number,title,updatedAt \
+              --jq ".[] | select(((${NOW_EPOCH} - (.updatedAt | sub(\"[^0-9]\";\"\") | split(\"T\")[0] | sub(\"-\";\"\") | tonumber) | . / 100 | floor) > ${THRESHOLD_DAYS})) | .number")
+            if [ -z "${PRS}" ]; then
+              break
+            fi
+            for PR_NUM in ${PRS}; do
+              echo "Closing stale dependabot PR #${PR_NUM}"
+              gh pr close "${PR_NUM}" --comment \
+                "Auto-closed by pr-hygiene: open for > ${THRESHOLD_DAYS} days without review. Dependabot will recreate if upstream updates."
+              CLOSED=$((CLOSED + 1))
+            done
+            PAGE=$((PAGE + 1))
+            if [ ${PAGE} -gt 5 ]; then
+              break
+            fi
+          done
+
+          echo "Closed ${CLOSED} stale dependabot PR(s)."
