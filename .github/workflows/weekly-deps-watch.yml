@@ -1,0 +1,134 @@
+name: weekly-deps-watch
+
+# Weekly production dependency freshness check.
+#
+# Runs `npm outdated --json --production` and maintains a living
+# "Weekly Dependency Report" issue (labeled `deps-watch`). Updates
+# the issue body each week with the latest outdated snapshot. Skips
+# updating if no production dependencies are outdated (no-op week).
+#
+# This is complementary to the upstream-unblock watchers:
+#   - weekly-jsx-a11y-watch.yml   → Issue #95  (eslint-plugin-jsx-a11y peer)
+#   - weekly-next-vendor-watch.yml → Issue #114 (next@16.2.13+ vendor)
+# This workflow covers ALL production deps, not just tracked constraints.
+#
+# Triggers:
+#   - cron: Mondays 02:00 UTC (30 min after weekly-next-vendor-watch's
+#     `0 1 * * 1` — same stagger rationale)
+#   - workflow_dispatch: manual ad-hoc run
+#
+# Style mirrors the repo's zero-grant workflow pattern (prod-smoke.yml,
+# security-audit.yml, weekly-* watchers).
+
+on:
+  schedule:
+    - cron: '0 2 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: weekly-deps-watch
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  freshness:
+    name: check production dependency freshness
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.node-version'
+
+      - run: npm ci
+
+      - name: Check outdated production deps
+        id: outdated
+        run: |
+          set -euo pipefail
+          OUTDATED=$(npm outdated --json --production 2>/dev/null || true)
+          if [ -z "${OUTDATED}" ] || [ "${OUTDATED}" = "{}" ]; then
+            echo "has_outdated=false" >> "${GITHUB_OUTPUT}"
+          else
+            echo "has_outdated=true" >> "${GITHUB_OUTPUT}"
+            {
+              echo "outdated_json<<OUTDATED_EOF"
+              echo "${OUTDATED}"
+              echo "OUTDATED_EOF"
+            } >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Post weekly freshness report
+        if: steps.outdated.outputs.has_outdated == 'true'
+        uses: actions/github-script@v7
+        env:
+          OUTDATED_JSON: ${{ steps.outdated.outputs.outdated_json }}
+        with:
+          script: |
+            const isoDate = new Date().toISOString().slice(0, 10);
+            const sha = context.sha;
+            const runUrl = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const outdated = JSON.parse(process.env.OUTDATED_JSON || '{}');
+
+            const lines = [];
+            lines.push(`### :robot: \`weekly-deps-watch\` — production dependency freshness — ${isoDate}`);
+            lines.push('');
+            lines.push('**Observation evidence (audit trail):**');
+            lines.push('');
+            lines.push(`- **ISO date**: \`${isoDate}\``);
+            lines.push(`- **Commit SHA**: \`${sha}\``);
+            lines.push(`- **Run URL**: <${runUrl}>`);
+            lines.push('');
+            lines.push('| Package | Current | Wanted | Latest |');
+            lines.push('|---------|---------|--------|--------|');
+            const rows = [];
+            for (const [pkg, info] of Object.entries(outdated)) {
+              if (info.current === info.latest) continue;
+              rows.push(`| \`${pkg}\` | ${info.current} | ${info.wanted} | ${info.latest} |`);
+            }
+            if (rows.length === 0) {
+              lines.push('*All production dependencies are up to date.*');
+            } else {
+              lines.push(...rows.slice(0, 20));
+              if (rows.length > 20) {
+                lines.push(`\n*...and ${rows.length - 20} more.*`);
+              }
+            }
+            lines.push('');
+            lines.push('> _Updated automatically by `.github/workflows/weekly-deps-watch.yml`._');
+
+            const body = lines.join('\n');
+            const marker = 'Weekly Dependency Report';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              labels: 'deps-watch',
+              state: 'open',
+              per_page: 5,
+            });
+            const existing = issues.find(i => i.title === marker);
+            if (existing) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: existing.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: marker,
+                body,
+                labels: ['deps-watch', 'dependencies'],
+              });
+            }
+
+      - name: Summary — all current
+        if: steps.outdated.outputs.has_outdated == 'false'
+        run: echo "All production dependencies are up to date. No issue update needed."
