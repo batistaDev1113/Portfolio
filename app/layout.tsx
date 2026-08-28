@@ -3,6 +3,7 @@ import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
 import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
 import type { Metadata } from 'next';
 import { FC, ReactNode } from 'react';
+import ResumeChatbot from '../components/ResumeChatbot';
 import ThemeProviderWrapper from '../components/ThemeProviderWrapper';
 import './styles/globals.css';
 
@@ -95,6 +96,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
           Skip to main content
         </a>
         <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+        <ResumeChatbot />
         <VercelAnalytics />
       </body>
     </html>
