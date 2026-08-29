@@ -54,7 +54,7 @@ export default function ResumeChatbot() {
           onClick={() => setIsOpen(true)}
           aria-label='Open resume chat'
           aria-expanded={false}
-          className='fixed bottom-6 right-6 z-50 flex h-14 w-14 items-center justify-center rounded-full bg-linear-to-br from-primary-600 to-violet-a text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-primary-500 focus-visible:outline-offset-2'
+          className='fixed bottom-6 right-6 z-50 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-linear-to-br from-primary-600 to-violet-a text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-primary-500 focus-visible:outline-offset-2'
         >
           {/* message circle icon */}
           <svg
@@ -93,7 +93,7 @@ export default function ResumeChatbot() {
             <button
               onClick={() => setIsOpen(false)}
               aria-label='Close chat'
-              className='rounded p-1 text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-700'
+              className='cursor-pointer rounded p-1 text-ink-500 hover:bg-ink-100 dark:hover:bg-ink-700'
             >
               <svg
                 width='18'
@@ -168,7 +168,7 @@ export default function ResumeChatbot() {
                 key={s.label}
                 onClick={() => handleSend(s.prompt)}
                 disabled={isLoading}
-                className='rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700 hover:bg-primary-100 disabled:opacity-50 dark:border-primary-800 dark:bg-primary-900/20 dark:text-primary-300'
+                className='cursor-pointer rounded-full border border-primary-200 bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700 transition-colors hover:bg-primary-100 disabled:opacity-50 dark:border-primary-800 dark:bg-primary-900/20 dark:text-primary-300 dark:hover:bg-primary-900/30'
               >
                 {s.label}
               </button>
@@ -194,7 +194,7 @@ export default function ResumeChatbot() {
               type='submit'
               disabled={isLoading || !input.trim()}
               aria-label='Send message'
-              className='rounded-full bg-primary-600 p-2 text-white hover:bg-primary-700 disabled:opacity-50'
+              className='cursor-pointer rounded-full bg-primary-600 p-2 text-white transition-colors hover:bg-primary-700 disabled:opacity-50 dark:hover:bg-primary-500'
             >
               <svg
                 width='18'
