@@ -125,7 +125,7 @@ export async function POST(req: Request) {
       });
     }
 
-    // Trim history to last 4 messages to reduce cross-talk (school -> phone bleed)
+    // Trim history to last 4 messages to reduce cross-talk
     const trimmedMessages = modelMessages.slice(-4);
     console.log(`Chat streaming - model:`, selectedModel, 'messages:', trimmedMessages.length);
     const result = streamText({
@@ -134,7 +134,7 @@ export async function POST(req: Request) {
       messages: trimmedMessages,
       temperature: 0.2,
       topP: 0.9,
-      maxOutputTokens: 300,
+      maxOutputTokens: 600,
     });
 
     return result.toUIMessageStreamResponse({
