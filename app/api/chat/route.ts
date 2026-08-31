@@ -103,6 +103,7 @@ export async function POST(req: Request) {
             max_tokens: 1,
             stream: false,
           }),
+          signal: AbortSignal.timeout(4_000),
         });
         if (probe.ok) {
           selectedModel = candidate;
@@ -129,12 +130,20 @@ export async function POST(req: Request) {
     const trimmedMessages = modelMessages.slice(-4);
     console.log(`Chat streaming - model:`, selectedModel, 'messages:', trimmedMessages.length);
     const result = streamText({
-      model: openrouter(selectedModel),
+      // OpenRouter exposes the OpenAI-compatible chat-completions API. The
+      // callable provider form targets the Responses API instead.
+      model: openrouter.chat(selectedModel),
       system: systemPrompt,
       messages: trimmedMessages,
       temperature: 0.2,
       topP: 0.9,
       maxOutputTokens: 600,
+      maxRetries: 0,
+      timeout: {
+        totalMs: 25_000,
+        firstChunkMs: 12_000,
+        chunkMs: 8_000,
+      },
     });
 
     return result.toUIMessageStreamResponse({
