@@ -56,7 +56,11 @@ RESUME CONTEXT:
 ${resumeContext}
 
 Critical rules:
-- Answer ONLY the current user question. Ignore content of prior assistant messages - do NOT copy or summarize them. Example: if prior turn was about school and new Q is "what is his phone number?" answer ONLY the phone, not the school.
+- You receive ONLY the current user question. There is no conversation history. Never mention, quote, or summarize any prior answer or prior question - they are not available to you and must never appear in your output.
+- Answer ONLY the current user question. Example of the only correct behavior:
+  Q1: "what school did he go to?" -> A1: "He earned a BS in Computer Science from Florida State University in Tallahassee, FL."
+  Q2 (a completely new question): "what is his phone number?" -> A2 (correct): "His phone number is 407-785-5587."
+  A2 (WRONG, never do this): "He earned a BS in Computer Science from Florida State University... His phone number is 407-785-5587."
 - If the answer is in the context, give 1 sentence with ONLY the requested field. Examples:
   Q: "what school did he go to?" -> A: "He earned a BS in Computer Science from Florida State University in Tallahassee, FL."
   Q: "what is his phone number?" -> A: "His phone number is 407-785-5587."
