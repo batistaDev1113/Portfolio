@@ -1,6 +1,6 @@
 # ADR 0010: Catalog the basher/AGENTS.md tool-quirks journey (PRs #102-#105)
 
-- **Status:** Accepted
+- **Status:** Superseded
 - **Date:** 2026-07-30
 - **Implementation PRs:**
   - [#102](https://github.com/batistaDev1113/Portfolio/pull/102) `chore(docs): catalog basher shape failure in AGENTS.md`
@@ -24,13 +24,13 @@ in agentic basher invocations, not in CI run artifacts).
 
 ## Decision
 
-Adopt `AGENTS.md → ## Tool quirks: basher shape failure` as the
-canonical agent-facing runbook section. Operational discipline section
-holds four bullets: (1) 6 KB command cap; (2) `printf '%s\n'` for
-body-file writes; (3) explicit `$?` capture pattern when piping
-`gh … | tail -N`; (4) `gh pr create --body-file` Windows
-path-resolution workaround via heredoc to `/tmp/gh-body/`. Three
-working examples for reusable scenarios:
+This ADR remains a historical record of the basher and GitHub CLI
+failures observed during PRs #102–#105. It is no longer the canonical
+agent-facing runbook. Current operating rules are maintained in
+`AGENTS.md`. The detailed command-shape workarounds below are retained
+as historical evidence rather than requirements for every agent run.
+
+The original working examples were:
 
 - `printf '%s\n' '...' > tmp_*.md + gh pr … --body-file` (used
   PR #98 #100 #101)
@@ -39,9 +39,10 @@ working examples for reusable scenarios:
 - `set +e; …; rc=$?; echo "rc=$rc"` to capture the actual exit
   code when piping `gh … | tail -N`
 
-The `PULL_REQUEST_TEMPLATE.md` Reviewer checklist cross-reference
-self-polices any future AGENTS.md-touching PR (PR #103 conditional
-bullet).
+The old `PULL_REQUEST_TEMPLATE.md` checklist cross-reference and the
+`AGENTS.md` Tool quirks section have been retired. Future changes to
+`AGENTS.md` should instead verify that related documentation and referenced
+commands remain current.
 
 ## Cross-references
 
