@@ -1,8 +1,7 @@
 <!-- .github/PULL_REQUEST_TEMPLATE.md -->
 <!-- Fallback for human contributors opening PRs via the GitHub web UI.
-     Agentic/automated runs should still use `gh pr create --body-file <path>`
-     per the canonical pattern documented in AGENTS.md
-     (`## gh CLI: do not use --yes on gh pr merge` section). -->
+     Agentic/automated runs should follow the current GitHub safety rules in
+     AGENTS.md and use a body file when it makes quoting safer. -->
 
 ## Summary
 
@@ -21,6 +20,5 @@
 
 <!-- Reminders for the reviewer -->
 
-- If your PR adds or modifies `AGENTS.md`, review the new
-  `## Tool quirks` section for any newly-discovered tool-shape
-  failures; cross-link forward references inside the section body.
+- If your PR adds or modifies `AGENTS.md`, verify that related documentation
+  and referenced commands still exist; update or remove stale cross-references.
