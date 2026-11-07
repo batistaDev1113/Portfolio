@@ -17,6 +17,25 @@ const ACCESSIBLE_PROMPTS = [
   'What is his current role and where does he work?',
 ];
 
+const FALLBACK_ERROR =
+  'Something went wrong. Please try again or email yuniorbatista1113@gmail.com';
+
+/**
+ * The route returns a specific reason (quota vs. unavailable) but the AI SDK
+ * surfaces it as an opaque Error. Map the known-safe phrases to plain copy so
+ * "try again" is not shown when retrying cannot possibly help.
+ */
+function describeChatError(error: Error | undefined): string {
+  const message = error?.message ?? '';
+  if (/daily capacity|too many requests/i.test(message)) {
+    return 'The chat has reached its daily limit. Please try again tomorrow, or email yuniorbatista1113@gmail.com.';
+  }
+  if (/temporarily unavailable/i.test(message)) {
+    return 'The chat model is briefly unavailable. Please try again in a moment.';
+  }
+  return FALLBACK_ERROR;
+}
+
 export default function ResumeChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [input, setInput] = useState('');
@@ -155,8 +174,7 @@ export default function ResumeChatbot() {
             )}
             {error && (
               <div className='max-w-[85%] self-start rounded-xl bg-red-50 px-3 py-2 text-[13px] text-red-700 dark:bg-red-900/20 dark:text-red-300'>
-                Something went wrong. Please try again or email
-                yuniorbatista1113@gmail.com
+                {describeChatError(error)}
               </div>
             )}
           </div>

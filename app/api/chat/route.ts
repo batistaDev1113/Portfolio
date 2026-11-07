@@ -169,6 +169,106 @@ function stripInlineThinking(): LanguageModelMiddleware {
   };
 }
 
+const OPENROUTER_CHAT_URL = 'https://openrouter.ai/api/v1/chat/completions';
+
+function openRouterHeaders(): Record<string, string> {
+  return {
+    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+    'HTTP-Referer': 'https://www.yuniorbatista.com',
+    'X-Title': 'Yunior Batista Portfolio',
+    'Content-Type': 'application/json',
+  };
+}
+
+// Free OpenRouter models that are actually served. Re-verify before editing:
+//   curl -s https://openrouter.ai/api/v1/models \
+//     | jq -r '.data[].id | select(endswith(":free"))'
+// Verified 2026-11-07: only 12 :free models exist, and the previous list had
+// rotted (nemotron-3-super-120b-a12b, poolside/laguna-xs-2.1, z-ai/glm-5.2 all
+// return 404 "no longer available"). Ordered to resist answer-echo
+// hallucination: largest instruction models first, 3B-class last.
+const FALLBACK_MODELS = [
+  'nvidia/nemotron-3-ultra-550b-a55b:free',
+  'nvidia/nemotron-3.5-super-vl:free',
+  'google/gemma-4-31b-it:free',
+  'google/gemma-4-26b-a4b-it:free',
+  'nvidia/nemotron-3.5-lightning:free', // 3B active MoE - most echo-prone
+] as const;
+
+type ChatModelSelection =
+  | { ok: true; model: string }
+  | { ok: false; reason: 'rate_limited' | 'unavailable' };
+
+// Free-model quota is account-wide, so a 429 on one candidate means every
+// remaining candidate will 429 too. Break immediately in that case, and cache
+// a working selection so the probe does not double quota burn on every message.
+const MODEL_CACHE_TTL_MS = 10 * 60_000;
+let modelCache: { model: string; ts: number } | null = null;
+
+/** Test hook: forget the cached selection between cases. */
+export function __resetChatModelCache(): void {
+  modelCache = null;
+}
+
+/**
+ * Pick the first free model that actually answers. Returns a typed outcome so
+ * the caller can distinguish exhausted quota (429, retry tomorrow) from dead
+ * model ids (503, genuinely unavailable).
+ */
+export async function selectChatModel(): Promise<ChatModelSelection> {
+  if (modelCache && Date.now() - modelCache.ts < MODEL_CACHE_TTL_MS) {
+    return { ok: true, model: modelCache.model };
+  }
+
+  let sawRateLimit = false;
+
+  for (const candidate of FALLBACK_MODELS) {
+    try {
+      const probe = await fetch(OPENROUTER_CHAT_URL, {
+        method: 'POST',
+        headers: openRouterHeaders(),
+        body: JSON.stringify({
+          model: candidate,
+          messages: [{ role: 'user', content: 'ping' }],
+          max_tokens: 1,
+          stream: false,
+        }),
+        signal: AbortSignal.timeout(4_000),
+      });
+
+      if (probe.ok) {
+        modelCache = { model: candidate, ts: Date.now() };
+        console.log('Chat probe ok - selected:', candidate);
+        return { ok: true, model: candidate };
+      }
+
+      const body = await probe.text();
+
+      if (probe.status === 429) {
+        // Account-wide: every other candidate would burn a request to 429 too.
+        sawRateLimit = true;
+        console.warn(
+          `Probe ${candidate} -> 429 (account-wide), stopping: ${body.slice(0, 150)}`
+        );
+        break;
+      }
+
+      const isRetriable =
+        probe.status === 404 ||
+        probe.status === 400 ||
+        /unavailable for free|No endpoints|not a valid model/i.test(body);
+      console.warn(
+        `Probe ${candidate} -> ${probe.status} ${body.slice(0, 150)} - ${isRetriable ? 'next' : 'abort'}`
+      );
+      if (!isRetriable) break;
+    } catch (e) {
+      console.warn(`Probe ${candidate} fetch error:`, e);
+    }
+  }
+
+  return { ok: false, reason: sawRateLimit ? 'rate_limited' : 'unavailable' };
+}
+
 export async function POST(req: Request) {
   try {
     const ip =
@@ -227,75 +327,24 @@ export async function POST(req: Request) {
       },
     });
 
-    // Live OpenRouter :free as of 2026-08-28 23:40 UTC (curl /api/v1/models | jq)
-    // Ordered to resist answer-echo hallucination: lead with the largest
-    // instruction models; the 3B-class lightning model is last-resort.
-    const fallbackModels = [
-      'google/gemma-4-31b-it:free',
-      'google/gemma-4-26b-a4b-it:free',
-      'nvidia/nemotron-3-super-120b-a12b:free',
-      'nvidia/nemotron-3.5-lightning:free', // 3B active MoE - most echo-prone
-      'poolside/laguna-xs-2.1:free',
-      'z-ai/glm-5.2:free',
-    ];
-
     const modelMessages = await convertToModelMessages(messages);
 
-    // Probe each model with a tiny non-streaming request before committing to stream
-    let selectedModel: string | null = null;
-    for (const candidate of fallbackModels) {
-      try {
-        const probe = await fetch(
-          'https://openrouter.ai/api/v1/chat/completions',
-          {
-            method: 'POST',
-            headers: {
-              Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-              'HTTP-Referer': 'https://www.yuniorbatista.com',
-              'X-Title': 'Yunior Batista Portfolio',
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: candidate,
-              messages: [{ role: 'user', content: 'ping' }],
-              max_tokens: 1,
-              stream: false,
-            }),
-            signal: AbortSignal.timeout(4_000),
-          }
-        );
-        if (probe.ok) {
-          selectedModel = candidate;
-          console.log(`Chat probe ok - selected:`, candidate);
-          break;
-        }
-        const body = await probe.text();
-        const isRetriable =
-          probe.status === 404 ||
-          probe.status === 400 ||
-          probe.status === 429 ||
-          /unavailable for free|No endpoints|not a valid model/i.test(body);
-        console.warn(
-          `Probe ${candidate} -> ${probe.status} ${body.slice(0, 150)} - ${isRetriable ? 'next' : 'abort'}`
-        );
-        if (!isRetriable) break;
-      } catch (e) {
-        console.warn(`Probe ${candidate} fetch error:`, e);
-      }
-    }
-
-    if (!selectedModel) {
+    const selection = await selectChatModel();
+    if (!selection.ok) {
+      const isQuota = selection.reason === 'rate_limited';
       return new Response(
         JSON.stringify({
-          error:
-            'All chat models temporarily unavailable. Please email yuniorbatista1113@gmail.com',
+          error: isQuota
+            ? 'Chat is at its daily capacity. Please try again tomorrow or email yuniorbatista1113@gmail.com'
+            : 'All chat models temporarily unavailable. Please email yuniorbatista1113@gmail.com',
         }),
         {
-          status: 503,
+          status: isQuota ? 429 : 503,
           headers: { 'Content-Type': 'application/json' },
         }
       );
     }
+    const selectedModel = selection.model;
 
     // Cross-talk defense: keep only the current user turn. Prior assistant
     // messages are the copy source for the small free models (they echo
