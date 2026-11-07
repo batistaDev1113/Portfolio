@@ -33,41 +33,56 @@ jest.mock('@ai-sdk/openai', () => ({
 import {
   POST,
   __resetChatModelCache,
+  resolveChatProvider,
   selectChatModel,
 } from '../app/api/chat/route';
 
 /**
  * Regression net for /api/chat's validation branches and model selection.
  *
- * The live failure this locks down: every probe returned 429
- * ("free-models-per-day"), the old loop still burned one request per candidate,
- * and the route answered 503 — which the UI rendered as an opaque "Something
- * went wrong". Selection now stops at the first 429 and reports exhausted quota
- * separately from genuinely unavailable models.
+ * Two live failures are locked down here:
+ *   - Every probe returned 429 (free quota exhausted) and the answer was an
+ *     opaque 503. Exhausted quota now reports separately from dead models.
+ *   - The fallback list rotted silently. A dead id now advances instead of
+ *     killing the request.
  *
- * Everything here is fetch-mocked; no network, no OpenRouter credentials.
+ * Quota scope differs per provider and the tests pin the difference: OpenRouter
+ * meters free models per account (one 429 ends the walk), Groq meters per model
+ * (a 429 on one model must not abandon the others' budget).
+ *
+ * Everything here is fetch-mocked; no network, no credentials.
  */
 
-const SAVED_API_KEY = process.env.OPENROUTER_API_KEY;
+const SAVED_GROQ = process.env.GROQ_API_KEY;
+const SAVED_OPENROUTER = process.env.OPENROUTER_API_KEY;
 const realFetch = global.fetch;
 
+const FAKE_GROQ_KEY = 'test-fake-groq-not-real';
+const FAKE_OPENROUTER_KEY = 'test-fake-openrouter-not-real';
+
 beforeAll(() => {
-  process.env.OPENROUTER_API_KEY = 'test-fake-not-real';
+  process.env.GROQ_API_KEY = FAKE_GROQ_KEY;
+  delete process.env.OPENROUTER_API_KEY;
 });
 
 afterAll(() => {
-  if (SAVED_API_KEY === undefined) {
-    delete process.env.OPENROUTER_API_KEY;
-  } else {
-    process.env.OPENROUTER_API_KEY = SAVED_API_KEY;
-  }
+  const restore = (name: string, value: string | undefined) => {
+    if (value === undefined) {
+      delete process.env[name];
+    } else {
+      process.env[name] = value;
+    }
+  };
+  restore('GROQ_API_KEY', SAVED_GROQ);
+  restore('OPENROUTER_API_KEY', SAVED_OPENROUTER);
   global.fetch = realFetch;
 });
 
 afterEach(() => {
-  // Test 1 deliberately removes the key; restore it so later cases exercise
-  // their own branch instead of falling into the 500 'not configured' path.
-  process.env.OPENROUTER_API_KEY = 'test-fake-not-real';
+  // Some tests deliberately remove or switch keys; reset to the Groq default so
+  // each case exercises its own branch.
+  process.env.GROQ_API_KEY = FAKE_GROQ_KEY;
+  delete process.env.OPENROUTER_API_KEY;
   __resetChatModelCache();
   global.fetch = realFetch;
 });
@@ -97,10 +112,12 @@ function userMessage(text: string) {
 }
 
 let fetchCalls = 0;
+let lastFetchUrl = '';
 function mockFetchStatus(status: number, body = ''): void {
   fetchCalls = 0;
-  global.fetch = (async () => {
+  global.fetch = (async (url: string | URL) => {
     fetchCalls += 1;
+    lastFetchUrl = String(url);
     return {
       ok: status >= 200 && status < 300,
       status,
@@ -109,8 +126,38 @@ function mockFetchStatus(status: number, body = ''): void {
   }) as unknown as typeof fetch;
 }
 
+function requireProvider() {
+  const provider = resolveChatProvider();
+  if (!provider) throw new Error('expected a configured provider');
+  return provider;
+}
+
+describe('provider resolution', () => {
+  test('prefers Groq when both keys exist', () => {
+    process.env.OPENROUTER_API_KEY = FAKE_OPENROUTER_KEY;
+    expect(requireProvider().id).toBe('groq');
+  });
+
+  test('falls back to OpenRouter when GROQ_API_KEY is absent', () => {
+    delete process.env.GROQ_API_KEY;
+    process.env.OPENROUTER_API_KEY = FAKE_OPENROUTER_KEY;
+    const provider = requireProvider();
+    expect(provider.id).toBe('openrouter');
+    // Deployment safety: this is what keeps the chatbot up if the Groq key is
+    // not configured yet in the hosting environment.
+    expect(provider.baseURL).toBe('https://openrouter.ai/api/v1');
+  });
+
+  test('reports no provider when no key is configured', () => {
+    delete process.env.GROQ_API_KEY;
+    delete process.env.OPENROUTER_API_KEY;
+    expect(resolveChatProvider()).toBeNull();
+  });
+});
+
 describe('POST /api/chat validation', () => {
-  test('rejects when OPENROUTER_API_KEY is missing', async () => {
+  test('rejects when no provider key is configured', async () => {
+    delete process.env.GROQ_API_KEY;
     delete process.env.OPENROUTER_API_KEY;
     const res = await POST(buildRequest({ messages: [userMessage('hi')] }));
     expect(res.status).toBe(500);
@@ -157,55 +204,92 @@ describe('POST /api/chat validation', () => {
 });
 
 describe('selectChatModel', () => {
-  test('stops at the first 429 instead of probing every candidate', async () => {
+  test('targets the provider baseURL, not a hardcoded one', async () => {
+    mockFetchStatus(200, '{}');
+    const provider = requireProvider();
+    await selectChatModel(provider);
+    expect(lastFetchUrl).toBe(
+      'https://api.groq.com/openai/v1/chat/completions'
+    );
+  });
+
+  test('Groq keeps walking past a 429 because quota is per model', async () => {
+    mockFetchStatus(429, '{"error":{"message":"Rate limit reached"}}');
+    const provider = requireProvider();
+
+    await expect(selectChatModel(provider)).resolves.toEqual({
+      ok: false,
+      reason: 'rate_limited',
+    });
+    // Account-scoped providers stop at 1; Groq must spend all four candidates
+    // because each model carries its own daily budget.
+    expect(fetchCalls).toBe(4);
+  });
+
+  test('OpenRouter stops at the first 429 (account-wide quota)', async () => {
+    delete process.env.GROQ_API_KEY;
+    process.env.OPENROUTER_API_KEY = FAKE_OPENROUTER_KEY;
     mockFetchStatus(
       429,
       '{"error":{"message":"Rate limit exceeded: free-models-per-day"}}'
     );
+    const provider = requireProvider();
 
-    await expect(selectChatModel()).resolves.toEqual({
+    await expect(selectChatModel(provider)).resolves.toEqual({
       ok: false,
       reason: 'rate_limited',
     });
-    // The old loop spent one request per candidate; quota exhaustion must not.
     expect(fetchCalls).toBe(1);
   });
 
-  test('walks the whole list when every model is gone', async () => {
+  test('walks the whole list when every model id is dead', async () => {
     mockFetchStatus(
       404,
-      '{"error":{"message":"no provider serves this model anymore"}}'
+      '{"error":{"message":"The model does not exist or you do not have access to it."}}'
     );
+    const provider = requireProvider();
 
-    await expect(selectChatModel()).resolves.toEqual({
+    await expect(selectChatModel(provider)).resolves.toEqual({
       ok: false,
       reason: 'unavailable',
     });
-    expect(fetchCalls).toBe(5);
+    expect(fetchCalls).toBe(4);
   });
 
   test('returns the first working model and caches it', async () => {
     mockFetchStatus(200, '{}');
+    const provider = requireProvider();
 
-    await expect(selectChatModel()).resolves.toEqual({
+    await expect(selectChatModel(provider)).resolves.toEqual({
       ok: true,
-      model: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+      model: 'openai/gpt-oss-120b',
     });
     expect(fetchCalls).toBe(1);
 
     // A second call inside the TTL must not re-probe.
-    await expect(selectChatModel()).resolves.toEqual({
+    await expect(selectChatModel(provider)).resolves.toEqual({
       ok: true,
-      model: 'nvidia/nemotron-3-ultra-550b-a55b:free',
+      model: 'openai/gpt-oss-120b',
     });
     expect(fetchCalls).toBe(1);
   });
 
+  test('does not reuse a cached model across providers', async () => {
+    mockFetchStatus(200, '{}');
+    await selectChatModel(requireProvider());
+    expect(fetchCalls).toBe(1);
+
+    delete process.env.GROQ_API_KEY;
+    process.env.OPENROUTER_API_KEY = FAKE_OPENROUTER_KEY;
+    await selectChatModel(requireProvider());
+
+    // A second probe proves the cache was not reused: model ids are
+    // provider-specific, so a cached Groq id must never reach OpenRouter.
+    expect(fetchCalls).toBe(2);
+  });
+
   test('surfaces exhausted quota as 429, not 503', async () => {
-    mockFetchStatus(
-      429,
-      '{"error":{"message":"Rate limit exceeded: free-models-per-day"}}'
-    );
+    mockFetchStatus(429, '{"error":{"message":"Rate limit reached"}}');
 
     const res = await POST(buildRequest({ messages: [userMessage('hi')] }));
     expect(res.status).toBe(429);
