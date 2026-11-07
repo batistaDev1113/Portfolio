@@ -194,13 +194,18 @@ type ChatProvider = {
 // list below also multiplies daily capacity. Re-verify before editing:
 //   curl -s https://api.groq.com/openai/v1/models \
 //     -H "Authorization: Bearer $GROQ_API_KEY" | grep -o '"id":"[^"]*"'
+// Verified 2026-11-07 against the live key: four chat models are enabled -
+// allam-2-7b, gpt-oss-120b, gpt-oss-20b, qwen/qwen3.8-27b.
+// llama-3.1-8b-instant has the largest published daily budget (14.4K RPD) but
+// is NOT available on this key, so it is deliberately absent rather than
+// pinned and left to 404 on every probe.
 // Ordered strongest-first: quality matters more than the larger daily budget
 // of the small model, which sits last as the capacity backstop.
 const GROQ_MODELS = [
   'openai/gpt-oss-120b', // 1K RPD, 200K TPD
   'qwen/qwen3.8-27b', // 1K RPD, 200K TPD
   'openai/gpt-oss-20b', // 1K RPD, 200K TPD
-  'llama-3.1-8b-instant', // 14.4K RPD, 500K TPD - most echo-prone
+  'allam-2-7b', // 7K RPD, 500K TPD - capacity backstop, most echo-prone
 ] as const;
 
 // OpenRouter free models that are actually served. Re-verify before editing:
