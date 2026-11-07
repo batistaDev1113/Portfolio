@@ -17,3 +17,18 @@ updates:
           - ">=7.0.0"
         update-types:
           - "version-update:semver-major"
+      # Development-only transitive dependency. Patched only in >=11.0.1, but every
+      # consumer (eslint, @eslint/config-array, typescript-eslint, glob,
+      # test-exclude) pins ^10.2.x, so no in-range fix exists. Alert #178 dismissed
+      # as tolerable risk; this only suppresses pointless update PRs, and lifts
+      # itself once a patched release is actually reachable.
+      - dependency-name: "minimatch"
+        versions:
+          - "<11.0.1"
+      # Development-only transitive dependency. No patched release exists: the
+      # newest published version (4.3.1) is the vulnerable one. Reached only via
+      # jest-config merging the project's own config. Alert #176 dismissed as
+      # tolerable risk. A future patched release is still picked up.
+      - dependency-name: "deepmerge"
+        versions:
+          - "<=4.3.1"
