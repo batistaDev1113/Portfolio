@@ -59,7 +59,7 @@ const Toolbox = () => {
       aria-label='Skills and toolbox'
     >
       <div className='flex flex-col items-center mb-16'>
-        <p className='eyebrow'>// 01 · Skills</p>
+        <p className='eyebrow'>{'// 01 · Skills'}</p>
         <h2 className='fluid-title text-ink-900 dark:text-white mt-4 text-center'>
           How I build
         </h2>
@@ -99,7 +99,7 @@ const Toolbox = () => {
 
       {/* Toolbox rail — natively scrollable so every tool is reachable */}
       <div className='mt-16'>
-        <p className='eyebrow mb-6 text-center'>// Toolbox</p>
+        <p className='eyebrow mb-6 text-center'>{'// Toolbox'}</p>
         <div className='toolbox-rail' role='list'>
           {TOOLBOX.map((tool, i) => (
             <span key={i} className='toolbox-item' role='listitem'>

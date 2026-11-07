@@ -74,65 +74,52 @@ const nextConfig = {
   compress: true,
 };
 
-// const nextConfig = {}
+// @sentry/nextjs v11 moved the Next.js build wrapper to the `./config`
+// subpath export and collapsed its options into a single object.
+// See: https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+const { withSentryConfig } = require('@sentry/nextjs/config');
 
-module.exports = nextConfig;
+module.exports = withSentryConfig(nextConfig, {
+  // Suppresses source map uploading logs during build
+  silent: true,
+  org: 'software-engineer-dn',
+  project: 'portfolio-nextjs',
 
-// Injected content via Sentry wizard below
+  // Routes browser requests to Sentry through a Next.js rewrite to circumvent
+  // ad-blockers (increases server load)
+  tunnelRoute: '/monitoring',
 
-const { withSentryConfig } = require('@sentry/nextjs');
-
-module.exports = withSentryConfig(
-  module.exports,
-  {
-    // For all available options, see:
-    // https://github.com/getsentry/sentry-webpack-plugin#options
-
-    // Suppresses source map uploading logs during build
-    silent: true,
-    org: 'software-engineer-dn',
-    project: 'portfolio-nextjs',
-
-    // Source map configuration
-    sourcemaps: {
-      disable: process.env.NODE_ENV === 'development',
-      deleteSourcemapsAfterUpload: true,
-    },
-
-    // Error handling for API timeouts
-    errorHandler: (err) => {
-      console.warn('Sentry CLI warning:', err);
-      // Don't fail the build on Sentry API errors
-      return false;
-    },
-
-    // Release configuration to prevent timeouts
-    release: {
-      finalize: false,
-    },
-
-    // Deploy configuration
-    deploy: {
-      env: process.env.NODE_ENV,
-    },
+  // Source map configuration
+  sourcemaps: {
+    disable: process.env.NODE_ENV === 'development',
+    deleteSourcemapsAfterUpload: true,
   },
-  {
-    // For all available options, see:
-    // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
-    // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers (increases server load)
-    tunnelRoute: '/monitoring',
+  // Don't fail the build on Sentry API errors
+  errorHandler: (err) => {
+    console.warn('Sentry CLI warning:', err);
+  },
 
-    // Hides source maps from generated client bundles
-    hideSourceMaps: true,
+  // Release configuration to prevent timeouts
+  release: {
+    finalize: false,
+  },
 
-    // Automatically tree-shake Sentry logger statements to reduce bundle size
-    disableLogger: true,
+  // Deploy configuration
+  deploy: {
+    env: process.env.NODE_ENV,
+  },
 
-    // Enables automatic instrumentation of Vercel Cron Monitors.
-    // See the following for more information:
-    // https://docs.sentry.io/product/crons/
-    // https://vercel.com/docs/cron-jobs
+  // Enables automatic instrumentation of Vercel Cron Monitors.
+  // See the following for more information:
+  // https://docs.sentry.io/product/crons/
+  // https://vercel.com/docs/cron-jobs
+  webpack: {
     automaticVercelMonitors: true,
-  }
-);
+  },
+
+  // Tree-shake Sentry debug logging to reduce bundle size
+  bundleSizeOptimizations: {
+    excludeDebugStatements: true,
+  },
+});

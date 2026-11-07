@@ -60,12 +60,19 @@ function stripInlineThinking(): LanguageModelMiddleware {
       let sawAnyText = false;
       const markerMax = Math.max(...THINK_START_MARKERS.map((m) => m.length));
       const endTagMax = Math.max(...THINK_END_TAGS.map((t) => t.length));
-      const flush = (text: string, controller: TransformStreamDefaultController) => {
+      const flush = (
+        text: string,
+        controller: TransformStreamDefaultController
+      ) => {
         if (text.length > 0) {
           if (!sawAnyText) {
             sawAnyText = true;
           }
-          controller.enqueue({ type: 'text-delta', id: 'chat-text', delta: text });
+          controller.enqueue({
+            type: 'text-delta',
+            id: 'chat-text',
+            delta: text,
+          });
         }
       };
       return {
@@ -95,17 +102,25 @@ function stripInlineThinking(): LanguageModelMiddleware {
               // the buffer (last markerMax chars could still complete one).
               while (buffer.length > 0) {
                 if (suppress) {
-                  const endIdx = THINK_END_TAGS.map((tag) => buffer.indexOf(tag)).reduce(
-                    (best, idx) => (best === -1 || (idx !== -1 && idx < best) ? idx : best),
-                    -1,
+                  const endIdx = THINK_END_TAGS.map((tag) =>
+                    buffer.indexOf(tag)
+                  ).reduce(
+                    (best, idx) =>
+                      best === -1 || (idx !== -1 && idx < best) ? idx : best,
+                    -1
                   );
                   if (endIdx !== -1) {
                     // Drop everything up to and including the close tag.
-                    buffer = buffer.slice(endIdx + THINK_END_TAGS.reduce(
-                      (min, tag) =>
-                        buffer.startsWith(tag, endIdx) && tag.length < min ? tag.length : min,
-                      Number.POSITIVE_INFINITY,
-                    ));
+                    buffer = buffer.slice(
+                      endIdx +
+                        THINK_END_TAGS.reduce(
+                          (min, tag) =>
+                            buffer.startsWith(tag, endIdx) && tag.length < min
+                              ? tag.length
+                              : min,
+                          Number.POSITIVE_INFINITY
+                        )
+                    );
                     suppress = false;
                     continue;
                   }
@@ -146,7 +161,7 @@ function stripInlineThinking(): LanguageModelMiddleware {
                 buffer = '';
               }
             },
-          }),
+          })
         ),
         ...rest,
       };
@@ -156,19 +171,28 @@ function stripInlineThinking(): LanguageModelMiddleware {
 
 export async function POST(req: Request) {
   try {
-    const ip = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
+    const ip =
+      req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
     if (isRateLimited(ip)) {
-      return new Response(JSON.stringify({ error: 'Too many requests. Please try again in a minute.' }), {
-        status: 429,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({
+          error: 'Too many requests. Please try again in a minute.',
+        }),
+        {
+          status: 429,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     if (!process.env.OPENROUTER_API_KEY) {
-      return new Response(JSON.stringify({ error: 'Chat service not configured' }), {
-        status: 500,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({ error: 'Chat service not configured' }),
+        {
+          status: 500,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     const { messages }: { messages: UIMessage[] } = await req.json();
@@ -221,30 +245,39 @@ export async function POST(req: Request) {
     let selectedModel: string | null = null;
     for (const candidate of fallbackModels) {
       try {
-        const probe = await fetch('https://openrouter.ai/api/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-            'HTTP-Referer': 'https://www.yuniorbatista.com',
-            'X-Title': 'Yunior Batista Portfolio',
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: candidate,
-            messages: [{ role: 'user', content: 'ping' }],
-            max_tokens: 1,
-            stream: false,
-          }),
-          signal: AbortSignal.timeout(4_000),
-        });
+        const probe = await fetch(
+          'https://openrouter.ai/api/v1/chat/completions',
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+              'HTTP-Referer': 'https://www.yuniorbatista.com',
+              'X-Title': 'Yunior Batista Portfolio',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              model: candidate,
+              messages: [{ role: 'user', content: 'ping' }],
+              max_tokens: 1,
+              stream: false,
+            }),
+            signal: AbortSignal.timeout(4_000),
+          }
+        );
         if (probe.ok) {
           selectedModel = candidate;
           console.log(`Chat probe ok - selected:`, candidate);
           break;
         }
         const body = await probe.text();
-        const isRetriable = probe.status === 404 || probe.status === 400 || probe.status === 429 || /unavailable for free|No endpoints|not a valid model/i.test(body);
-        console.warn(`Probe ${candidate} -> ${probe.status} ${body.slice(0, 150)} - ${isRetriable ? 'next' : 'abort'}`);
+        const isRetriable =
+          probe.status === 404 ||
+          probe.status === 400 ||
+          probe.status === 429 ||
+          /unavailable for free|No endpoints|not a valid model/i.test(body);
+        console.warn(
+          `Probe ${candidate} -> ${probe.status} ${body.slice(0, 150)} - ${isRetriable ? 'next' : 'abort'}`
+        );
         if (!isRetriable) break;
       } catch (e) {
         console.warn(`Probe ${candidate} fetch error:`, e);
@@ -252,23 +285,32 @@ export async function POST(req: Request) {
     }
 
     if (!selectedModel) {
-      return new Response(JSON.stringify({ error: 'All chat models temporarily unavailable. Please email yuniorbatista1113@gmail.com' }), {
-        status: 503,
-        headers: { 'Content-Type': 'application/json' },
-      });
+      return new Response(
+        JSON.stringify({
+          error:
+            'All chat models temporarily unavailable. Please email yuniorbatista1113@gmail.com',
+        }),
+        {
+          status: 503,
+          headers: { 'Content-Type': 'application/json' },
+        }
+      );
     }
 
     // Cross-talk defense: keep only the current user turn. Prior assistant
     // messages are the copy source for the small free models (they echo
     // previous answers verbatim), so they are never sent to the model.
     // The resume context in the system prompt carries all durable facts.
-    const lastUserIndex = modelMessages.findLastIndex(
-      (m) => m.role === 'user',
-    );
+    const lastUserIndex = modelMessages.findLastIndex((m) => m.role === 'user');
     const currentTurn =
       lastUserIndex >= 0 ? modelMessages.slice(lastUserIndex) : modelMessages;
     const trimmedMessages = currentTurn.filter((m) => m.role !== 'assistant');
-    console.log(`Chat streaming - model:`, selectedModel, 'messages:', trimmedMessages.length);
+    console.log(
+      `Chat streaming - model:`,
+      selectedModel,
+      'messages:',
+      trimmedMessages.length
+    );
     const result = streamText({
       // OpenRouter exposes the OpenAI-compatible chat-completions API. The
       // callable provider form targets the Responses API instead.
@@ -297,9 +339,12 @@ export async function POST(req: Request) {
     });
   } catch (error) {
     console.error('Chat API error:', error);
-    return new Response(JSON.stringify({ error: 'Failed to process chat request' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({ error: 'Failed to process chat request' }),
+      {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      }
+    );
   }
 }

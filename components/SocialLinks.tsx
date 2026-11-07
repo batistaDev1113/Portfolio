@@ -27,7 +27,10 @@ const ITEMS = [
   },
 ];
 
-const SocialLinks = ({ className = '', variant = 'icon' }: SocialLinksProps) => {
+const SocialLinks = ({
+  className = '',
+  variant = 'icon',
+}: SocialLinksProps) => {
   return (
     <div
       className={`flex gap-6 ${variant === 'text' ? 'flex-col items-start' : 'flex-row items-center'}`}
