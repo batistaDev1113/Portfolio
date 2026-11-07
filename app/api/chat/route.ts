@@ -169,25 +169,48 @@ function stripInlineThinking(): LanguageModelMiddleware {
   };
 }
 
-const OPENROUTER_CHAT_URL = 'https://openrouter.ai/api/v1/chat/completions';
+/**
+ * Chat providers are interchangeable: both expose the OpenAI chat-completions
+ * API, so the same @ai-sdk/openai client drives either one and no extra
+ * dependency is needed.
+ *
+ * They differ in how they meter quota, which changes the fallback strategy:
+ *   - OpenRouter meters free models per *account*, so one 429 means every
+ *     candidate is exhausted and probing further only wastes requests.
+ *   - Groq meters per *model* (and per minute), so a 429 on one model leaves
+ *     the others usable and the loop should keep walking.
+ */
+type ChatProvider = {
+  id: 'groq' | 'openrouter';
+  baseURL: string;
+  apiKey: string;
+  models: readonly string[];
+  quotaScope: 'account' | 'model';
+  extraHeaders?: Record<string, string>;
+};
 
-function openRouterHeaders(): Record<string, string> {
-  return {
-    Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
-    'HTTP-Referer': 'https://www.yuniorbatista.com',
-    'X-Title': 'Yunior Batista Portfolio',
-    'Content-Type': 'application/json',
-  };
-}
+// Groq: no card required, limits published per model. RPD/TPD from
+// https://console.groq.com/docs/rate-limits - because quota is per model, the
+// list below also multiplies daily capacity. Re-verify before editing:
+//   curl -s https://api.groq.com/openai/v1/models \
+//     -H "Authorization: Bearer $GROQ_API_KEY" | grep -o '"id":"[^"]*"'
+// Ordered strongest-first: quality matters more than the larger daily budget
+// of the small model, which sits last as the capacity backstop.
+const GROQ_MODELS = [
+  'openai/gpt-oss-120b', // 1K RPD, 200K TPD
+  'qwen/qwen3.8-27b', // 1K RPD, 200K TPD
+  'openai/gpt-oss-20b', // 1K RPD, 200K TPD
+  'llama-3.1-8b-instant', // 14.4K RPD, 500K TPD - most echo-prone
+] as const;
 
-// Free OpenRouter models that are actually served. Re-verify before editing:
+// OpenRouter free models that are actually served. Re-verify before editing:
 //   curl -s https://openrouter.ai/api/v1/models \
 //     | jq -r '.data[].id | select(endswith(":free"))'
 // Verified 2026-11-07: only 12 :free models exist, and the previous list had
 // rotted (nemotron-3-super-120b-a12b, poolside/laguna-xs-2.1, z-ai/glm-5.2 all
 // return 404 "no longer available"). Ordered to resist answer-echo
 // hallucination: largest instruction models first, 3B-class last.
-const FALLBACK_MODELS = [
+const OPENROUTER_MODELS = [
   'nvidia/nemotron-3-ultra-550b-a55b:free',
   'nvidia/nemotron-3.5-super-vl:free',
   'google/gemma-4-31b-it:free',
@@ -195,15 +218,63 @@ const FALLBACK_MODELS = [
   'nvidia/nemotron-3.5-lightning:free', // 3B active MoE - most echo-prone
 ] as const;
 
+/**
+ * Groq wins when both keys are present: it is free without credits and meters
+ * per model. OpenRouter stays reachable so deploying this before GROQ_API_KEY
+ * exists cannot take the chatbot down.
+ */
+export function resolveChatProvider(): ChatProvider | null {
+  if (process.env.GROQ_API_KEY) {
+    return {
+      id: 'groq',
+      baseURL: 'https://api.groq.com/openai/v1',
+      apiKey: process.env.GROQ_API_KEY,
+      models: GROQ_MODELS,
+      quotaScope: 'model',
+    };
+  }
+
+  if (process.env.OPENROUTER_API_KEY) {
+    return {
+      id: 'openrouter',
+      baseURL: 'https://openrouter.ai/api/v1',
+      apiKey: process.env.OPENROUTER_API_KEY,
+      models: OPENROUTER_MODELS,
+      quotaScope: 'account',
+      extraHeaders: {
+        'HTTP-Referer': 'https://www.yuniorbatista.com',
+        'X-Title': 'Yunior Batista Portfolio',
+      },
+    };
+  }
+
+  return null;
+}
+
+function chatCompletionsUrl(provider: ChatProvider): string {
+  return `${provider.baseURL}/chat/completions`;
+}
+
+function chatHeaders(provider: ChatProvider): Record<string, string> {
+  return {
+    Authorization: `Bearer ${provider.apiKey}`,
+    'Content-Type': 'application/json',
+    ...provider.extraHeaders,
+  };
+}
+
 type ChatModelSelection =
   | { ok: true; model: string }
   | { ok: false; reason: 'rate_limited' | 'unavailable' };
 
-// Free-model quota is account-wide, so a 429 on one candidate means every
-// remaining candidate will 429 too. Break immediately in that case, and cache
-// a working selection so the probe does not double quota burn on every message.
+// Cache a working selection so the probe does not burn a request on every
+// message. Keyed by provider: each one has its own model namespace.
 const MODEL_CACHE_TTL_MS = 10 * 60_000;
-let modelCache: { model: string; ts: number } | null = null;
+let modelCache: {
+  providerId: ChatProvider['id'];
+  model: string;
+  ts: number;
+} | null = null;
 
 /** Test hook: forget the cached selection between cases. */
 export function __resetChatModelCache(): void {
@@ -211,22 +282,28 @@ export function __resetChatModelCache(): void {
 }
 
 /**
- * Pick the first free model that actually answers. Returns a typed outcome so
- * the caller can distinguish exhausted quota (429, retry tomorrow) from dead
- * model ids (503, genuinely unavailable).
+ * Pick the first model that actually answers. Returns a typed outcome so the
+ * caller can distinguish exhausted quota (429, retry tomorrow) from dead model
+ * ids (503, genuinely unavailable).
  */
-export async function selectChatModel(): Promise<ChatModelSelection> {
-  if (modelCache && Date.now() - modelCache.ts < MODEL_CACHE_TTL_MS) {
+export async function selectChatModel(
+  provider: ChatProvider
+): Promise<ChatModelSelection> {
+  if (
+    modelCache &&
+    modelCache.providerId === provider.id &&
+    Date.now() - modelCache.ts < MODEL_CACHE_TTL_MS
+  ) {
     return { ok: true, model: modelCache.model };
   }
 
   let sawRateLimit = false;
 
-  for (const candidate of FALLBACK_MODELS) {
+  for (const candidate of provider.models) {
     try {
-      const probe = await fetch(OPENROUTER_CHAT_URL, {
+      const probe = await fetch(chatCompletionsUrl(provider), {
         method: 'POST',
-        headers: openRouterHeaders(),
+        headers: chatHeaders(provider),
         body: JSON.stringify({
           model: candidate,
           messages: [{ role: 'user', content: 'ping' }],
@@ -237,20 +314,31 @@ export async function selectChatModel(): Promise<ChatModelSelection> {
       });
 
       if (probe.ok) {
-        modelCache = { model: candidate, ts: Date.now() };
+        modelCache = {
+          providerId: provider.id,
+          model: candidate,
+          ts: Date.now(),
+        };
         console.log('Chat probe ok - selected:', candidate);
         return { ok: true, model: candidate };
       }
 
       const body = await probe.text();
 
-      if (probe.status === 429) {
-        // Account-wide: every other candidate would burn a request to 429 too.
+      if (probe.status === 429 || probe.status === 413) {
         sawRateLimit = true;
+        if (provider.quotaScope === 'account') {
+          // Account-wide: every other candidate would burn a request to 429 too.
+          console.warn(
+            `Probe ${candidate} -> ${probe.status} (account-wide), stopping: ${body.slice(0, 150)}`
+          );
+          break;
+        }
+        // Model-scoped quota: the next model has its own budget.
         console.warn(
-          `Probe ${candidate} -> 429 (account-wide), stopping: ${body.slice(0, 150)}`
+          `Probe ${candidate} -> ${probe.status} (model-scoped), trying next: ${body.slice(0, 150)}`
         );
-        break;
+        continue;
       }
 
       const isRetriable =
@@ -285,7 +373,8 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!process.env.OPENROUTER_API_KEY) {
+    const provider = resolveChatProvider();
+    if (!provider) {
       return new Response(
         JSON.stringify({ error: 'Chat service not configured' }),
         {
@@ -318,18 +407,15 @@ export async function POST(req: Request) {
       });
     }
 
-    const openrouter = createOpenAI({
-      baseURL: 'https://openrouter.ai/api/v1',
-      apiKey: process.env.OPENROUTER_API_KEY,
-      headers: {
-        'HTTP-Referer': 'https://www.yuniorbatista.com',
-        'X-Title': 'Yunior Batista Portfolio',
-      },
+    const client = createOpenAI({
+      baseURL: provider.baseURL,
+      apiKey: provider.apiKey,
+      headers: provider.extraHeaders,
     });
 
     const modelMessages = await convertToModelMessages(messages);
 
-    const selection = await selectChatModel();
+    const selection = await selectChatModel(provider);
     if (!selection.ok) {
       const isQuota = selection.reason === 'rate_limited';
       return new Response(
@@ -361,10 +447,10 @@ export async function POST(req: Request) {
       trimmedMessages.length
     );
     const result = streamText({
-      // OpenRouter exposes the OpenAI-compatible chat-completions API. The
+      // Both providers expose the OpenAI-compatible chat-completions API. The
       // callable provider form targets the Responses API instead.
       model: wrapLanguageModel({
-        model: openrouter.chat(selectedModel),
+        model: client.chat(selectedModel),
         middleware: stripInlineThinking(),
       }),
       system: systemPrompt,
