@@ -16,7 +16,7 @@ export default function ResumePage() {
             Kissimmee, FL | 407-785-5587 | yuniorbatista1113@gmail.com
           </p>
           <p className='text-sm text-ink-700 dark:text-ink-300'>
-            linkedin.com/in/yuniorbatista | yuniorbatista.com
+            linkedin.com/in/yunior-profile | yuniorbatista.com
           </p>
           <p className='text-base text-ink-700 dark:text-ink-300'>
             Product-minded Software Engineer with 8+ years of experience
