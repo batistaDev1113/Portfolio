@@ -32,7 +32,10 @@ jest.mock('@ai-sdk/openai', () => ({
 
 import {
   POST,
+  MAX_PER_DAY,
   __resetChatModelCache,
+  __resetRateLimits,
+  checkRateLimit,
   resolveChatProvider,
   selectChatModel,
 } from '../app/api/chat/route';
@@ -84,6 +87,7 @@ afterEach(() => {
   process.env.GROQ_API_KEY = FAKE_GROQ_KEY;
   delete process.env.OPENROUTER_API_KEY;
   __resetChatModelCache();
+  __resetRateLimits();
   global.fetch = realFetch;
 });
 
@@ -200,6 +204,44 @@ describe('POST /api/chat validation', () => {
     await expect(blocked.json()).resolves.toEqual({
       error: 'Too many requests. Please try again in a minute.',
     });
+  });
+
+  test('one IP cannot outlive its daily allowance by waiting out the minute cap', () => {
+    jest.useFakeTimers();
+    try {
+      jest.setSystemTime(new Date('2026-11-07T12:00:00Z'));
+      const ip = '198.51.100.9';
+      let allowed = 0;
+
+      // 10 requests per minute is fine; without the daily bucket an attacker
+      // could simply pace themselves and consume the provider's whole budget.
+      for (let minute = 0; minute < 10; minute += 1) {
+        for (let i = 0; i < 10; i += 1) {
+          if (checkRateLimit(ip) === 'ok') allowed += 1;
+        }
+        jest.advanceTimersByTime(61_000);
+      }
+
+      expect(allowed).toBe(MAX_PER_DAY);
+    } finally {
+      jest.useRealTimers();
+    }
+  });
+
+  test('a different IP is unaffected by another caller exhausting its own day', () => {
+    jest.useFakeTimers();
+    try {
+      jest.setSystemTime(new Date('2026-11-07T12:00:00Z'));
+      const noisy = '198.51.100.10';
+      for (let minute = 0; minute < 6; minute += 1) {
+        for (let i = 0; i < 10; i += 1) checkRateLimit(noisy);
+        jest.advanceTimersByTime(61_000);
+      }
+      expect(checkRateLimit(noisy)).toBe('day');
+      expect(checkRateLimit('203.0.113.55')).toBe('ok');
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });
 
