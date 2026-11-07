@@ -122,7 +122,7 @@ const ContactForm = memo(() => {
       id='contact'
     >
       <div className='flex flex-col items-center mb-16'>
-        <p className='eyebrow'>// 03 · Contact</p>
+        <p className='eyebrow'>{'// 03 · Contact'}</p>
         <h2 className='fluid-title text-ink-900 dark:text-white mt-4 text-center'>
           Let&apos;s Connect
         </h2>

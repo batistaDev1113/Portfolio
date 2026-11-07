@@ -66,7 +66,7 @@ export default async function ProjectPage({ params }: Props) {
       <header className='mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 lg:px-8'>
         <div className='grid grid-cols-1 items-center gap-10 lg:grid-cols-2'>
           <div>
-            <SectionLabel>// Project</SectionLabel>
+            <SectionLabel>{'// Project'}</SectionLabel>
             <h1 className='fluid-title mt-4 text-ink-900 dark:text-white'>
               {name}
             </h1>
@@ -124,21 +124,21 @@ export default async function ProjectPage({ params }: Props) {
       <section className='mx-auto w-full max-w-7xl px-4 pb-16 sm:px-6 lg:px-8'>
         <div className='space-y-12'>
           <div>
-            <SectionLabel>// Problem</SectionLabel>
+            <SectionLabel>{'// Problem'}</SectionLabel>
             <p className='mt-4 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-300'>
               {problem}
             </p>
           </div>
 
           <div>
-            <SectionLabel>// Approach</SectionLabel>
+            <SectionLabel>{'// Approach'}</SectionLabel>
             <p className='mt-4 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-300'>
               {approach}
             </p>
           </div>
 
           <div>
-            <SectionLabel>// Key Decisions</SectionLabel>
+            <SectionLabel>{'// Key Decisions'}</SectionLabel>
             <ul className='mt-4 space-y-3'>
               {keyDecisions.map((decision) => (
                 <li key={decision} className='flex gap-3'>
@@ -155,7 +155,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
 
           <div>
-            <SectionLabel>// Outcome</SectionLabel>
+            <SectionLabel>{'// Outcome'}</SectionLabel>
             <p className='mt-4 max-w-3xl text-lg leading-8 text-ink-700 dark:text-ink-300'>
               {outcome}
             </p>
@@ -163,7 +163,7 @@ export default async function ProjectPage({ params }: Props) {
 
           {improvements.length > 0 && (
             <div>
-              <SectionLabel>// What I'd Improve Next</SectionLabel>
+              <SectionLabel>{"// What I'd Improve Next"}</SectionLabel>
               <ul className='mt-4 space-y-3'>
                 {improvements.map((improvement) => (
                   <li key={improvement} className='flex gap-3'>

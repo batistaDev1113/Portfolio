@@ -13,7 +13,7 @@ const Projects = async () => {
       id='projects'
     >
       <div className='flex flex-col items-center mb-16'>
-        <p className='eyebrow'>// 02 · Work</p>
+        <p className='eyebrow'>{'// 02 · Work'}</p>
         <h2 className='fluid-title text-ink-900 dark:text-white mt-4 text-center'>
           Selected Projects
         </h2>

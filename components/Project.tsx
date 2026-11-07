@@ -51,7 +51,7 @@ const Project = memo(
               />
             </div>
             <div className='md:col-span-5 p-8 flex flex-col justify-center gap-4 relative'>
-              <span className='eyebrow'>// Featured</span>
+              <span className='eyebrow'>{'// Featured'}</span>
               <h3 className='fluid-subtitle text-2xl md:text-3xl font-bold tracking-tight text-ink-900 dark:text-white'>
                 {name}
               </h3>
