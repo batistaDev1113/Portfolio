@@ -3,7 +3,7 @@
 
 export const resumeContext = `
 Yunior Batista - Senior Frontend Engineer
-Location: Kissimmee, FL | 407-785-5587 | yuniorbatista1113@gmail.com | linkedin.com/in/yuniorbatista | yuniorbatista.com
+Location: Kissimmee, FL | 407-785-5587 | yuniorbatista1113@gmail.com | linkedin.com/in/yunior-profile | yuniorbatista.com
 Summary: Product-minded Software Engineer with 8+ years building scalable, accessible, user-centered web apps. Expertise in frontend architecture, React, Next.js, TypeScript, Angular, Vue, component-based development. Strong UX/UI judgment + technical leadership across system design, reusable component systems, API integration, testing strategy, performance, production delivery.
 
 Technical Skills:
