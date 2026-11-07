@@ -11,22 +11,89 @@ import { systemPrompt } from '../../../lib/resumeContext';
 export const runtime = 'nodejs';
 export const maxDuration = 30;
 
-// Simple in-memory rate limit (per-instance, resets on cold start)
-// For production, replace with Upstash Ratelimit
-const rateMap = new Map<string, { count: number; ts: number }>();
-const WINDOW_MS = 60_000;
-const MAX_REQ = 10;
+// Simple in-memory rate limit (per-instance, resets on cold start).
+// For production, replace with Upstash Ratelimit.
+//
+// Two windows, because they defend different things. The per-minute cap stops
+// a burst; the per-day cap bounds what one IP can consume across the whole
+// reset period. The daily one matters because Groq's quota is per model and
+// per day: without it, a single visitor could burn the day's budget in a few
+// minutes and every real user after them gets a 429.
+//
+// This is best effort, not a guarantee. On Vercel each instance holds its own
+// map, so a caller routed across N instances gets roughly N times these limits,
+// and a cold start forgets everything. A shared counter (Upstash/KV) is the
+// only real fix and is deliberately not adopted here yet - see
+// docs/adr/0012-chat-provider-and-quota-abuse.md.
+const MINUTE_WINDOW_MS = 60_000;
+const MAX_PER_MINUTE = 10;
+const DAY_WINDOW_MS = 24 * 60 * 60_000;
+export const MAX_PER_DAY = 40;
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateMap.get(ip);
-  if (!entry || now - entry.ts > WINDOW_MS) {
-    rateMap.set(ip, { count: 1, ts: now });
-    return false;
+// Above this size, stale buckets are swept so the map cannot grow forever.
+const PRUNE_THRESHOLD = 5_000;
+
+type Bucket = {
+  minuteCount: number;
+  minuteTs: number;
+  dayCount: number;
+  dayTs: number;
+};
+
+const rateMap = new Map<string, Bucket>();
+
+export type RateLimitVerdict = 'ok' | 'minute' | 'day';
+
+function pruneStale(now: number): void {
+  for (const [key, bucket] of rateMap) {
+    if (now - bucket.dayTs > DAY_WINDOW_MS) rateMap.delete(key);
   }
-  entry.count += 1;
-  if (entry.count > MAX_REQ) return true;
-  return false;
+}
+
+/**
+ * Records a request against the caller's windows and reports which one, if
+ * any, it just exceeded. Exported for tests; the route is the only caller.
+ */
+export function checkRateLimit(ip: string): RateLimitVerdict {
+  const now = Date.now();
+
+  if (rateMap.size > PRUNE_THRESHOLD) pruneStale(now);
+
+  const bucket = rateMap.get(ip);
+
+  if (!bucket) {
+    rateMap.set(ip, {
+      minuteCount: 1,
+      minuteTs: now,
+      dayCount: 1,
+      dayTs: now,
+    });
+    return 'ok';
+  }
+
+  // Rolling-ish windows: each resets when its own period has elapsed.
+  if (now - bucket.minuteTs > MINUTE_WINDOW_MS) {
+    bucket.minuteCount = 1;
+    bucket.minuteTs = now;
+  } else {
+    bucket.minuteCount += 1;
+  }
+
+  if (now - bucket.dayTs > DAY_WINDOW_MS) {
+    bucket.dayCount = 1;
+    bucket.dayTs = now;
+  } else {
+    bucket.dayCount += 1;
+  }
+
+  if (bucket.dayCount > MAX_PER_DAY) return 'day';
+  if (bucket.minuteCount > MAX_PER_MINUTE) return 'minute';
+  return 'ok';
+}
+
+/** Test hook: forget all recorded requests. */
+export function __resetRateLimits(): void {
+  rateMap.clear();
 }
 
 // Inline chain-of-thought markers the small free models emit in plain text.
@@ -366,10 +433,14 @@ export async function POST(req: Request) {
   try {
     const ip =
       req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
-    if (isRateLimited(ip)) {
+    const verdict = checkRateLimit(ip);
+    if (verdict !== 'ok') {
       return new Response(
         JSON.stringify({
-          error: 'Too many requests. Please try again in a minute.',
+          error:
+            verdict === 'day'
+              ? 'You have reached the chat limit for today. Please email yuniorbatista1113@gmail.com'
+              : 'Too many requests. Please try again in a minute.',
         }),
         {
           status: 429,

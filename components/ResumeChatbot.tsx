@@ -27,7 +27,7 @@ const FALLBACK_ERROR =
  */
 function describeChatError(error: Error | undefined): string {
   const message = error?.message ?? '';
-  if (/daily capacity|too many requests/i.test(message)) {
+  if (/daily capacity|too many requests|chat limit for today/i.test(message)) {
     return 'The chat has reached its daily limit. Please try again tomorrow, or email yuniorbatista1113@gmail.com.';
   }
   if (/temporarily unavailable/i.test(message)) {
