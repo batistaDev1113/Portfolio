@@ -74,22 +74,21 @@ const nextConfig = {
   compress: true,
 };
 
-// @sentry/nextjs v11 moved the Next.js build wrapper to the `./config`
-// subpath export and collapsed its options into a single object.
-// See: https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+// const nextConfig = {}
+
+module.exports = nextConfig;
+
+// Sentry v11: withSentryConfig now lives in '@sentry/nextjs/config'
+// and takes a single options object.
 const { withSentryConfig } = require('@sentry/nextjs/config');
 
-module.exports = withSentryConfig(nextConfig, {
+module.exports = withSentryConfig(module.exports, {
   // Suppresses source map uploading logs during build
   silent: true,
   org: 'software-engineer-dn',
   project: 'portfolio-nextjs',
 
-  // Routes browser requests to Sentry through a Next.js rewrite to circumvent
-  // ad-blockers (increases server load)
-  tunnelRoute: '/monitoring',
-
-  // Source map configuration
+  // Source maps are uploaded, then deleted so they never ship to the browser
   sourcemaps: {
     disable: process.env.NODE_ENV === 'development',
     deleteSourcemapsAfterUpload: true,
@@ -98,28 +97,26 @@ module.exports = withSentryConfig(nextConfig, {
   // Don't fail the build on Sentry API errors
   errorHandler: (err) => {
     console.warn('Sentry CLI warning:', err);
+    return false;
   },
 
   // Release configuration to prevent timeouts
   release: {
     finalize: false,
+    deploy: {
+      env: process.env.NODE_ENV,
+    },
   },
 
-  // Deploy configuration
-  deploy: {
-    env: process.env.NODE_ENV,
-  },
+  // Routes browser requests to Sentry through a Next.js rewrite to get past ad-blockers
+  tunnelRoute: '/monitoring',
 
-  // Enables automatic instrumentation of Vercel Cron Monitors.
-  // See the following for more information:
-  // https://docs.sentry.io/product/crons/
-  // https://vercel.com/docs/cron-jobs
   webpack: {
+    // Tree-shake Sentry debug logging (was disableLogger)
+    treeshake: {
+      removeDebugLogging: true,
+    },
+    // Vercel Cron Monitors instrumentation (was automaticVercelMonitors)
     automaticVercelMonitors: true,
-  },
-
-  // Tree-shake Sentry debug logging to reduce bundle size
-  bundleSizeOptimizations: {
-    excludeDebugStatements: true,
   },
 });
