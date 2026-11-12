@@ -24,8 +24,8 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
-    "@ai-sdk/openai": "^4.0.66",
-    "@ai-sdk/react": "^4.0.102",
+    "@ai-sdk/openai": "^4.0.111",
+    "@ai-sdk/react": "^4.0.170",
     "@sentry/nextjs": "^11.11.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@vercel/analytics": "^2.0.1",
