@@ -20,7 +20,7 @@ Improve machine/agent readability and discovery (markdown negotiation, llms.txt,
 - Branch creation requested but git CLI unavailable in this environment; record limitation.
 
 ## Authorized scope
-Modify/add: `app/robots.ts`, `app/llms.txt/route.ts`, `app/openapi.json/route.ts`, `app/.well-known/api-catalog/route.ts`, `app/.well-known/oauth-authorization-server/route.ts`, `app/.well-known/oauth-protected-resource/route.ts`, `app/index.md/route.ts` (or equivalent), `middleware.ts`, `app/layout.tsx`, `next.config.js`, `public/index.md` (if needed), `odd/tasks/agent-readiness-remediation.md`.
+Modify/add: `app/robots.ts`, `app/llms.txt/route.ts`, `app/openapi.json/route.ts`, `app/.well-known/api-catalog/route.ts`, `app/.well-known/oauth-authorization-server/route.ts`, `app/.well-known/oauth-protected-resource/route.ts`, `app/index.md/route.ts` (or equivalent), `proxy.ts`, `app/layout.tsx`, `next.config.js`, `public/index.md` (if needed), `odd/tasks/agent-readiness-remediation.md`.
 
 ## Acceptance criteria
 - `/llms.txt` returns markdown per llmstxt.org (H1, summary, ## sections with links).
@@ -58,12 +58,12 @@ Modify/add: `app/robots.ts`, `app/llms.txt/route.ts`, `app/openapi.json/route.ts
 - Implemented P1: `app/.well-known/api-catalog/route.ts` serves RFC 9727-style `application/linkset+json` linking to OpenAPI `service-desc` and `llms.txt` via `describedby`.
 - Implemented P4: `app/.well-known/oauth-authorization-server/route.ts` and `app/.well-known/oauth-protected-resource/route.ts` serve minimal honest discovery metadata (issuer/resource canonical URL, empty supported grants/response types/methods/scopes, no invented working endpoints).
 - Implemented D3: `next.config.js` adds global `Link` header (api-catalog, describedby/openapi, help/llms.txt, alternate index.md). `app/layout.tsx` adds `<link rel="api-catalog">`, `<link rel="describedby">`, markdown alternate, and llms help tags.
-- Implemented C1: `app/index.md/route.ts` serves markdown homepage/portfolio summary at `/index.md` (`text/markdown; charset=utf-8`, `Vary: Accept`). `middleware.ts` rewrites `/` to `/index.md` when `Accept` includes `text/markdown` (matcher limited to `/` and `/index.md`) to preserve normal HTML for browsers.
+- Implemented C1: `app/index.md/route.ts` serves markdown homepage/portfolio summary at `/index.md` (`text/markdown; charset=utf-8`, `Vary: Accept`). `proxy.ts` rewrites `/` to `/index.md` when `Accept` includes `text/markdown` (matcher limited to `/` and `/index.md`) to preserve normal HTML for browsers.
 - Updated `app/sitemap.ts` to canonical URLs and included key discoverable resources (`/resume`, `/llms.txt`, `/index.md`, `/openapi.json`).
 
 ## Verification evidence
 - Not run in this environment: shell/git unavailable for `npx tsc --noEmit`, `npm run lint:check`, `npm run build`, or `npm test -- --watchAll=false`.
-- Manual static checks: inspected created/edited route files, config, middleware, layout, robots, and sitemap for expected paths, content types, canonical URLs, and preserved existing API/CSP behavior.
+- Manual static checks: inspected created/edited route files, config, proxy, layout, robots, and sitemap for expected paths, content types, canonical URLs, and preserved existing API/CSP behavior.
 
 ## Next step
 Run applicable verification in a Node 22/npm environment (`npx tsc --noEmit`, `npm run lint:check` or targeted ESLint, `npm run build`, targeted tests as relevant) and confirm `/`, `/index.md`, `/llms.txt`, `/openapi.json`, `/.well-known/api-catalog`, OAuth well-known routes, Link headers, and Accept negotiation behave as expected. Commit on a dedicated branch when git is available.

@@ -5,7 +5,7 @@ function prefersMarkdown(acceptHeader: string | null): boolean {
   return /(^|,|\s)text\/markdown\b/i.test(acceptHeader);
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   if (pathname === '/' && prefersMarkdown(request.headers.get('accept'))) {
