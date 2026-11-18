@@ -28,7 +28,7 @@ const nextConfig = {
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
 
-  // Security headers
+  // Security and discovery headers
   async headers() {
     return [
       {
@@ -62,6 +62,11 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value:
               "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://va.vercel-scripts.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https: blob:; connect-src 'self' https://vitals.vercel-insights.com https://vercel.live wss://ws-us3.pusher.com https://*.sentry.io; worker-src blob:; frame-ancestors 'self'; base-uri 'self'; form-action 'self';",
+          },
+          {
+            key: 'Link',
+            value:
+              '<https://www.yuniorbatista.com/.well-known/api-catalog>; rel="api-catalog", <https://www.yuniorbatista.com/openapi.json>; rel="describedby"; type="application/vnd.oai.openapi+json", <https://www.yuniorbatista.com/llms.txt>; rel="help"; type="text/plain", <https://www.yuniorbatista.com/index.md>; rel="alternate"; type="text/markdown"',
           },
         ],
       },
