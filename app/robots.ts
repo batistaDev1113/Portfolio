@@ -1,6 +1,15 @@
 import { MetadataRoute } from 'next';
 
-const allowAll = { allow: '/' as const };
+// Cloudflare Content Signals Policy: declare how crawlers may use site content.
+// search = search indexing, ai-input = RAG/grounding, ai-train = model training.
+// See https://content-signals.org/
+const contentSignal = {
+  other: {
+    'Content-Signal': 'search=yes, ai-train=no, ai-input=yes',
+  },
+};
+
+const allowAll = { allow: '/' as const, ...contentSignal };
 
 export default function robots(): MetadataRoute.Robots {
   return {
