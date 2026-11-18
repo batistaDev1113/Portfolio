@@ -20,7 +20,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # NVIDIA NIM exposes an OpenAI-compatible endpoint; use the openai/ prefix.
-          config.model: "openai/deepseek-ai/deepseek-v4.1-flash"
+          config.model: "openai/nvidia/nemotron-3.5-lightning-30b-a3b"
           config.fallback_models: '[]'
           config.custom_model_max_tokens: "32000"
           config.num_retries: "6"
