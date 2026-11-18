@@ -78,13 +78,14 @@ const openapi = {
             },
           },
           '400': {
-              description: 'Invalid or missing messages / invalid message length.',
-              content: {
-                'application/json': {
-                  schema: { $ref: '#/components/schemas/Error' },
-                },
+            description:
+              'Invalid or missing messages / invalid message length.',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Error' },
               },
             },
+          },
           '429': {
             description: 'Rate limited (per-minute or daily capacity/quota).',
             content: {
@@ -94,13 +95,14 @@ const openapi = {
             },
           },
           '500': {
-              description: 'Chat service not configured or internal processing error.',
-              content: {
-                'application/json': {
-                  schema: { $ref: '#/components/schemas/Error' },
-                },
+            description:
+              'Chat service not configured or internal processing error.',
+            content: {
+              'application/json': {
+                schema: { $ref: '#/components/schemas/Error' },
               },
             },
+          },
           '503': {
             description: 'All chat models temporarily unavailable.',
             content: {
@@ -135,22 +137,22 @@ const openapi = {
         },
         responses: {
           '200': {
-              description: 'Message sent successfully.',
-              content: {
-                'application/json': {
-                  schema: {
-                    type: 'object',
-                    properties: {
-                      message: {
-                        type: 'string',
-                        const: 'Email sent successfully',
-                      },
+            description: 'Message sent successfully.',
+            content: {
+              'application/json': {
+                schema: {
+                  type: 'object',
+                  properties: {
+                    message: {
+                      type: 'string',
+                      const: 'Email sent successfully',
                     },
-                    required: ['message'],
                   },
+                  required: ['message'],
                 },
               },
             },
+          },
           '400': {
             description: 'Missing required fields.',
             content: {
