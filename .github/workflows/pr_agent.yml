@@ -21,7 +21,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           # NVIDIA NIM exposes an OpenAI-compatible endpoint; use the openai/ prefix.
           config.model: "openai/nvidia/nemotron-3.5-lightning-30b-a3b"
-          config.fallback_models: '[]'
+          config.fallback_models: '["openai/moonshotai/kimi-k3.1-pro"]'
           config.custom_model_max_tokens: "32000"
           config.num_retries: "6"
           config.ai_timeout: "300"
