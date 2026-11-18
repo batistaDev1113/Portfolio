@@ -2,6 +2,8 @@
 
 [View the live site](https://www.yuniorbatista.com/) · [View the accessible resume](https://www.yuniorbatista.com/resume) · [Download the resume PDF](https://www.yuniorbatista.com/Yunior-Batista-Resume.pdf)
 
+[![AIScan.site Grade A+ — 100/100](https://aiscan.site/api/public/badge.svg?score=100&grade=A%2B&host=www.yuniorbatista.com)](https://aiscan.site/?u=https%3A%2F%2Fwww.yuniorbatista.com%2F)
+
 This is the source for Yunior Batista's portfolio: a product-minded Senior Frontend Engineer with 8+ years of experience building scalable, accessible web applications and digital products. It is designed to demonstrate the same standards brought to production work—clear information architecture, maintainable component systems, measurable performance, accessibility, and dependable delivery.
 
 ## What this portfolio demonstrates
