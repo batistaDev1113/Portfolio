@@ -66,6 +66,28 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
     <html lang='en' suppressHydrationWarning>
       <head>
         <link rel='icon' href='data:,' />
+        <link
+          rel='api-catalog'
+          href='https://www.yuniorbatista.com/.well-known/api-catalog'
+          type='application/linkset+json'
+        />
+        <link
+          rel='describedby'
+          href='https://www.yuniorbatista.com/openapi.json'
+          type='application/vnd.oai.openapi+json'
+        />
+        <link
+          rel='alternate'
+          href='https://www.yuniorbatista.com/index.md'
+          type='text/markdown'
+          title='Markdown version'
+        />
+        <link
+          rel='help'
+          href='https://www.yuniorbatista.com/llms.txt'
+          type='text/plain'
+          title='LLM site description'
+        />
         <script
           type='application/ld+json'
           dangerouslySetInnerHTML={{
