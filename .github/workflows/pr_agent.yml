@@ -1,4 +1,4 @@
-name: PR Agent (Gemini)
+name: PR Agent (NVIDIA NIM)
 
 on:
   pull_request:
@@ -13,17 +13,20 @@ jobs:
       contents: read
       issues: write
       pull-requests: write
-    name: Run PR Agent (Gemini) on pull requests and comments
+    name: Run PR Agent (NVIDIA NIM) on pull requests and comments
     steps:
       - name: PR Agent action step
         uses: the-pr-agent/pr-agent@main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          config.model: "gemini/gemini-2.5-flash"
-          config.fallback_models: '["gemini/gemini-3.8-flash"]'
+          # NVIDIA NIM exposes an OpenAI-compatible endpoint; use the openai/ prefix.
+          config.model: "openai/deepseek-ai/deepseek-v4-flash"
+          config.fallback_models: '[]'
+          config.custom_model_max_tokens: "32000"
           config.num_retries: "6"
           config.ai_timeout: "300"
-          GOOGLE_AI_STUDIO.GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_KEY: ${{ secrets.NVIDIA_NIM_API_KEY }}
+          OPENAI.API_BASE: "https://integrate.api.nvidia.com/v1"
           github_action_config.auto_review: "true"
-          github_action_config.auto_describe: "true"
-          github_action_config.auto_improve: "true"
+          github_action_config.auto_describe: "false"
+          github_action_config.auto_improve: "false"
