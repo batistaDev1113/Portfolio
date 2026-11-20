@@ -45,7 +45,6 @@ const Project = memo(
                 alt={`${name} project screenshot`}
                 className='w-full h-full object-cover'
                 loading='eager'
-                priority
                 sizes='(max-width: 768px) 100vw, 58vw'
                 quality={80}
               />
