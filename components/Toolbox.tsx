@@ -73,6 +73,7 @@ const Toolbox = () => {
             accessibility={100}
             bestPractices={100}
             seo={100}
+            agenticBrowsing={100}
           />
         </div>
       </div>
