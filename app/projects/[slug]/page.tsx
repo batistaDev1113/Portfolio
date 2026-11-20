@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!project) return {};
   return {
     title: `${project.name} — Case Study`,
-    description: project.impact,
+    description: project.description,
   };
 }
 
@@ -36,7 +36,6 @@ export default async function ProjectPage({ params }: Props) {
   const {
     name,
     description,
-    impact,
     imageUrl,
     technologies,
     githubLink,
@@ -72,10 +71,6 @@ export default async function ProjectPage({ params }: Props) {
             </h1>
             <p className='mt-4 text-base leading-7 text-ink-700 dark:text-ink-300'>
               {description}
-            </p>
-            <p className='mt-5 inline-flex items-center gap-2 rounded-lg bg-primary-50 px-4 py-2.5 text-sm font-semibold text-primary-700 dark:bg-primary-500/10 dark:text-primary-300'>
-              <span aria-hidden='true'>▲</span>
-              {impact}
             </p>
             <div className='mt-6 flex flex-wrap gap-2'>
               {technologies.map((tech) => (

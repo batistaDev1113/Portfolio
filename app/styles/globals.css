@@ -643,3 +643,13 @@ html {
   border-color: var(--color-primary-400);
   background: var(--color-brand-tint-hover);
 }
+
+/* Featured card escapes the section's px-4 gutters on mobile: true
+   edge-to-edge cinematic card (image-led), restored to the framed split at md+ */
+@media (max-width: 767px) {
+  .featured-bleed {
+    width: calc(100% + 2rem);
+    margin-inline: -1rem;
+    border-radius: 0;
+  }
+}

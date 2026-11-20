@@ -4,7 +4,7 @@
     "name": "Portfolio",
     "slug": "portfolio",
     "description": "A single-page portfolio engineered like a product: design-token system, CSS-first motion, and a Core Web Vitals budget enforced in CI.",
-    "impact": "Lighthouse (mobile) — Performance 93 · Accessibility 100 · Best Practices 100 · SEO 100",
+    "impact": "Core Web Vitals budget enforced on every merge",
     "technologies": [
       "React",
       "Next.js",
