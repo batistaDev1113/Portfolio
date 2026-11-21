@@ -34,10 +34,10 @@ const Project = memo(
           /* Featured: landscape split, image-led */
           <Link
             href={href}
-            className='group project-card w-full md:grid md:grid-cols-12 md:min-h-72 flex flex-col'
+            className='group project-card featured-bleed w-full md:grid md:grid-cols-12 md:min-h-72 flex flex-col'
             aria-label={`View case study for ${name}`}
           >
-            <div className='project-image-overlay md:col-span-7 h-56 md:h-full'>
+            <div className='project-image-overlay aspect-[16/10] md:col-span-7 md:aspect-auto md:h-full'>
               <Image
                 src={src || '/No-Image-Placeholder.svg'}
                 width={800}
@@ -48,10 +48,21 @@ const Project = memo(
                 sizes='(max-width: 768px) 100vw, 58vw'
                 quality={80}
               />
+              {/* Mobile: cinematic caption overlay — duplicated in the text
+                column for md+ so exactly one accessible heading exists */}
+              <div
+                aria-hidden='true'
+                className='md:hidden absolute inset-x-0 bottom-0 p-5 pt-16 bg-linear-to-t from-black/85 via-black/45 to-transparent'
+              >
+                <span className='eyebrow text-white/70'>{'// Featured'}</span>
+                <h3 className='mt-1 text-2xl font-bold tracking-tight text-white drop-shadow line-clamp-2'>
+                  {name}
+                </h3>
+              </div>
             </div>
-            <div className='md:col-span-5 p-8 flex flex-col justify-center gap-4 relative'>
-              <span className='eyebrow'>{'// Featured'}</span>
-              <h3 className='fluid-subtitle text-2xl md:text-3xl font-bold tracking-tight text-ink-900 dark:text-white'>
+            <div className='md:col-span-5 px-6 py-6 md:p-8 flex flex-col justify-center gap-4 relative'>
+              <span className='hidden md:block eyebrow'>{'// Featured'}</span>
+              <h3 className='hidden md:block fluid-subtitle text-2xl md:text-3xl font-bold tracking-tight text-ink-900 dark:text-white'>
                 {name}
               </h3>
               <p className='text-ink-700 dark:text-ink-300 text-sm leading-relaxed line-clamp-4'>

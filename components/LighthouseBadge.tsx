@@ -5,6 +5,8 @@ type LighthouseBadgeProps = {
   accessibility: number;
   bestPractices: number;
   seo: number;
+  /** Optional Agentic Browsing score; omitted when the audit did not include it. */
+  agenticBrowsing?: number;
 };
 
 // Proof-of-work Lighthouse badge. Scores reflect the last mobile audit of the
@@ -15,18 +17,22 @@ const LighthouseBadge = ({
   accessibility,
   bestPractices,
   seo,
+  agenticBrowsing,
 }: LighthouseBadgeProps) => {
   const scores = [
     { label: 'Perf', value: performance },
     { label: 'A11y', value: accessibility },
     { label: 'Best practices', value: bestPractices },
     { label: 'SEO', value: seo },
+    ...(agenticBrowsing === undefined
+      ? []
+      : [{ label: 'Agentic browsing', value: agenticBrowsing }]),
   ];
 
   return (
     <div
-      className='inline-flex items-center gap-3 rounded-full border border-primary-200 bg-primary-50/60 px-4 py-2 dark:border-border dark:bg-surface'
-      aria-label={`Lighthouse scores — Performance ${performance}, Accessibility ${accessibility}, Best practices ${bestPractices}, SEO ${seo} out of 100`}
+      className='inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-primary-200 bg-primary-50/60 px-4 py-2 text-center sm:gap-3 dark:border-border dark:bg-surface'
+      aria-label={`Lighthouse scores — Performance ${performance}, Accessibility ${accessibility}, Best practices ${bestPractices}, SEO ${seo}${agenticBrowsing === undefined ? '' : `, Agentic browsing ${agenticBrowsing}`} out of 100`}
     >
       <FaTachometerAlt
         className='h-4 w-4 shrink-0 text-primary-600 dark:text-primary-300'
@@ -36,7 +42,7 @@ const LighthouseBadge = ({
         Lighthouse
       </span>
       <span className='hidden h-4 w-px bg-ink-300 dark:bg-ink-600 sm:block' />
-      <ul className='flex items-center gap-2 font-mono text-xs'>
+      <ul className='flex flex-wrap items-center justify-center gap-x-2 gap-y-1 font-mono text-xs'>
         {scores.map(({ label, value }) => (
           <li
             key={label}

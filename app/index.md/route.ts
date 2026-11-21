@@ -56,7 +56,7 @@ Expertise in frontend architecture, React, Next.js, TypeScript, Angular, Vue, co
 
 ### Portfolio
 - **Stack:** React, Next.js, TypeScript, Tailwind CSS, Playwright, Jest, Vercel
-- **Impact:** Lighthouse (mobile) — Performance 93, Accessibility 100, Best Practices 100, SEO 100
+- **Impact:** Lighthouse (live site via PageSpeed Insights) — Desktop: Performance 99, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 100; Mobile: Performance 93, Accessibility 100, Best Practices 100, SEO 100
 - **Highlights:** Pure-CSS motion, Tailwind v4 design tokens, next/image AVIF/WebP, CI quality gates
 - **Live:** https://www.yuniorbatista.com/
 - **Source:** https://github.com/batistaDev1113/Portfolio

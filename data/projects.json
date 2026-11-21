@@ -4,7 +4,7 @@
     "name": "Portfolio",
     "slug": "portfolio",
     "description": "A single-page portfolio engineered like a product: design-token system, CSS-first motion, and a Core Web Vitals budget enforced in CI.",
-    "impact": "Lighthouse (mobile) — Performance 93 · Accessibility 100 · Best Practices 100 · SEO 100",
+    "impact": "Core Web Vitals budget enforced on every merge",
     "technologies": [
       "React",
       "Next.js",
@@ -27,7 +27,7 @@
       "next/image with breakpoint-accurate sizes + AVIF/WebP, so mobile never downloads the full-resolution master files.",
       "CI gate (lint, tsc, jest, Playwright hero regression, npm audit) that reviews every PR before merge."
     ],
-    "outcome": "Mobile Lighthouse: Performance 93, Accessibility 100, Best Practices 100, SEO 100 (audited on the live site via PageSpeed Insights). Accessibility kept AA-clean while the hero renders lazily-rendered text that doesn't wait on JS hydration.",
+    "outcome": "Lighthouse (audited on the live site via PageSpeed Insights) — Desktop: Performance 99, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 100; Mobile: Performance 93, Accessibility 100, Best Practices 100, SEO 100. Agentic Browsing 100 means the site ships llms.txt plus a clean, parseable accessibility tree and schema so AI agents can browse it. Accessibility kept AA-clean while the hero renders text that doesn't wait on JS hydration.",
     "improvements": [
       "Add 3–5 more case-study routes to cover different tech stacks and outcomes.",
       "Add a Lighthouse CI badge auto-published from the main branch so the score is verifiable, not just claimed.",
