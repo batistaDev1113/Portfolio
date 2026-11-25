@@ -32,7 +32,7 @@ const ContactForm = memo(() => {
     const trimmed = email.trim();
     if (!trimmed) return 'Email is required';
     const emailRegex =
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/;
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.(?:[a-zA-Z]{2,}|xn--[a-zA-Z0-9-]{1,58}[a-zA-Z0-9])$/;
     if (!emailRegex.test(trimmed)) return 'Please enter a valid email address';
     return undefined;
   };
