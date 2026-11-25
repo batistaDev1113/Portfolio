@@ -99,7 +99,7 @@ const Hero = memo(() => {
           </section>
           <p
             id='resume-format-note'
-            className='mt-4 text-sm text-white/70 text-left max-w-md'
+            className='mt-4 text-sm text-white/85 drop-shadow-sm text-left max-w-md'
           >
             HTML resume for screen readers; PDF for sharing.
           </p>
@@ -132,11 +132,11 @@ const Hero = memo(() => {
       </div>
 
       {/* Scroll hint */}
-      <div className='absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-white/40'>
-        <span className='font-mono text-[11px] tracking-widest uppercase'>
+      <div className='absolute bottom-6 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 text-white/75'>
+        <span className='font-mono text-[11px] tracking-widest uppercase drop-shadow-sm'>
           scroll
         </span>
-        <span className='w-px h-8 bg-linear-to-b from-white/40 to-transparent' />
+        <span className='w-px h-8 bg-linear-to-b from-white/70 to-transparent' />
       </div>
     </section>
   );
