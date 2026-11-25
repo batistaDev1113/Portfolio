@@ -1,19 +1,18 @@
+'use client';
+
 import { ThemeProvider } from 'next-themes';
-import { type FC, type ReactNode } from 'react';
-import '../app/styles/globals.css';
+import type { ComponentProps } from 'react';
 
-interface MyThemeProviderProps {
-  children: ReactNode;
-  [key: string]: any;
-}
+type MyThemeProviderProps = ComponentProps<typeof ThemeProvider>;
 
-const MyThemeProvider: FC<MyThemeProviderProps> = ({ children, ...props }) => {
+const MyThemeProvider = ({ children, ...props }: MyThemeProviderProps) => {
   return (
     <ThemeProvider
-      {...props}
+      attribute='class'
       defaultTheme='dark'
       enableSystem={true}
       enableColorScheme={true}
+      {...props}
     >
       {children}
     </ThemeProvider>

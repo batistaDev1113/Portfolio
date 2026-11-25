@@ -1,34 +1,34 @@
 'use client';
 
-// Using custom glassmorphism card instead of Flowbite.
 // Hero entrance animations are pure-CSS (@keyframes, see globals.css) so the
-// LCP hero-bio text renders without requiring framer-motion to hydrate.
+// LCP hero-bio text renders without requiring a JS motion library to hydrate.
 import Image from 'next/image';
-import { memo } from 'react';
+import Link from 'next/link';
+import { memo, useSyncExternalStore } from 'react';
 import { FaFileDownload } from 'react-icons/fa';
 import { useTheme } from 'next-themes';
 import portraitDark from '../public/images/portrait-dark.jpg';
 import portraitLight from '../public/images/portrait-light.jpg';
 import SocialLinks from '../components/SocialLinks';
 
-const Hero = memo(() => {
-  const { resolvedTheme } = useTheme();
-  // Light mode uses the black-background cartoon (it reads as a clean photo
-  // against the light page); dark mode uses the light-gray-background cartoon.
-  const portraitSrc = resolvedTheme === 'light' ? portraitLight : portraitDark;
+const emptySubscribe = () => () => {};
 
-  const HERO_ABOUT_TEXT = `Hi, I'm Yunior—a product-minded Senior Frontend Engineer. I turn complex ideas into intuitive, scalable web experiences with React, Next.js, and TypeScript, shipping accessible, high-performance interfaces that are as maintainable as they are polished.
+const HERO_ABOUT_TEXT = `Hi, I'm Yunior—a product-minded Senior Frontend Engineer. I turn complex ideas into intuitive, scalable web experiences with React, Next.js, and TypeScript, shipping accessible, high-performance interfaces that are as maintainable as they are polished.
 
 I care about creating accessible, maintainable component systems that solve real product problems through thoughtful engineering and user-centered design.`;
 
-  const handleDownloadResume = () => {
-    const link = document.createElement('a');
-    link.href = '/Yunior-Batista-Resume.pdf';
-    link.download = 'Yunior-Batista-Resume.pdf';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+const Hero = memo(() => {
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,
+    () => false
+  );
+  const { resolvedTheme } = useTheme();
+  // Light mode uses the black-background cartoon; dark mode uses the
+  // light-gray-background cartoon. Guard with `mounted` so SSR and initial
+  // hydration always agree.
+  const portraitSrc =
+    mounted && resolvedTheme === 'light' ? portraitLight : portraitDark;
 
   return (
     <section
@@ -43,7 +43,7 @@ I care about creating accessible, maintainable component systems that solve real
             &nbsp;// Senior Frontend Engineer
           </p>
 
-          <h1 className='mt-6 text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold text-white drop-shadow-lg fluid-title hero-anim hero-anim-2 leading-[1.05] whitespace-nowrap'>
+          <h1 className='mt-6 font-display text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-bold tracking-[-0.02em] text-white drop-shadow-lg hero-anim hero-anim-2 leading-[1.05] sm:whitespace-nowrap'>
             Yunior Batista
           </h1>
 
@@ -65,7 +65,7 @@ I care about creating accessible, maintainable component systems that solve real
 
           <div className='mt-6 flex items-center gap-2 hero-anim hero-anim-4'>
             <span className='relative flex h-2.5 w-2.5'>
-              <span className='absolute inline-flex h-full w-full animate-ping rounded-full bg-live opacity-75'></span>
+              <span className='absolute inline-flex h-full w-full animate-ping motion-reduce:animate-none rounded-full bg-live opacity-75'></span>
               <span className='relative inline-flex h-2.5 w-2.5 rounded-full bg-live'></span>
             </span>
             <span className='text-sm text-white/70 font-mono'>
@@ -78,24 +78,24 @@ I care about creating accessible, maintainable component systems that solve real
             className='w-full flex flex-wrap items-center gap-4 mt-8'
             aria-label='Resume actions'
           >
-            <a
+            <Link
               href='/resume'
               aria-label='View Resume'
               aria-describedby='resume-format-note'
               className='button-about m-0'
             >
               View Resume
-            </a>
-            <button
-              type='button'
+            </Link>
+            <a
+              href='/Yunior-Batista-Resume.pdf'
+              download='Yunior-Batista-Resume.pdf'
               aria-label='Download Resume PDF'
               aria-describedby='resume-format-note'
-              className='button-quiet hover:cursor-pointer'
-              onClick={handleDownloadResume}
+              className='button-quiet'
             >
-              <FaFileDownload className='mr-2' />
+              <FaFileDownload className='mr-2' aria-hidden='true' />
               Resume PDF
-            </button>
+            </a>
           </section>
           <p
             id='resume-format-note'
@@ -136,7 +136,7 @@ I care about creating accessible, maintainable component systems that solve real
         <span className='font-mono text-[11px] tracking-widest uppercase'>
           scroll
         </span>
-        <span className='w-px h-8 bg-gradient-to-b from-white/40 to-transparent' />
+        <span className='w-px h-8 bg-linear-to-b from-white/40 to-transparent' />
       </div>
     </section>
   );

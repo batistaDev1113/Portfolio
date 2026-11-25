@@ -30,6 +30,7 @@ const ScrollReveal = () => {
       return;
     }
 
+    const observed = new WeakSet<Element>();
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -42,10 +43,14 @@ const ScrollReveal = () => {
       { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
     );
 
-    const observePending = () =>
+    const observePending = () => {
       revealTargets().forEach((el) => {
-        if (!el.classList.contains('in-view')) observer.observe(el);
+        if (!el.classList.contains('in-view') && !observed.has(el)) {
+          observed.add(el);
+          observer.observe(el);
+        }
       });
+    };
 
     // Defer until load: during hydration the layout is still collapsed, so
     // below-fold content temporarily stacks at the top and would falsely
@@ -54,20 +59,34 @@ const ScrollReveal = () => {
     const start = () => {
       observePending();
 
-      // next/dynamic clients (ContactForm) may mount after load, so keep
-      // observing for late-added reveal targets.
+      // next/dynamic clients (ContactForm) may mount after load; disconnect
+      // as soon as #contact's reveal target is present so we don't observe
+      // unrelated DOM mutations (like chat streaming) forever.
+      const hasContactReveal = () =>
+        Boolean(document.querySelector('#contact .section-reveal'));
+
       let animationFrame = 0;
-      const mutationObserver = new MutationObserver(() => {
-        cancelAnimationFrame(animationFrame);
-        animationFrame = requestAnimationFrame(observePending);
-      });
-      mutationObserver.observe(document.body, {
-        childList: true,
-        subtree: true,
-      });
+      let mutationObserver: MutationObserver | null = null;
+
+      if (!hasContactReveal()) {
+        mutationObserver = new MutationObserver(() => {
+          cancelAnimationFrame(animationFrame);
+          animationFrame = requestAnimationFrame(() => {
+            observePending();
+            if (hasContactReveal()) {
+              mutationObserver?.disconnect();
+              mutationObserver = null;
+            }
+          });
+        });
+        mutationObserver.observe(document.body, {
+          childList: true,
+          subtree: true,
+        });
+      }
 
       return () => {
-        mutationObserver.disconnect();
+        mutationObserver?.disconnect();
         observer.disconnect();
         cancelAnimationFrame(animationFrame);
       };

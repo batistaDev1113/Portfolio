@@ -79,8 +79,6 @@ const nextConfig = {
   compress: true,
 };
 
-// const nextConfig = {}
-
 module.exports = nextConfig;
 
 // Sentry v11: withSentryConfig now lives in '@sentry/nextjs/config'

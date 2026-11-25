@@ -106,14 +106,10 @@
   /* White-alpha glass surfaces. */
   --color-glass-text: rgba(255, 255, 255, 0.85);
   --color-glass-text-strong: rgba(255, 255, 255, 0.9);
-  --color-glass-fill: rgba(255, 255, 255, 0.08);
-  --color-glass-fill-dark: rgba(255, 255, 255, 0.05);
   --color-glass-fill-tag: rgba(255, 255, 255, 0.12);
   --color-glass-fill-faint: rgba(255, 255, 255, 0.04);
   --color-glass-fill-hover: rgba(255, 255, 255, 0.1);
   --color-glass-border: rgba(255, 255, 255, 0.22);
-  --color-glass-border-soft: rgba(255, 255, 255, 0.15);
-  --color-glass-border-dark: rgba(255, 255, 255, 0.12);
   --color-glass-border-hover: rgba(255, 255, 255, 0.45);
 
   /* Brand (primary/violet) alpha tints. */
@@ -135,6 +131,4 @@
   --shadow-card-hover-dark: 0 25px 55px rgba(0, 0, 0, 0.5);
   --shadow-btn-primary: 0 10px 25px rgba(79, 70, 229, 0.3);
   --shadow-btn-primary-hover: 0 15px 35px rgba(79, 70, 229, 0.4);
-  --shadow-hero-card: 0 25px 60px rgba(0, 0, 0, 0.5);
-  --shadow-hero-card-dark: 0 25px 60px rgba(0, 0, 0, 0.6);
 }

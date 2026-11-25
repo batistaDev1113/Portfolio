@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ModeToggle } from './ModeToggle';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -15,16 +16,31 @@ const Navigation = () => {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setIsOpen(false);
+        menuButtonRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [isOpen]);
+
   const handleNavLinkClick = () => {
     setIsOpen(false);
   };
 
   // At the top of the page the nav sits over the (dark, in both themes) hero,
   // so it goes transparent with light ink to blend with the hero surface. Once
-  // scrolled it switches to the frosted, theme-aware look.
+  // scrolled it switches to the frosted, theme-aware look. When the mobile menu
+  // is open over the hero, give it a dark frosted surface for legibility.
   const navSurface = scrolled
     ? 'bg-white/90 dark:bg-night/90 backdrop-blur-md border-b border-ink-200/40 dark:border-border'
-    : 'bg-transparent border-b border-transparent';
+    : isOpen
+      ? 'bg-night/95 backdrop-blur-md border-b border-border'
+      : 'bg-transparent border-b border-transparent';
   const linkColor = scrolled
     ? 'text-ink-700 dark:text-ink-400'
     : 'text-white/90';
@@ -34,7 +50,7 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`sticky top-0 z-100 w-full px-6 py-3 transition-all duration-300 ${navSurface}`}
+      className={`sticky top-0 z-100 w-full px-6 py-3 transition-[background-color,border-color,backdrop-filter] duration-300 ${navSurface}`}
     >
       <div className='flex flex-wrap items-center justify-between'>
         <Link
@@ -43,9 +59,10 @@ const Navigation = () => {
         >
           Yunior B.
         </Link>
-        <div className='flex items-center space-x-8'>
+        <div className='flex items-center space-x-6'>
           <ModeToggle onHero={!scrolled} />
           <button
+            ref={menuButtonRef}
             onClick={() => setIsOpen(!isOpen)}
             type='button'
             className={`inline-flex items-center rounded-lg p-2 text-sm focus:outline-none focus:ring-2 md:hidden ${
@@ -63,6 +80,7 @@ const Navigation = () => {
                 fill='none'
                 viewBox='0 0 24 24'
                 stroke='currentColor'
+                aria-hidden='true'
               >
                 <path
                   strokeLinecap='round'
@@ -77,6 +95,7 @@ const Navigation = () => {
                 fill='none'
                 viewBox='0 0 24 24'
                 stroke='currentColor'
+                aria-hidden='true'
               >
                 <path
                   strokeLinecap='round'
@@ -100,9 +119,7 @@ const Navigation = () => {
                 onClick={handleNavLinkClick}
                 className={`block py-2 pr-4 pl-3 md:p-0 ${linkColor}`}
               >
-                <span
-                  className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}
-                >
+                <span className={`pb-1 hover:border-b-2 ${linkHover}`}>
                   How I Build
                 </span>
               </a>
@@ -114,9 +131,7 @@ const Navigation = () => {
                 onClick={handleNavLinkClick}
                 className={`block py-2 pr-4 pl-3 md:p-0 ${linkColor}`}
               >
-                <span
-                  className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}
-                >
+                <span className={`pb-1 hover:border-b-2 ${linkHover}`}>
                   Some Projects I&apos;ve Built
                 </span>
               </a>
@@ -128,9 +143,7 @@ const Navigation = () => {
                 onClick={handleNavLinkClick}
                 className={`block py-2 pr-4 pl-3 md:p-0 ${linkColor}`}
               >
-                <span
-                  className={`pb-1 hover:border-b-2 hover:border-spacing-4 ${linkHover}`}
-                >
+                <span className={`pb-1 hover:border-b-2 ${linkHover}`}>
                   Let&apos;s Connect
                 </span>
               </a>

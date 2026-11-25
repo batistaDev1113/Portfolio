@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, memo, useCallback, useState } from 'react';
+import { FormEvent, memo, useCallback, useRef, useState } from 'react';
 import { BsGithub, BsLinkedin } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
@@ -9,6 +9,7 @@ const GITHUB_URL = 'https://github.com/batistaDev1113';
 
 const ContactForm = memo(() => {
   const [sending, setSending] = useState<boolean>(false);
+  const [submitted, setSubmitted] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
   const [errors, setErrors] = useState<{
     fullName?: string;
@@ -20,6 +21,7 @@ const ContactForm = memo(() => {
     email: '',
     message: '',
   });
+  const fullNameInputRef = useRef<HTMLInputElement>(null);
 
   const fullNameErrorId = 'full-name-error';
   const emailErrorId = 'email-error';
@@ -27,9 +29,11 @@ const ContactForm = memo(() => {
 
   // Validation functions
   const validateEmail = (email: string): string | undefined => {
-    if (!email.trim()) return 'Email is required';
-    const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/i;
-    if (!emailRegex.test(email)) return 'Please enter a valid email address';
+    const trimmed = email.trim();
+    if (!trimmed) return 'Email is required';
+    const emailRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*\.(?:[a-zA-Z]{2,}|xn--[a-zA-Z0-9-]{1,58}[a-zA-Z0-9])$/;
+    if (!emailRegex.test(trimmed)) return 'Please enter a valid email address';
     return undefined;
   };
 
@@ -103,6 +107,7 @@ const ContactForm = memo(() => {
       const result = await response.json();
 
       if (response.ok) {
+        setSubmitted(true);
         setMessage('Message sent successfully! Thank you for contacting me.');
         setFormData({ fullName: '', email: '', message: '' });
         setErrors({});
@@ -136,7 +141,7 @@ const ContactForm = memo(() => {
         {/* Desktop Split Layout */}
         <div className='lg:grid lg:grid-cols-2 lg:min-h-150'>
           {/* Contact Info Panel */}
-          <section className='relative p-8 lg:p-12 bg-linear-to-br from-primary-800 via-primary-700 to-violet-a dark:from-surface dark:via-raised dark:to-surface overflow-hidden flex flex-col justify-center gap-6 natural'>
+          <section className='relative p-8 lg:p-12 bg-linear-to-br from-primary-800 via-primary-700 to-violet-a dark:from-surface dark:via-raised dark:to-surface overflow-hidden flex flex-col justify-center gap-6'>
             {/* Ambient glow */}
             <div className='absolute -top-24 -right-24 w-72 h-72 rounded-full bg-violet-a/25 blur-3xl pointer-events-none' />
             <div className='absolute -bottom-20 -left-16 w-64 h-64 rounded-full bg-primary-500/20 blur-3xl pointer-events-none' />
@@ -181,21 +186,41 @@ const ContactForm = memo(() => {
           </section>
 
           {/* Form Section */}
-          <main
+          <div
             aria-label='Contact Form'
             className='relative flex items-center justify-center p-8 lg:p-12'
           >
-            {sending ? (
-              <div className='flex flex-col items-center justify-center w-full text-center pop-in'>
+            {submitted ? (
+              <div
+                role='status'
+                aria-live='polite'
+                className='flex flex-col items-center justify-center w-full text-center pop-in'
+              >
                 <div className='w-20 h-20 bg-linear-to-r from-success-400 to-info-500 rounded-full flex items-center justify-center mb-6'>
-                  <FaRegPaperPlane className='text-2xl text-white animate-bounce' />
+                  <FaRegPaperPlane
+                    className='text-2xl text-white animate-bounce motion-reduce:animate-none'
+                    aria-hidden='true'
+                  />
                 </div>
-                <h2 className='text-2xl font-semibold text-ink-900 dark:text-white mb-2'>
+                <h3 className='text-2xl font-semibold text-ink-900 dark:text-white mb-2'>
                   Message Sent!
-                </h2>
+                </h3>
                 <p className='text-ink-600 dark:text-ink-400'>
                   Thank you for reaching out. I&apos;ll get back to you soon.
                 </p>
+                <button
+                  type='button'
+                  onClick={() => {
+                    setSubmitted(false);
+                    setMessage('');
+                    requestAnimationFrame(() => {
+                      fullNameInputRef.current?.focus();
+                    });
+                  }}
+                  className='mt-6 rounded-lg border border-ink-300 px-4 py-2 text-sm font-medium text-ink-700 transition-colors hover:border-primary-500 hover:text-primary-600 cursor-pointer dark:border-border dark:text-ink-300 dark:hover:text-primary-300'
+                >
+                  Send another message
+                </button>
               </div>
             ) : (
               <div className='w-full max-w-lg'>
@@ -214,6 +239,7 @@ const ContactForm = memo(() => {
                       Full Name
                     </label>
                     <input
+                      ref={fullNameInputRef}
                       type='text'
                       id='FullName'
                       name='full_name'
@@ -321,17 +347,20 @@ const ContactForm = memo(() => {
                   <button
                     type='submit'
                     disabled={sending}
-                    className='w-full bg-linear-to-r from-primary-600 to-violet-a hover:from-primary-500 hover:to-violet-b hover:cursor-pointer text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary-400/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3'
+                    className='group w-full bg-linear-to-r from-primary-600 to-violet-a hover:from-primary-500 hover:to-violet-b hover:cursor-pointer text-white font-semibold py-4 px-6 rounded-xl transition-all duration-200 transform hover:scale-[1.02] focus:outline-none focus:ring-2 focus:ring-primary-400/50 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-lg hover:shadow-xl flex items-center justify-center gap-3'
                   >
                     {sending ? (
                       <>
-                        <div className='w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin' />
+                        <div className='w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin motion-reduce:animate-none' />
                         Sending...
                       </>
                     ) : (
                       <>
                         Send Message
-                        <FaRegPaperPlane className='transform group-hover:translate-x-1 transition-transform duration-200' />
+                        <FaRegPaperPlane
+                          className='transform group-hover:translate-x-1 transition-transform duration-200'
+                          aria-hidden='true'
+                        />
                       </>
                     )}
                   </button>
@@ -355,7 +384,7 @@ const ContactForm = memo(() => {
                 </form>
               </div>
             )}
-          </main>
+          </div>
         </div>
       </div>
     </section>

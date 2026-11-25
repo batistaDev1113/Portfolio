@@ -1,5 +1,4 @@
 import { cleanup, render } from '@testing-library/react';
-import { afterEach } from 'node:test';
 import Project from '../components/Project';
 
 afterEach(cleanup);
@@ -14,12 +13,12 @@ const project = {
 };
 
 describe('Project featured image preload strategy', () => {
-  it('featured (below-the-fold) image is not marked as priority/preloaded', () => {
+  it('featured (below-the-fold) image is lazy-loaded and not marked as priority/preloaded', () => {
     const { container } = render(<Project project={project} featured />);
     const img = container.querySelector('img');
     expect(img).toBeTruthy();
     expect(img.getAttribute('fetchpriority')).not.toBe('high');
-    expect(img.getAttribute('loading')).toBe('eager');
+    expect(img.getAttribute('loading')).toBe('lazy');
     // priority would inject a <link rel=preload> for the image into the head
     // (ReactDOM.preload); a below-the-fold image must not compete with real
     // above-the-fold LCP preloads.
