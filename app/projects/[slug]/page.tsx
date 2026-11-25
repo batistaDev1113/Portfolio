@@ -3,6 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { FaArrowLeft, FaExternalLinkAlt, FaGithub } from 'react-icons/fa';
+import ModeToggle from '../../../components/ModeToggle';
 import projects from '../../../data/projects.json';
 import type { Project } from '../../../types/project';
 
@@ -24,8 +25,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <p className='eyebrow'>{children}</p>;
+function SectionLabel({
+  children,
+  as = 'h2',
+}: {
+  children: React.ReactNode;
+  as?: 'h2' | 'p';
+}) {
+  const Tag = as;
+  return <Tag className='eyebrow'>{children}</Tag>;
 }
 
 export default async function ProjectPage({ params }: Props) {
@@ -48,24 +56,31 @@ export default async function ProjectPage({ params }: Props) {
   } = project;
 
   return (
-    <main className='flex min-h-screen w-full flex-col bg-light-surface dark:bg-night'>
+    <main
+      id='main-content'
+      tabIndex={-1}
+      className='flex min-h-screen w-full flex-col bg-light-surface dark:bg-night'
+    >
       <div className='mx-auto w-full max-w-7xl flex items-center justify-between px-4 py-6 sm:px-6 lg:px-8'>
         <Link
           href='/#projects'
           className='inline-flex items-center gap-2 font-mono text-sm text-primary-600 transition-colors hover:text-primary-500 dark:text-primary-300'
         >
-          <FaArrowLeft className='h-3.5 w-3.5' />
+          <FaArrowLeft className='h-3.5 w-3.5' aria-hidden='true' />
           Back to work
         </Link>
-        <span className='font-mono text-xs uppercase tracking-[0.16em] text-ink-400 dark:text-ink-500'>
-          Case Study
-        </span>
+        <div className='flex items-center gap-4'>
+          <span className='font-mono text-xs uppercase tracking-[0.16em] text-ink-400 dark:text-ink-500'>
+            Case Study
+          </span>
+          <ModeToggle />
+        </div>
       </div>
 
       <header className='mx-auto w-full max-w-7xl px-4 pb-12 sm:px-6 lg:px-8'>
         <div className='grid grid-cols-1 items-center gap-10 lg:grid-cols-2'>
           <div>
-            <SectionLabel>{'// Project'}</SectionLabel>
+            <SectionLabel as='p'>{'// Project'}</SectionLabel>
             <h1 className='fluid-title mt-4 text-ink-900 dark:text-white'>
               {name}
             </h1>

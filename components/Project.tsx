@@ -4,10 +4,12 @@
 // dedicated case-study route — no modal.
 import Image from 'next/image';
 import Link from 'next/link';
-import { memo } from 'react';
+import { memo, useSyncExternalStore } from 'react';
 import { useTheme } from 'next-themes';
 import { FaExternalLinkAlt } from 'react-icons/fa';
 import type { Project as ProjectData } from '../types/project';
+
+const emptySubscribe = () => () => {};
 
 type ProjectProps = {
   featured?: boolean;
@@ -18,11 +20,19 @@ type ProjectProps = {
 const Project = memo(
   ({ project, featured = false, order = 0 }: ProjectProps) => {
     const { name, description, impact, imageUrl, technologies, slug } = project;
+    const mounted = useSyncExternalStore(
+      emptySubscribe,
+      () => true,
+      () => false
+    );
     const { resolvedTheme } = useTheme();
     // Projects may ship theme-aware thumbnails (e.g. the Portfolio case has
-    // dark/light screenshot variants); default to the canonical imageUrl.
+    // dark/light screenshot variants); guard with `mounted` so SSR and initial
+    // hydration match.
     const src =
-      resolvedTheme === 'light' ? project.imageUrlLight || imageUrl : imageUrl;
+      mounted && resolvedTheme === 'light'
+        ? project.imageUrlLight || imageUrl
+        : imageUrl;
     const href = `/projects/${slug}`;
     const revealDelay = {
       '--reveal-delay': `${order * 90}ms`,
@@ -44,25 +54,25 @@ const Project = memo(
                 height={450}
                 alt={`${name} project screenshot`}
                 className='w-full h-full object-cover'
-                loading='eager'
+                loading='lazy'
                 sizes='(max-width: 768px) 100vw, 58vw'
                 quality={80}
               />
-              {/* Mobile: cinematic caption overlay — duplicated in the text
-                column for md+ so exactly one accessible heading exists */}
+              {/* Mobile visual overlay; the single accessible <h3> lives in the
+                  text column (sr-only on mobile, visible at md+). */}
               <div
                 aria-hidden='true'
                 className='md:hidden absolute inset-x-0 bottom-0 p-5 pt-16 bg-linear-to-t from-black/85 via-black/45 to-transparent'
               >
                 <span className='eyebrow text-white/70'>{'// Featured'}</span>
-                <h3 className='mt-1 text-2xl font-bold tracking-tight text-white drop-shadow line-clamp-2'>
+                <p className='mt-1 text-2xl font-bold tracking-tight text-white drop-shadow line-clamp-2'>
                   {name}
-                </h3>
+                </p>
               </div>
             </div>
             <div className='md:col-span-5 px-6 py-6 md:p-8 flex flex-col justify-center gap-4 relative'>
               <span className='hidden md:block eyebrow'>{'// Featured'}</span>
-              <h3 className='hidden md:block fluid-subtitle text-2xl md:text-3xl font-bold tracking-tight text-ink-900 dark:text-white'>
+              <h3 className='sr-only md:not-sr-only fluid-subtitle text-2xl md:text-3xl font-bold tracking-tight text-ink-900 dark:text-white'>
                 {name}
               </h3>
               <p className='text-ink-700 dark:text-ink-300 text-sm leading-relaxed line-clamp-4'>
@@ -83,7 +93,10 @@ const Project = memo(
               </div>
               <div className='flex items-center gap-4 mt-2'>
                 <span className='project-cta'>Open case study</span>
-                <FaExternalLinkAlt className='w-3.5 h-3.5 text-primary-500' />
+                <FaExternalLinkAlt
+                  className='w-3.5 h-3.5 text-primary-500'
+                  aria-hidden='true'
+                />
               </div>
             </div>
           </Link>
@@ -110,9 +123,9 @@ const Project = memo(
 
             {/* Bottom gradient + caption */}
             <div className='absolute inset-x-0 bottom-0 p-5 pt-16 bg-linear-to-t from-black/85 via-black/45 to-transparent'>
-              <h4 className='text-lg font-bold tracking-tight text-white drop-shadow line-clamp-2'>
+              <h3 className='text-lg font-bold tracking-tight text-white drop-shadow line-clamp-2'>
                 {name}
-              </h4>
+              </h3>
               <div className='mt-2 flex flex-wrap gap-2'>
                 {technologies.slice(0, 3).map((tech, index) => (
                   <span key={index} className='tag-overlay'>
@@ -128,7 +141,10 @@ const Project = memo(
             </div>
 
             {/* Corner glyph */}
-            <div className='absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
+            <div
+              className='absolute top-4 right-4 w-9 h-9 rounded-full bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300'
+              aria-hidden='true'
+            >
               <FaExternalLinkAlt className='w-4 h-4' />
             </div>
           </Link>

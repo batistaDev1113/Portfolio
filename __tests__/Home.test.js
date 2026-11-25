@@ -1,5 +1,5 @@
 import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach } from 'node:test';
+import React from 'react';
 import Hero from '../components/Hero';
 
 afterEach(cleanup);

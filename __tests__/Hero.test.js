@@ -1,22 +1,11 @@
 import { cleanup, render, screen } from '@testing-library/react';
-import { afterEach } from 'node:test';
 import React from 'react';
 import Hero from '../components/Hero';
-import Skeleton from '../components/Skeleton';
 
 afterEach(cleanup);
 
 describe('Hero', () => {
-  test('renders skeleton when mounted is false', () => {
-    render(<Hero />);
-    render(<Skeleton />);
-
-    const skeletonElement = screen.getByTestId('skeleton');
-
-    expect(skeletonElement).toBeInTheDocument();
-  });
-
-  test('renders hero section when mounted is true', () => {
+  test('renders hero section', () => {
     const { getByTestId } = render(<Hero />);
 
     const heroSection = getByTestId('hero-section');
@@ -42,13 +31,21 @@ describe('Hero', () => {
     expect(heroDescription).toBeInTheDocument();
   });
 
-  test('renders resume link', () => {
+  test('renders resume link and PDF download link', () => {
     render(<Hero />);
 
     const resumeLink = screen.getByText('View Resume');
-
     expect(resumeLink).toBeInTheDocument();
     expect(resumeLink).toHaveAttribute('href', '/resume');
+
+    const downloadLink = screen.getByRole('link', {
+      name: /Download Resume PDF/i,
+    });
+    expect(downloadLink).toHaveAttribute('href', '/Yunior-Batista-Resume.pdf');
+    expect(downloadLink).toHaveAttribute(
+      'download',
+      'Yunior-Batista-Resume.pdf'
+    );
   });
 
   test('renders hero image', () => {

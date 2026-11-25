@@ -4,7 +4,7 @@ import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
 import type { Metadata } from 'next';
 import { FC, ReactNode } from 'react';
 import ResumeChatbot from '../components/ResumeChatbot';
-import ThemeProviderWrapper from '../components/ThemeProviderWrapper';
+import ThemeProvider from '../components/ThemeProvider';
 import './styles/globals.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });
@@ -65,7 +65,6 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang='en' suppressHydrationWarning>
       <head>
-        <link rel='icon' href='data:,' />
         <link
           rel='api-catalog'
           href='https://www.yuniorbatista.com/.well-known/api-catalog'
@@ -117,7 +116,7 @@ const RootLayout: FC<RootLayoutProps> = ({ children }) => {
         >
           Skip to main content
         </a>
-        <ThemeProviderWrapper>{children}</ThemeProviderWrapper>
+        <ThemeProvider>{children}</ThemeProvider>
         <ResumeChatbot />
         <VercelAnalytics />
       </body>

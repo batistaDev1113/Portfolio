@@ -41,7 +41,9 @@ const SocialLinks = ({
           href={href}
           target={href.startsWith('http') ? '_blank' : undefined}
           rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
-          aria-label={`${label} profile`}
+          aria-label={
+            label === 'Email' ? 'Email Yunior Batista' : `${label} profile`
+          }
           className={`group flex items-center gap-2 transition-colors duration-200 ${className}`}
         >
           <Icon className='w-5 h-5 transition-transform duration-200 group-hover:scale-110' />

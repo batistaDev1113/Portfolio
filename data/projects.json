@@ -32,11 +32,6 @@
       "Add 3–5 more case-study routes to cover different tech stacks and outcomes.",
       "Add a Lighthouse CI badge auto-published from the main branch so the score is verifiable, not just claimed.",
       "Extract the design tokens into a shared package so a second product site reuses the same system."
-    ],
-    "features": [
-      "Design-token system",
-      "CSS-first performance motion",
-      "Case-study project pages"
     ]
   },
   {
@@ -68,7 +63,6 @@
       "Replace the full-page reloads implied by task actions with optimistic updates so saves feel instant.",
       "Add keyboard-first reordering (arrow keys + screen-reader announcements) so the board meets WCAG 2.1 AA, matching the through-UI experience.",
       "Add jest/Playwright coverage for board state transitions before shipping to more users."
-    ],
-    "features": ["Backend API", "Database integration", "Authentication"]
+    ]
   }
 ]

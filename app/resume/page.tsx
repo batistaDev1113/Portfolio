@@ -1,6 +1,34 @@
+import Link from 'next/link';
+import { FaArrowLeft, FaFileDownload } from 'react-icons/fa';
+import ModeToggle from '../../components/ModeToggle';
+
 export default function ResumePage() {
   return (
-    <main className='min-h-screen px-6 py-12 md:px-10 lg:px-16'>
+    <main
+      id='main-content'
+      tabIndex={-1}
+      className='min-h-screen bg-light-surface dark:bg-night px-6 py-8 md:px-10 lg:px-16'
+    >
+      <div className='mx-auto mb-10 flex max-w-4xl flex-wrap items-center justify-between gap-4'>
+        <Link
+          href='/'
+          className='inline-flex items-center gap-2 font-mono text-sm text-primary-600 transition-colors hover:text-primary-500 dark:text-primary-300'
+        >
+          <FaArrowLeft className='h-3.5 w-3.5' aria-hidden='true' />
+          Back to portfolio
+        </Link>
+        <div className='flex items-center gap-3'>
+          <a
+            href='/Yunior-Batista-Resume.pdf'
+            download='Yunior-Batista-Resume.pdf'
+            className='inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-primary-600 to-violet-a px-4 py-2 text-sm font-semibold text-white shadow-md shadow-primary-500/20 transition-transform duration-200 hover:-translate-y-0.5'
+          >
+            <FaFileDownload className='h-3.5 w-3.5' aria-hidden='true' />
+            Download PDF
+          </a>
+          <ModeToggle />
+        </div>
+      </div>
       <article className='mx-auto max-w-4xl space-y-10'>
         <header className='space-y-4'>
           <p className='text-sm uppercase tracking-wide text-ink-500'>
@@ -26,8 +54,8 @@ export default function ResumePage() {
             development.
           </p>
           <p className='text-sm text-ink-600 dark:text-ink-400'>
-            Prefer a printable document? Return to the home page and use
-            Download Resume to get the PDF.
+            Prefer a printable document? Use Download PDF above for the
+            formatted resume.
           </p>
         </header>
 
@@ -248,7 +276,7 @@ export default function ResumePage() {
             Portfolio Website
           </h3>
           <p className='text-sm text-ink-600 dark:text-ink-400'>
-            Next.js, React, TypeScript, Tailwind CSS, Framer Motion, SendGrid
+            Next.js, React, TypeScript, Tailwind CSS, Pure-CSS Motion, Mailjet
           </p>
           <ul className='list-disc space-y-2 pl-6 text-base text-ink-700 dark:text-ink-300'>
             <li>
@@ -257,8 +285,8 @@ export default function ResumePage() {
             </li>
             <li>
               Implemented a modern Next.js architecture with reusable
-              components, theme support, accessible responsive layouts,
-              animations, and a SendGrid-powered contact workflow.
+              components, theme support, accessible responsive layouts, pure-CSS
+              animations, and a Mailjet-powered contact workflow.
             </li>
             <li>
               Optimized the experience for usability, performance, and

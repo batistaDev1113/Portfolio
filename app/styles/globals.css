@@ -38,13 +38,6 @@ html {
     width: 10px;
   }
 
-  .image {
-    object-fit: fill;
-    width: 100% !important;
-    position: relative !important;
-    height: unset !important;
-  }
-
   /* Minimal, globally-consistent focus treatment. */
   :focus-visible {
     outline: 2px solid var(--color-primary-500);
@@ -100,25 +93,9 @@ html {
     box-shadow: var(--shadow-card-dark);
   }
 
-  /* Subtle top accent bar for branded cards. */
-  .accent-top::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(
-      90deg,
-      var(--color-primary-500),
-      var(--color-violet-a)
-    );
-  }
-
   .button-about {
-    @apply my-4 inline-flex items-center justify-center px-8 py-3 text-base text-center text-white border-none rounded-lg transition-all duration-300 ease-out;
+    @apply my-4 inline-flex items-center justify-center px-8 py-3 text-base text-center text-white border-none rounded-lg transition-[transform,box-shadow,background-color] duration-300 ease-out;
     background: linear-gradient(135deg, var(--color-primary-600) 0%, var(--color-violet-a) 100%);
-    backdrop-filter: blur(10px);
     box-shadow: var(--shadow-btn-primary);
     transform: translateY(0);
   }
@@ -132,7 +109,7 @@ html {
   /* Quiet secondary CTA: underline on hover, no gradient fill. Sits
      alongside .button-about as the "less important" action. */
   .button-quiet {
-    @apply inline-flex items-center justify-center px-5 py-3 text-base text-center rounded-lg transition-all duration-300 ease-out;
+    @apply inline-flex items-center justify-center px-5 py-3 text-base text-center rounded-lg transition-[transform,color,border-color,background-color] duration-300 ease-out;
     color: var(--color-glass-text);
     border: 1px solid var(--color-glass-border);
     background: var(--color-glass-fill-faint);
@@ -199,6 +176,7 @@ html {
   .js .project-reveal.in-view {
     opacity: 1;
     transform: translateY(0);
+    will-change: auto;
   }
 
   /* Form success/status entrance. */
@@ -230,21 +208,6 @@ html {
       opacity: 1;
       transform: translateY(0);
     }
-  }
-
-  /* Glassmorphism Hero Card */
-  .hero-card {
-    background: var(--color-glass-fill);
-    backdrop-filter: blur(24px);
-    border: 1px solid var(--color-glass-border-soft);
-    box-shadow: var(--shadow-hero-card);
-    border-radius: 20px;
-  }
-
-  .dark .hero-card {
-    background: var(--color-glass-fill-dark);
-    border: 1px solid var(--color-glass-border-dark);
-    box-shadow: var(--shadow-hero-card-dark);
   }
 
   /* Animated Gradient Background.
@@ -374,7 +337,10 @@ html {
     border: 1px solid var(--color-primary-100);
     border-radius: 20px;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      border-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     position: relative;
     box-shadow: var(--shadow-card);
   }
@@ -480,7 +446,6 @@ html {
     font-size: 0.7rem;
     letter-spacing: 0.06em;
     background: var(--color-brand-tint-soft);
-    backdrop-filter: blur(10px);
     border: 1px solid var(--color-brand-tint-border);
     border-radius: 6px;
     padding: 0.3rem 0.6rem;
@@ -531,67 +496,6 @@ html {
   *::-webkit-scrollbar-thumb {
     background: transparent;
   }
-}
-
-/* Custom 3D utilities moved OUT of @layer base -> root level.
-   In Tailwind v4, @layer base becomes a NATIVE CSS cascade layer,
-   so utilities inside `base` would receive LOWEST specificity and
-   be overridden by standard utilities that live in the unlayered
-   namespace or in `@layer utilities`. Placing these at root level
-   keeps them at the top of the cascade (still subject to component-
-   local classname overrides only). */
-
-.rotate-x-12 {
-  transform: rotateX(12deg);
-}
-
-.rotate-x-45 {
-  transform: rotateX(-45deg);
-}
-
-.rotate-x-35 {
-  transform: rotateX(-35deg);
-}
-
-.rotate-y-12 {
-  transform: rotateY(12deg);
-}
-
-.translate-y-2 {
-  transform: translateY(0.5rem);
-}
-
-/* 3D Envelope Styles */
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-.envelope-3d {
-  transform-style: preserve-3d;
-  transition: transform 0.5s ease-in-out;
-}
-
-.envelope-3d:hover {
-  transform: rotateY(15deg) rotateX(-5deg);
-}
-
-.envelope-back {
-  transform: rotateX(15deg) translateZ(-10px) translateY(8px);
-}
-
-.envelope-body {
-  transform-style: preserve-3d;
-  transition: transform 0.5s ease-in-out;
-}
-
-.envelope-flap {
-  transform-origin: bottom;
-  transform: rotateX(-45deg) translateZ(5px);
-  transition: transform 0.5s ease-in-out;
-}
-
-.envelope-3d:hover .envelope-flap {
-  transform: rotateX(-35deg) translateZ(5px);
 }
 
 /* Toolbox rail: natively scrollable (overflow-x: auto) so every tool is
