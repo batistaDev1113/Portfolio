@@ -43,7 +43,7 @@ Professional Experience:
    - Responsive UI + SEO + animations, 30% site visit increase, 8% defect reduction
 
 Projects:
-- Portfolio (portfolio): Next.js, React, TypeScript, Tailwind CSS, Playwright, Jest, Vercel. Lighthouse mobile: Performance 93, Accessibility 100, Best Practices 100, SEO 100. Pure-CSS motion (removed framer-motion ~60KB), Tailwind v4 @theme tokens, next/image AVIF/WebP, CI gates. Live: yuniorbatista.com
+- Portfolio (portfolio): Next.js, React, TypeScript, Tailwind CSS, Playwright, Jest, Vercel. Lighthouse desktop: Performance 100, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 100; mobile: Performance 99, Accessibility 100, Best Practices 100, SEO 100, Agentic Browsing 100. Pure-CSS motion (removed framer-motion ~60KB), Tailwind v4 @theme tokens, next/image AVIF/WebP, CI gates. Live: yuniorbatista.com
 - Kanban Board (kanban-board): React, TS, Tailwind, React DND, Node.js, Vercel. Full-stack drag-and-drop task manager with auth + persisted DB state, not localStorage. Live: kanbanboardclone.vercel.app
 
 Education: BS Computer Science, Florida State University, Tallahassee, FL
