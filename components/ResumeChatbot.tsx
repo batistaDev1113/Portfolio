@@ -9,7 +9,13 @@ const ResumeChatbotDialog = dynamic(() => import('./ResumeChatbotDialog'), {
 
 export default function ResumeChatbot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [hasOpened, setHasOpened] = useState(false);
   const launcherRef = useRef<HTMLButtonElement>(null);
+
+  const handleOpen = useCallback(() => {
+    setHasOpened(true);
+    setIsOpen(true);
+  }, []);
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
@@ -24,7 +30,7 @@ export default function ResumeChatbot() {
         <button
           ref={launcherRef}
           type='button'
-          onClick={() => setIsOpen(true)}
+          onClick={handleOpen}
           aria-label='Open resume chat'
           aria-expanded={false}
           className='fixed bottom-6 right-6 z-50 flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-linear-to-br from-primary-600 to-violet-a text-white shadow-lg transition-transform hover:scale-105 focus-visible:outline focus-visible:outline-primary-500 focus-visible:outline-offset-2'
@@ -43,7 +49,9 @@ export default function ResumeChatbot() {
         </button>
       )}
 
-      {isOpen && <ResumeChatbotDialog onClose={handleClose} />}
+      {hasOpened && (
+        <ResumeChatbotDialog isOpen={isOpen} onClose={handleClose} />
+      )}
     </>
   );
 }

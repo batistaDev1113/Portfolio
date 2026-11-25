@@ -36,10 +36,12 @@ function describeChatError(error: Error | undefined): string {
 }
 
 type ResumeChatbotDialogProps = {
+  isOpen: boolean;
   onClose: () => void;
 };
 
 export default function ResumeChatbotDialog({
+  isOpen,
   onClose,
 }: ResumeChatbotDialogProps) {
   const [input, setInput] = useState('');
@@ -53,10 +55,12 @@ export default function ResumeChatbotDialog({
   const isLoading = status === 'streaming' || status === 'submitted';
 
   useEffect(() => {
+    if (!isOpen) return;
     inputRef.current?.focus();
-  }, []);
+  }, [isOpen]);
 
   useEffect(() => {
+    if (!isOpen) return;
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         onClose();
@@ -64,13 +68,17 @@ export default function ResumeChatbotDialog({
     };
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
-  }, [onClose]);
+  }, [isOpen, onClose]);
 
   useEffect(() => {
-    if (scrollRef.current) {
+    if (isOpen && scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
-  }, [messages, isLoading]);
+  }, [isOpen, messages, isLoading]);
+
+  if (!isOpen) {
+    return null;
+  }
 
   const handleSend = (text: string) => {
     const trimmed = text.trim();
