@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
+import { BrandLogo } from './BrandLogo';
 import { ModeToggle } from './ModeToggle';
 
 const Navigation = () => {
@@ -50,16 +51,16 @@ const Navigation = () => {
 
   return (
     <nav
-      className={`sticky top-0 z-100 w-full px-6 py-3 transition-[background-color,border-color,backdrop-filter] duration-300 ${navSurface}`}
+      className={`sticky top-0 z-100 w-full px-4 sm:px-6 py-3 transition-[background-color,border-color,backdrop-filter] duration-300 ${navSurface}`}
     >
       <div className='flex flex-wrap items-center justify-between'>
         <Link
           href='/'
-          className='self-center text-2xl font-semibold text-transparent bg-linear-to-r from-primary-500 via-violet-a to-primary-400 bg-clip-text md:text-4xl lg:text-3xl font-display'
+          className='self-center rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-400'
         >
-          Yunior B.
+          <BrandLogo onHero={!scrolled} />
         </Link>
-        <div className='flex items-center space-x-6'>
+        <div className='flex items-center space-x-3 sm:space-x-6'>
           <ModeToggle onHero={!scrolled} />
           <button
             ref={menuButtonRef}

@@ -7,6 +7,13 @@ const Projects = async () => {
 
   const [featured, ...rest] = projects;
 
+  const restGridClass =
+    rest.length === 1
+      ? 'grid grid-cols-1 max-w-2xl mx-auto gap-6 justify-items-center items-stretch'
+      : rest.length === 2
+        ? 'grid grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto gap-6 justify-items-center items-stretch'
+        : 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center items-stretch';
+
   return (
     <div
       className='w-full max-w-7xl mx-auto my-20 px-4 z-50 scroll-mt-20'
@@ -30,9 +37,9 @@ const Projects = async () => {
         </div>
       )}
 
-      {/* Remaining projects — responsive 1/2/3-col, generic for any N */}
+      {/* Remaining projects — adapts cleanly for 1, 2, or 3+ cards */}
       {rest.length > 0 && (
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center items-stretch'>
+        <div className={restGridClass}>
           {rest.map((project, index) => (
             <Project key={project.id} project={project} order={index + 1} />
           ))}

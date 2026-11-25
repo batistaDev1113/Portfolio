@@ -251,7 +251,7 @@ const ContactForm = memo(() => {
                       aria-describedby={
                         errors.fullName ? fullNameErrorId : undefined
                       }
-                      className={`w-full px-4 py-3 rounded-xl border ${
+                      className={`scroll-mt-24 w-full px-4 py-3 rounded-xl border ${
                         errors.fullName
                           ? 'border-danger-500 focus:border-danger-500 focus:ring-danger-500/20'
                           : 'border-ink-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
@@ -287,7 +287,7 @@ const ContactForm = memo(() => {
                       }
                       aria-invalid={Boolean(errors.email)}
                       aria-describedby={errors.email ? emailErrorId : undefined}
-                      className={`w-full px-4 py-3 rounded-xl border ${
+                      className={`scroll-mt-24 w-full px-4 py-3 rounded-xl border ${
                         errors.email
                           ? 'border-danger-500 focus:border-danger-500 focus:ring-danger-500/20'
                           : 'border-ink-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
@@ -326,7 +326,7 @@ const ContactForm = memo(() => {
                         errors.message ? messageErrorId : undefined
                       }
                       placeholder='Tell me about your project or just say hello...'
-                      className={`w-full px-4 py-3 rounded-xl border ${
+                      className={`scroll-mt-24 w-full px-4 py-3 rounded-xl border ${
                         errors.message
                           ? 'border-danger-500 focus:border-danger-500 focus:ring-danger-500/20'
                           : 'border-ink-200 dark:border-border focus:border-primary-400 focus:ring-primary-400/20'
