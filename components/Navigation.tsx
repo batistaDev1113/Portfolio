@@ -1,12 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ModeToggle } from './ModeToggle';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const menuButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -20,6 +21,7 @@ const Navigation = () => {
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setIsOpen(false);
+        menuButtonRef.current?.focus();
       }
     };
     window.addEventListener('keydown', onKeyDown);
@@ -60,6 +62,7 @@ const Navigation = () => {
         <div className='flex items-center space-x-6'>
           <ModeToggle onHero={!scrolled} />
           <button
+            ref={menuButtonRef}
             onClick={() => setIsOpen(!isOpen)}
             type='button'
             className={`inline-flex items-center rounded-lg p-2 text-sm focus:outline-none focus:ring-2 md:hidden ${
