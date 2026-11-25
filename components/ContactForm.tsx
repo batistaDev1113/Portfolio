@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, memo, useCallback, useState } from 'react';
+import { FormEvent, memo, useCallback, useRef, useState } from 'react';
 import { BsGithub, BsLinkedin } from 'react-icons/bs';
 import { FaRegPaperPlane } from 'react-icons/fa';
 
@@ -21,6 +21,7 @@ const ContactForm = memo(() => {
     email: '',
     message: '',
   });
+  const fullNameInputRef = useRef<HTMLInputElement>(null);
 
   const fullNameErrorId = 'full-name-error';
   const emailErrorId = 'email-error';
@@ -212,6 +213,9 @@ const ContactForm = memo(() => {
                   onClick={() => {
                     setSubmitted(false);
                     setMessage('');
+                    requestAnimationFrame(() => {
+                      fullNameInputRef.current?.focus();
+                    });
                   }}
                   className='mt-6 rounded-lg border border-ink-300 px-4 py-2 text-sm font-medium text-ink-700 transition-colors hover:border-primary-500 hover:text-primary-600 cursor-pointer dark:border-border dark:text-ink-300 dark:hover:text-primary-300'
                 >
@@ -235,6 +239,7 @@ const ContactForm = memo(() => {
                       Full Name
                     </label>
                     <input
+                      ref={fullNameInputRef}
                       type='text'
                       id='FullName'
                       name='full_name'
